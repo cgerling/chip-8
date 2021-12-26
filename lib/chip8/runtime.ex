@@ -2,6 +2,7 @@ defmodule Chip8.Runtime do
   @moduledoc false
 
   alias Chip8.Display
+  alias Chip8.Memory
 
   @enforce_keys [:display, :dt, :i, :memory, :pc, :st, :stack, :v]
   defstruct @enforce_keys
@@ -12,7 +13,7 @@ defmodule Chip8.Runtime do
           display: Display.t(),
           dt: timer(),
           i: byte(),
-          memory: list(byte()),
+          memory: Memory.t(),
           pc: non_neg_integer(),
           st: timer(),
           stack: list(byte()),
@@ -21,11 +22,12 @@ defmodule Chip8.Runtime do
 
   @display_height 32
   @display_width 64
+  @memory_size 4096
 
   @spec new() :: t()
   def new do
     display = Display.new(@display_height, @display_width)
-    memory = List.duplicate(0, 4096)
+    memory = Memory.new(@memory_size)
     stack = []
     v = Map.new(0x0..0xF, &{&1, 0})
 
