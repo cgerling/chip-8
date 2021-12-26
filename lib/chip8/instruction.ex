@@ -1,10 +1,14 @@
 defmodule Chip8.Instruction do
   @moduledoc false
 
-  @enforce_keys [:arguments, :module]
-  defstruct @enforce_keys
+  alias Chip8.Runtime
 
   @type arguments :: %{atom() => term()}
+
+  @callback execute(Runtime.t(), arguments()) :: Runtime.t()
+
+  @enforce_keys [:arguments, :module]
+  defstruct @enforce_keys
 
   @type t :: %__MODULE__{
           arguments: arguments(),
