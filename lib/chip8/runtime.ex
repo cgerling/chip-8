@@ -4,6 +4,7 @@ defmodule Chip8.Runtime do
   alias Chip8.Display
   alias Chip8.Memory
   alias Chip8.Stack
+  alias Chip8.VRegisters
 
   @enforce_keys [:display, :dt, :i, :memory, :pc, :st, :stack, :v]
   defstruct @enforce_keys
@@ -18,7 +19,7 @@ defmodule Chip8.Runtime do
           pc: non_neg_integer(),
           st: timer(),
           stack: Stack.t(),
-          v: %{(0x0..0xF) => byte()}
+          v: VRegisters.t()
         }
 
   @display_height 32
@@ -30,7 +31,7 @@ defmodule Chip8.Runtime do
     display = Display.new(@display_height, @display_width)
     memory = Memory.new(@memory_size)
     stack = Stack.new()
-    v = Map.new(0x0..0xF, &{&1, 0})
+    v = VRegisters.new()
 
     %__MODULE__{
       display: display,
