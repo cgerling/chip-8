@@ -23,4 +23,11 @@ defmodule Chip8.Instruction do
       module: module
     }
   end
+
+  @spec execute(t(), Runtime.t()) :: Runtime.t()
+  def execute(%__MODULE__{} = instruction, %Runtime{} = runtime) do
+    %__MODULE__{arguments: arguments, module: module} = instruction
+
+    module.execute(runtime, arguments)
+  end
 end
