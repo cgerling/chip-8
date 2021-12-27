@@ -4,8 +4,10 @@ defmodule Chip8.Memory do
   @enforce_keys [:data, :size]
   defstruct @enforce_keys
 
+  @type data :: list(byte())
+
   @type t :: %__MODULE__{
-          data: list(byte()),
+          data: data,
           size: non_neg_integer()
         }
 
