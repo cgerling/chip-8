@@ -1,6 +1,7 @@
 defmodule Chip8.Instruction do
   @moduledoc false
 
+  alias Chip8.Instruction.Decoder
   alias Chip8.Runtime
 
   @type arguments :: %{atom() => term()}
@@ -23,6 +24,8 @@ defmodule Chip8.Instruction do
       module: module
     }
   end
+
+  defdelegate decode(data), to: Decoder
 
   @spec execute(t(), Runtime.t()) :: Runtime.t()
   def execute(%__MODULE__{} = instruction, %Runtime{} = runtime) do
