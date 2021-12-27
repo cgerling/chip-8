@@ -2,6 +2,7 @@ defmodule Chip8.Instruction.Decoder do
   @moduledoc false
 
   alias Chip8.Instruction
+  alias Chip8.Instruction.CLS
   alias Chip8.Instruction.SYS
   alias Chip8.Memory
 
@@ -29,6 +30,10 @@ defmodule Chip8.Instruction.Decoder do
 
   defp pad_byte([nibble]), do: [0x0, nibble]
   defp pad_byte([_nibble1, _nibble2] = byte), do: byte
+
+  defp decode_data({0x0, 0x0, 0xE, 0x0}) do
+    Instruction.new(CLS)
+  end
 
   defp decode_data({0x0, address1, address2, address3}) do
     address = build_address(address1, address2, address3)
