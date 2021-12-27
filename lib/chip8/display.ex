@@ -23,4 +23,9 @@ defmodule Chip8.Display do
       width: width
     }
   end
+
+  @spec clear(t()) :: t()
+  def clear(%__MODULE__{height: height, width: width}) do
+    new(height, width)
+  end
 end
