@@ -5,7 +5,7 @@ defmodule Chip8.Instruction.DecoderTest do
   alias Chip8.Instruction.Decoder
 
   describe "decode/1" do
-    test "should return a instruction struct for SYS address bytes" do
+    test "should return a instruction struct for `SYS address` instruction" do
       bytes = [0x0A, 0x4F]
 
       instruction = Decoder.decode(bytes)
