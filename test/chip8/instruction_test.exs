@@ -46,6 +46,18 @@ defmodule Chip8.InstructionTest do
     end
   end
 
+  describe "decode/1" do
+    test "should return a instruction struct" do
+      bytes = [0x00, 0x0F]
+
+      instruction = Instruction.decode(bytes)
+
+      assert %Instruction{} = instruction
+      assert is_atom(instruction.module)
+      assert is_map(instruction.arguments)
+    end
+  end
+
   describe "execute/2" do
     test "should return a runtime struct" do
       runtime = Runtime.new()
