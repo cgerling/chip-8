@@ -39,4 +39,84 @@ defmodule Chip8.DisplayTest do
       assert Enum.all?(cleared_display.pixels, &(&1 == 0))
     end
   end
+
+  describe "get_coordinates/3" do
+    test "should return a coordinates tuple" do
+      display = Display.new(100, 100)
+      x = :rand.uniform(display.height - 1)
+      y = :rand.uniform(display.width - 1)
+
+      coordinates = Display.get_coordinates(display, x, y)
+
+      assert {x, y} == coordinates
+    end
+
+    test "should return coordinates wrapped when x is equals to display's height" do
+      display = Display.new(100, 100)
+      x = display.height
+      y = :rand.uniform(display.width - 1)
+
+      coordinates = Display.get_coordinates(display, x, y)
+
+      assert {0, y} == coordinates
+    end
+
+    test "should return coordinates wrapped when x is greather than display's height" do
+      display = Display.new(100, 100)
+      x = :rand.uniform(display.height - 1)
+      y = :rand.uniform(display.width - 1)
+
+      overflow_x = display.height + x
+
+      coordinates = Display.get_coordinates(display, overflow_x, y)
+
+      assert {x, y} == coordinates
+    end
+
+    test "should return coordinates when x is negative" do
+      display = Display.new(100, 100)
+      x = :rand.uniform(display.height - 1)
+      y = :rand.uniform(display.width - 1)
+
+      negative_x = x * -1
+
+      coordinates = Display.get_coordinates(display, negative_x, y)
+
+      assert {x, y} == coordinates
+    end
+
+    test "should return coordinates wrapped when y is equals to display's width" do
+      display = Display.new(100, 100)
+      x = :rand.uniform(display.height - 1)
+      y = display.width
+
+      coordinates = Display.get_coordinates(display, x, y)
+
+      assert {x, 0} == coordinates
+    end
+
+    test "should return coordinates wrapped when y is greather than display's width" do
+      display = Display.new(100, 100)
+      x = :rand.uniform(display.height - 1)
+      y = :rand.uniform(display.width - 1)
+
+      overflow_y = display.width + y
+
+      coordinates = Display.get_coordinates(display, x, overflow_y)
+
+      assert {x, y} == coordinates
+    end
+
+    test "should return coordinates when y is negative" do
+      display = Display.new(100, 100)
+      x = :rand.uniform(display.height - 1)
+      y = :rand.uniform(display.width - 1)
+
+      negative_y = y * -1
+
+      coordinates = Display.get_coordinates(display, x, negative_y)
+
+      assert {x, y} == coordinates
+    end
+  end
 end
