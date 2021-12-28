@@ -226,4 +226,36 @@ defmodule Chip8.DisplayTest do
              ]
     end
   end
+
+  describe "has_collision?/2" do
+    test "should return a boolean" do
+      display = Display.new(8, 8)
+
+      has_collision? = Display.has_collision?(display, display)
+
+      assert is_boolean(has_collision?)
+    end
+
+    test "should return true when any of the pixels on in the before display are off in the after display" do
+      display = Display.new(8, 8)
+      coordinates = {0, 0}
+      sprite = Sprite.new([0x1])
+
+      before_display = Display.draw(display, coordinates, sprite)
+      after_display = Display.draw(before_display, coordinates, sprite)
+
+      has_collision? = Display.has_collision?(before_display, after_display)
+
+      assert has_collision?
+    end
+
+    test "should return false when all of the pixels on in the before display are still on in the after display" do
+      before_display = Display.new(8, 8)
+      after_display = Display.new(8, 8)
+
+      has_collision? = Display.has_collision?(before_display, after_display)
+
+      refute has_collision?
+    end
+  end
 end
