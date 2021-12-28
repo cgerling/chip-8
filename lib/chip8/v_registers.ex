@@ -19,14 +19,15 @@ defmodule Chip8.VRegisters do
     }
   end
 
+  defguardp is_register(register) when is_integer(register) and register in 0x0..0xF
+
   @spec get(t(), register()) :: non_neg_integer()
-  def get(%__MODULE__{data: data}, register) when is_integer(register) and register in 0x0..0xF do
+  def get(%__MODULE__{data: data}, register) when is_register(register) do
     data[register]
   end
 
   @spec set(t(), register(), non_neg_integer()) :: t()
-  def set(%__MODULE__{} = v_registers, register, value)
-      when is_integer(register) and register in 0x0..0xF do
+  def set(%__MODULE__{} = v_registers, register, value) when is_register(register) do
     data = %{v_registers.data | register => value}
 
     %{v_registers | data: data}
