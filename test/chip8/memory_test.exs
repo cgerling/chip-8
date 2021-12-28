@@ -17,4 +17,56 @@ defmodule Chip8.MemoryTest do
       assert size == memory.size
     end
   end
+
+  describe "read/3" do
+    test "should return a list of memory data" do
+      size = :rand.uniform(100)
+      memory = Memory.new(size)
+
+      address = size - :rand.uniform(size)
+      amount = :rand.uniform(10)
+
+      data = Memory.read(memory, address, amount)
+
+      assert is_list(data)
+    end
+
+    test "should return a list of memory data with size as the given amount" do
+      size = :rand.uniform(100)
+      memory = Memory.new(size)
+
+      address_offset = :rand.uniform(size)
+      address = size - address_offset
+      amount = :rand.uniform(address_offset)
+
+      data = Memory.read(memory, address, amount)
+
+      assert amount == Enum.count(data)
+    end
+
+    test "should return a list of memory data with size less than the given amount when overflows memory" do
+      size = :rand.uniform(100)
+      memory = Memory.new(size)
+
+      amount = :rand.uniform(size)
+      actual_amount = trunc(amount / 2)
+      address = size - actual_amount
+
+      data = Memory.read(memory, address, amount)
+
+      assert actual_amount == Enum.count(data)
+    end
+
+    test "should return an empty list when address is greather than or equal to memory size" do
+      size = :rand.uniform(100)
+      memory = Memory.new(size)
+
+      address = size + :rand.uniform(size)
+      amount = :rand.uniform(10)
+
+      data = Memory.read(memory, address, amount)
+
+      assert [] == data
+    end
+  end
 end
