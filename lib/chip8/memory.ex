@@ -20,4 +20,12 @@ defmodule Chip8.Memory do
       size: size
     }
   end
+
+  @spec read(t(), non_neg_integer(), non_neg_integer()) :: data()
+  def read(%__MODULE__{size: size}, address, _amount) when address >= size, do: []
+
+  def read(%__MODULE__{data: data}, address, amount)
+      when is_integer(address) and is_integer(amount) and address >= 0 and amount >= 0 do
+    Enum.slice(data, address, amount)
+  end
 end
