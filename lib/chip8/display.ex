@@ -61,4 +61,11 @@ defmodule Chip8.Display do
 
     %{display | pixels: pixels}
   end
+
+  @spec has_collision?(t(), t()) :: boolean()
+  def has_collision?(%__MODULE__{pixels: before_pixels}, %__MODULE__{pixels: after_pixels}) do
+    before_pixels
+    |> Enum.zip(after_pixels)
+    |> Enum.any?(fn {before_pixel, after_pixel} -> before_pixel > after_pixel end)
+  end
 end
