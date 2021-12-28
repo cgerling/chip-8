@@ -2,6 +2,7 @@ defmodule Chip8.DisplayTest do
   use ExUnit.Case, async: true
 
   alias Chip8.Display
+  alias Chip8.Sprite
 
   describe "new/2" do
     test "should return a display struct" do
@@ -117,6 +118,112 @@ defmodule Chip8.DisplayTest do
       coordinates = Display.get_coordinates(display, x, negative_y)
 
       assert {x, y} == coordinates
+    end
+  end
+
+  describe "draw/3" do
+    test "should return a display struct" do
+      display = Display.new(8, 8)
+      sprite = Sprite.new([0xFF])
+      coordinates = {0, 0}
+
+      drawed_display = Display.draw(display, coordinates, sprite)
+
+      assert %Display{} = drawed_display
+    end
+
+    test "should return a display with sprite rendered into the given coordinates" do
+      display = Display.new(8, 8)
+      sprite = Sprite.new([0xAA, 0x55, 0xAA, 0x55])
+      coordinates = {0, 2}
+
+      drawed_display = Display.draw(display, coordinates, sprite)
+
+      display_matrix = Enum.chunk_every(drawed_display.pixels, display.width)
+
+      assert 16 == Enum.count(drawed_display.pixels, &(&1 == 1))
+
+      assert display_matrix == [
+               [0, 0, 0, 0, 0, 0, 0, 0],
+               [0, 0, 0, 0, 0, 0, 0, 0],
+               [1, 0, 1, 0, 1, 0, 1, 0],
+               [0, 1, 0, 1, 0, 1, 0, 1],
+               [1, 0, 1, 0, 1, 0, 1, 0],
+               [0, 1, 0, 1, 0, 1, 0, 1],
+               [0, 0, 0, 0, 0, 0, 0, 0],
+               [0, 0, 0, 0, 0, 0, 0, 0]
+             ]
+    end
+
+    test "should return a display with the sprite erased when rendered twice into the same coordinates" do
+      display = Display.new(8, 8)
+      sprite = Sprite.new([0xAA, 0x55, 0xAA, 0x55])
+      coordinates = {0, 2}
+
+      display = Display.draw(display, coordinates, sprite)
+
+      drawed_display = Display.draw(display, coordinates, sprite)
+
+      display_matrix = Enum.chunk_every(drawed_display.pixels, display.width)
+
+      assert Enum.all?(drawed_display.pixels, &(&1 == 0))
+
+      assert display_matrix == [
+               [0, 0, 0, 0, 0, 0, 0, 0],
+               [0, 0, 0, 0, 0, 0, 0, 0],
+               [0, 0, 0, 0, 0, 0, 0, 0],
+               [0, 0, 0, 0, 0, 0, 0, 0],
+               [0, 0, 0, 0, 0, 0, 0, 0],
+               [0, 0, 0, 0, 0, 0, 0, 0],
+               [0, 0, 0, 0, 0, 0, 0, 0],
+               [0, 0, 0, 0, 0, 0, 0, 0]
+             ]
+    end
+
+    test "should return a display with the sprite cropped horizontally when it overflows the display's width" do
+      display = Display.new(8, 8)
+      sprite = Sprite.new([0xFF, 0xFF])
+      coordinates = {4, 0}
+
+      drawed_display = Display.draw(display, coordinates, sprite)
+
+      display_matrix = Enum.chunk_every(drawed_display.pixels, display.width)
+
+      assert 8 == Enum.count(drawed_display.pixels, &(&1 == 1))
+
+      assert display_matrix == [
+               [0, 0, 0, 0, 1, 1, 1, 1],
+               [0, 0, 0, 0, 1, 1, 1, 1],
+               [0, 0, 0, 0, 0, 0, 0, 0],
+               [0, 0, 0, 0, 0, 0, 0, 0],
+               [0, 0, 0, 0, 0, 0, 0, 0],
+               [0, 0, 0, 0, 0, 0, 0, 0],
+               [0, 0, 0, 0, 0, 0, 0, 0],
+               [0, 0, 0, 0, 0, 0, 0, 0]
+             ]
+    end
+
+    test "should return a display with the sprite cropped vertically when it overflows the display's height" do
+      display = Display.new(8, 8)
+      sprite = Sprite.new([0x0F, 0x0F, 0x0F, 0x0F])
+      coordinates = {0, 6}
+
+      drawed_display = Display.draw(display, coordinates, sprite)
+
+      display_matrix = Enum.chunk_every(drawed_display.pixels, display.width)
+
+      assert 8 == Enum.count(drawed_display.pixels, &(&1 == 1))
+
+      assert display_matrix == [
+               [0, 0, 0, 0, 0, 0, 0, 0],
+               [0, 0, 0, 0, 0, 0, 0, 0],
+               [0, 0, 0, 0, 0, 0, 0, 0],
+               [0, 0, 0, 0, 0, 0, 0, 0],
+               [0, 0, 0, 0, 0, 0, 0, 0],
+               [0, 0, 0, 0, 0, 0, 0, 0],
+               [0, 0, 0, 0, 1, 1, 1, 1],
+               [0, 0, 0, 0, 1, 1, 1, 1]
+             ]
     end
   end
 end

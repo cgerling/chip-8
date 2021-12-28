@@ -1,6 +1,8 @@
 defmodule Chip8.Display do
   @moduledoc false
 
+  alias Chip8.Sprite
+
   @enforce_keys [:height, :pixels, :width]
   defstruct @enforce_keys
 
@@ -36,5 +38,27 @@ defmodule Chip8.Display do
     coordinate_y = rem(abs(y), display.width)
 
     {coordinate_x, coordinate_y}
+  end
+
+  @spec draw(t(), coordinates(), Sprite.t()) :: t()
+  def draw(%__MODULE__{} = display, {x, y}, %Sprite{} = sprite) do
+    visible_sprite_width = max(display.width - x, 0)
+
+    pixels =
+      sprite
+      |> Sprite.to_bitmap()
+      |> Enum.with_index()
+      |> Enum.reduce(display.pixels, fn {byte, y_index}, pixels ->
+        byte
+        |> Enum.slice(0, visible_sprite_width)
+        |> Enum.with_index()
+        |> Enum.reduce(pixels, fn {bit, x_index}, pixels ->
+          position = display.width * (y + y_index) + (x + x_index)
+
+          List.update_at(pixels, position, &Bitwise.bxor(&1, bit))
+        end)
+      end)
+
+    %{display | pixels: pixels}
   end
 end
