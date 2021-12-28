@@ -23,4 +23,12 @@ defmodule Chip8.VRegisters do
   def get(%__MODULE__{data: data}, register) when is_integer(register) and register in 0x0..0xF do
     data[register]
   end
+
+  @spec set(t(), register(), non_neg_integer()) :: t()
+  def set(%__MODULE__{} = v_registers, register, value)
+      when is_integer(register) and register in 0x0..0xF do
+    data = %{v_registers.data | register => value}
+
+    %{v_registers | data: data}
+  end
 end
