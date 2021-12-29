@@ -94,6 +94,10 @@ defmodule Chip8.Instruction.Decoder do
     Instruction.new(XOR, %{x: x, y: y})
   end
 
+  defp decode_data({0x8, x, y, 0x4}) do
+    Instruction.new(ADD, %{x: x, y: y})
+  end
+
   defp decode_data({0x9, x, y, 0x0}) do
     Instruction.new(SNE, %{x: x, y: y})
   end
