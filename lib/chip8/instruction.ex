@@ -33,4 +33,7 @@ defmodule Chip8.Instruction do
 
     module.execute(runtime, arguments)
   end
+
+  @spec byte_size() :: integer()
+  def byte_size, do: 2
 end

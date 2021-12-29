@@ -80,4 +80,12 @@ defmodule Chip8.InstructionTest do
       assert pc_value == executed_runtime.pc
     end
   end
+
+  describe "byte_size/0" do
+    test "should return the byte size of an instruction" do
+      byte_size = Instruction.byte_size()
+
+      assert 2 == byte_size
+    end
+  end
 end
