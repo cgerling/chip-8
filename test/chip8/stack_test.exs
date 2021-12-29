@@ -56,4 +56,33 @@ defmodule Chip8.StackTest do
       assert {nil, stack} == pop_result
     end
   end
+
+  describe "push/2" do
+    test "should return a stack struct" do
+      stack = Stack.new()
+
+      value = :rand.uniform(0xFFF)
+      pushed_stack = Stack.push(stack, value)
+
+      assert %Stack{} = pushed_stack
+    end
+
+    test "should return a stack with the given item on top" do
+      stack = Stack.new()
+
+      value = :rand.uniform(0xFFF)
+      pushed_stack = Stack.push(stack, value)
+
+      assert [value] == pushed_stack.data
+    end
+
+    test "should return a stack with the size incremented" do
+      stack = Stack.new()
+
+      value = :rand.uniform(0xFFF)
+      pushed_stack = Stack.push(stack, value)
+
+      assert 1 == pushed_stack.size
+    end
+  end
 end

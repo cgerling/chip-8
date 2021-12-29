@@ -25,4 +25,9 @@ defmodule Chip8.Stack do
 
     {address, popped_stack}
   end
+
+  @spec push(t(), integer()) :: t()
+  def push(%__MODULE__{data: data} = stack, value) when is_integer(value) do
+    %{stack | data: [value | data], size: stack.size + 1}
+  end
 end
