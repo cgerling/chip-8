@@ -2,6 +2,7 @@ defmodule Chip8.Instruction.Decoder do
   @moduledoc false
 
   alias Chip8.Instruction
+  alias Chip8.Instruction.CALL
   alias Chip8.Instruction.CLS
   alias Chip8.Instruction.DRW
   alias Chip8.Instruction.RET
@@ -45,6 +46,12 @@ defmodule Chip8.Instruction.Decoder do
     address = build_address(address1, address2, address3)
 
     Instruction.new(SYS, %{address: address})
+  end
+
+  defp decode_data({0x2, address1, address2, address3}) do
+    address = build_address(address1, address2, address3)
+
+    Instruction.new(CALL, %{address: address})
   end
 
   defp decode_data({0xD, x, y, nibble}) do
