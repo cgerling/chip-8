@@ -7,6 +7,7 @@ defmodule Chip8.Instruction.Decoder do
   alias Chip8.Instruction.DRW
   alias Chip8.Instruction.RET
   alias Chip8.Instruction.SE
+  alias Chip8.Instruction.SNE
   alias Chip8.Instruction.SYS
   alias Chip8.Memory
 
@@ -59,6 +60,12 @@ defmodule Chip8.Instruction.Decoder do
     byte = build_byte(byte1, byte2)
 
     Instruction.new(SE, %{x: x, byte: byte})
+  end
+
+  defp decode_data({0x4, x, byte1, byte2}) do
+    byte = build_byte(byte1, byte2)
+
+    Instruction.new(SNE, %{x: x, byte: byte})
   end
 
   defp decode_data({0xD, x, y, nibble}) do
