@@ -72,6 +72,10 @@ defmodule Chip8.Instruction.Decoder do
     Instruction.new(SE, %{x: x, y: y})
   end
 
+  defp decode_data({0x9, x, y, 0x0}) do
+    Instruction.new(SNE, %{x: x, y: y})
+  end
+
   defp decode_data({0xD, x, y, nibble}) do
     Instruction.new(DRW, %{x: x, y: y, nibble: nibble})
   end
