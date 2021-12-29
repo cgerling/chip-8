@@ -75,15 +75,15 @@ defmodule Chip8.Instruction.Decoder do
     Instruction.new(SE, %{x: x, y: y})
   end
 
-  defp decode_data({0x8, x, y, 1}) do
+  defp decode_data({0x8, x, y, 0x1}) do
     Instruction.new(OR, %{x: x, y: y})
   end
 
-  defp decode_data({0x8, x, y, 2}) do
+  defp decode_data({0x8, x, y, 0x2}) do
     Instruction.new(AND, %{x: x, y: y})
   end
 
-  defp decode_data({0x8, x, y, 3}) do
+  defp decode_data({0x8, x, y, 0x3}) do
     Instruction.new(XOR, %{x: x, y: y})
   end
 
