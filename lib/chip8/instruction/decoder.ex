@@ -11,6 +11,7 @@ defmodule Chip8.Instruction.Decoder do
   alias Chip8.Instruction.SE
   alias Chip8.Instruction.SNE
   alias Chip8.Instruction.SYS
+  alias Chip8.Instruction.XOR
   alias Chip8.Memory
 
   @hex_base 16
@@ -80,6 +81,10 @@ defmodule Chip8.Instruction.Decoder do
 
   defp decode_data({0x8, x, y, 2}) do
     Instruction.new(AND, %{x: x, y: y})
+  end
+
+  defp decode_data({0x8, x, y, 3}) do
+    Instruction.new(XOR, %{x: x, y: y})
   end
 
   defp decode_data({0x9, x, y, 0x0}) do
