@@ -14,4 +14,12 @@ defmodule Chip8.Instruction.SNE do
 
     %{runtime | pc: runtime.pc + skip_value}
   end
+
+  def execute(%Runtime{} = runtime, %{x: x, y: y}) do
+    register_x = VRegisters.get(runtime.v, x)
+    register_y = VRegisters.get(runtime.v, y)
+    skip_value = if register_x != register_y, do: Instruction.byte_size(), else: 0
+
+    %{runtime | pc: runtime.pc + skip_value}
+  end
 end
