@@ -15,6 +15,16 @@ defmodule Chip8.Instruction.DecoderTest do
       assert %{} == instruction.arguments
     end
 
+    test "should return a instruction struct for `RET` instruction" do
+      bytes = [0x00, 0xEE]
+
+      instruction = Decoder.decode(bytes)
+
+      assert %Instruction{} = instruction
+      assert Chip8.Instruction.RET == instruction.module
+      assert %{} == instruction.arguments
+    end
+
     test "should return a instruction struct for `SYS address` instruction" do
       bytes = [0x0A, 0x4F]
 
@@ -23,6 +33,17 @@ defmodule Chip8.Instruction.DecoderTest do
       assert %Instruction{} = instruction
       assert Chip8.Instruction.SYS == instruction.module
       assert %{address: 0xA4F} == instruction.arguments
+    end
+
+    test "should return a instruction struct for `CALL address` instruction" do
+      bytes = [0x2B, 0x06]
+
+      instruction = Decoder.decode(bytes)
+
+      assert %Instruction{} = instruction
+
+      assert Chip8.Instruction.CALL == instruction.module
+      assert %{address: 0xB06} == instruction.arguments
     end
 
     test "should return a instruction struct for the `DRW Vx, Vy, nibble` instruction" do
