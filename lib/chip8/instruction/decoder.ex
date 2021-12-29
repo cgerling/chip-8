@@ -6,6 +6,8 @@ defmodule Chip8.Instruction.Decoder do
   alias Chip8.Instruction.CLS
   alias Chip8.Instruction.DRW
   alias Chip8.Instruction.RET
+  alias Chip8.Instruction.SE
+  alias Chip8.Instruction.SNE
   alias Chip8.Instruction.SYS
   alias Chip8.Memory
 
@@ -54,11 +56,35 @@ defmodule Chip8.Instruction.Decoder do
     Instruction.new(CALL, %{address: address})
   end
 
+  defp decode_data({0x3, x, byte1, byte2}) do
+    byte = build_byte(byte1, byte2)
+
+    Instruction.new(SE, %{x: x, byte: byte})
+  end
+
+  defp decode_data({0x4, x, byte1, byte2}) do
+    byte = build_byte(byte1, byte2)
+
+    Instruction.new(SNE, %{x: x, byte: byte})
+  end
+
+  defp decode_data({0x5, x, y, 0x0}) do
+    Instruction.new(SE, %{x: x, y: y})
+  end
+
+  defp decode_data({0x9, x, y, 0x0}) do
+    Instruction.new(SNE, %{x: x, y: y})
+  end
+
   defp decode_data({0xD, x, y, nibble}) do
     Instruction.new(DRW, %{x: x, y: y, nibble: nibble})
   end
 
   defp build_address(address1, address2, address3) do
     Integer.undigits([address1, address2, address3], @hex_base)
+  end
+
+  defp build_byte(byte1, byte2) do
+    Integer.undigits([byte1, byte2], @hex_base)
   end
 end
