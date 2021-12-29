@@ -5,6 +5,7 @@ defmodule Chip8.Instruction.Decoder do
   alias Chip8.Instruction.CALL
   alias Chip8.Instruction.CLS
   alias Chip8.Instruction.DRW
+  alias Chip8.Instruction.OR
   alias Chip8.Instruction.RET
   alias Chip8.Instruction.SE
   alias Chip8.Instruction.SNE
@@ -70,6 +71,10 @@ defmodule Chip8.Instruction.Decoder do
 
   defp decode_data({0x5, x, y, 0x0}) do
     Instruction.new(SE, %{x: x, y: y})
+  end
+
+  defp decode_data({0x8, x, y, 1}) do
+    Instruction.new(OR, %{x: x, y: y})
   end
 
   defp decode_data({0x9, x, y, 0x0}) do
