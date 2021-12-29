@@ -16,4 +16,13 @@ defmodule Chip8.Stack do
       size: 0
     }
   end
+
+  @spec pop(t()) :: {byte() | nil, t()}
+  def pop(%__MODULE__{data: []} = stack), do: {nil, stack}
+
+  def pop(%__MODULE__{data: [address | data]} = stack) do
+    popped_stack = %{stack | data: data, size: stack.size - 1}
+
+    {address, popped_stack}
+  end
 end
