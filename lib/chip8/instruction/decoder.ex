@@ -2,14 +2,18 @@ defmodule Chip8.Instruction.Decoder do
   @moduledoc false
 
   alias Chip8.Instruction
+  alias Chip8.Instruction.ADD
   alias Chip8.Instruction.AND
   alias Chip8.Instruction.CALL
   alias Chip8.Instruction.CLS
   alias Chip8.Instruction.DRW
   alias Chip8.Instruction.OR
   alias Chip8.Instruction.RET
+  alias Chip8.Instruction.RND
   alias Chip8.Instruction.SE
   alias Chip8.Instruction.SNE
+  alias Chip8.Instruction.SUB
+  alias Chip8.Instruction.SUBN
   alias Chip8.Instruction.SYS
   alias Chip8.Instruction.XOR
   alias Chip8.Memory
@@ -75,24 +79,52 @@ defmodule Chip8.Instruction.Decoder do
     Instruction.new(SE, %{x: x, y: y})
   end
 
-  defp decode_data({0x8, x, y, 1}) do
+  defp decode_data({0x7, x, byte1, byte2}) do
+    byte = build_byte(byte1, byte2)
+
+    Instruction.new(ADD, %{x: x, byte: byte})
+  end
+
+  defp decode_data({0x8, x, y, 0x1}) do
     Instruction.new(OR, %{x: x, y: y})
   end
 
-  defp decode_data({0x8, x, y, 2}) do
+  defp decode_data({0x8, x, y, 0x2}) do
     Instruction.new(AND, %{x: x, y: y})
   end
 
-  defp decode_data({0x8, x, y, 3}) do
+  defp decode_data({0x8, x, y, 0x3}) do
     Instruction.new(XOR, %{x: x, y: y})
+  end
+
+  defp decode_data({0x8, x, y, 0x4}) do
+    Instruction.new(ADD, %{x: x, y: y})
+  end
+
+  defp decode_data({0x8, x, y, 0x5}) do
+    Instruction.new(SUB, %{x: x, y: y})
+  end
+
+  defp decode_data({0x8, x, y, 0x7}) do
+    Instruction.new(SUBN, %{x: x, y: y})
   end
 
   defp decode_data({0x9, x, y, 0x0}) do
     Instruction.new(SNE, %{x: x, y: y})
   end
 
+  defp decode_data({0xC, x, byte1, byte2}) do
+    byte = build_byte(byte1, byte2)
+
+    Instruction.new(RND, %{x: x, byte: byte})
+  end
+
   defp decode_data({0xD, x, y, nibble}) do
     Instruction.new(DRW, %{x: x, y: y, nibble: nibble})
+  end
+
+  defp decode_data({0xF, x, 0x1, 0xE}) do
+    Instruction.new(ADD, %{x: x})
   end
 
   defp build_address(address1, address2, address3) do
