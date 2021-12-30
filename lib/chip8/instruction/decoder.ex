@@ -146,6 +146,10 @@ defmodule Chip8.Instruction.Decoder do
     Instruction.new(LD, %{x: x, operation: :store})
   end
 
+  defp decode_data({0xF, x, 0x6, 0x5}) do
+    Instruction.new(LD, %{x: x, operation: :load})
+  end
+
   defp build_address(address1, address2, address3) do
     Integer.undigits([address1, address2, address3], @hex_base)
   end

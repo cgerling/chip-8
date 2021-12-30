@@ -246,5 +246,16 @@ defmodule Chip8.Instruction.DecoderTest do
       assert Chip8.Instruction.LD == instruction.module
       assert %{x: 0xD, operation: :store} == instruction.arguments
     end
+
+    test "should return a instruction struct for the `LD Vx, I` instruction" do
+      bytes = [0xFF, 0x65]
+
+      instruction = Decoder.decode(bytes)
+
+      assert %Instruction{} = instruction
+
+      assert Chip8.Instruction.LD == instruction.module
+      assert %{x: 0xF, operation: :load} == instruction.arguments
+    end
   end
 end
