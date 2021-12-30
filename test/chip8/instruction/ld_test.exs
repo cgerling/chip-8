@@ -47,5 +47,25 @@ defmodule Chip8.Instruction.LDTest do
 
       assert Enum.to_list(0..x) == Memory.read(executed_runtime.memory, i_value, x + 1)
     end
+
+    test "should return a runtime with v register 0 up to v register x holding the contents of memory" do
+      runtime = Runtime.new()
+
+      x = :rand.uniform(0xE) + 1
+      data = Enum.to_list(1..x)
+      address = :rand.uniform(runtime.memory.size - x)
+      memory = Memory.write(runtime.memory, address, data)
+      runtime = put_in(runtime.i, address)
+      runtime = put_in(runtime.memory, memory)
+
+      arguments = %{x: x, operation: :load}
+      executed_runtime = LD.execute(runtime, arguments)
+
+      assert data
+             |> Enum.with_index()
+             |> Enum.all?(fn {value, index} ->
+               value == VRegisters.get(executed_runtime.v, index)
+             end)
+    end
   end
 end

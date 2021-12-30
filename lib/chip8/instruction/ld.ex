@@ -22,4 +22,17 @@ defmodule Chip8.Instruction.LD do
     memory = Memory.write(runtime.memory, runtime.i, registers)
     %{runtime | memory: memory}
   end
+
+  def execute(%Runtime{} = runtime, %{x: x, operation: :load}) do
+    data = Memory.read(runtime.memory, runtime.i, x + 1)
+
+    v_registers =
+      data
+      |> Enum.with_index()
+      |> Enum.reduce(runtime.v, fn {value, index}, v ->
+        VRegisters.set(v, index, value)
+      end)
+
+    %{runtime | v: v_registers}
+  end
 end
