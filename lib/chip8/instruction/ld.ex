@@ -15,4 +15,11 @@ defmodule Chip8.Instruction.LD do
     memory = Memory.write(runtime.memory, runtime.i, decimal_digits)
     %{runtime | memory: memory}
   end
+
+  def execute(%Runtime{} = runtime, %{x: x, operation: :store}) do
+    registers = Enum.map(0..x, &VRegisters.get(runtime.v, &1))
+
+    memory = Memory.write(runtime.memory, runtime.i, registers)
+    %{runtime | memory: memory}
+  end
 end
