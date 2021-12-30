@@ -11,6 +11,7 @@ defmodule Chip8.Instruction.DecoderTest do
       instruction = Decoder.decode(bytes)
 
       assert %Instruction{} = instruction
+
       assert Chip8.Instruction.CLS == instruction.module
       assert %{} == instruction.arguments
     end
@@ -21,6 +22,7 @@ defmodule Chip8.Instruction.DecoderTest do
       instruction = Decoder.decode(bytes)
 
       assert %Instruction{} = instruction
+
       assert Chip8.Instruction.RET == instruction.module
       assert %{} == instruction.arguments
     end
@@ -31,6 +33,7 @@ defmodule Chip8.Instruction.DecoderTest do
       instruction = Decoder.decode(bytes)
 
       assert %Instruction{} = instruction
+
       assert Chip8.Instruction.SYS == instruction.module
       assert %{address: 0xA4F} == instruction.arguments
     end
@@ -129,6 +132,7 @@ defmodule Chip8.Instruction.DecoderTest do
       instruction = Decoder.decode(bytes)
 
       assert %Instruction{} = instruction
+
       assert Chip8.Instruction.DRW == instruction.module
       assert %{x: 0x7, y: 0xF, nibble: 0x2} == instruction.arguments
     end
