@@ -191,5 +191,16 @@ defmodule Chip8.Instruction.DecoderTest do
       assert Chip8.Instruction.DRW == instruction.module
       assert %{x: 0x7, y: 0xF, nibble: 0x2} == instruction.arguments
     end
+
+    test "should return a instruction struct for the `ADD I, Vx` instruction" do
+      bytes = [0xF2, 0x1E]
+
+      instruction = Decoder.decode(bytes)
+
+      assert %Instruction{} = instruction
+
+      assert Chip8.Instruction.ADD == instruction.module
+      assert %{x: 0x2} == instruction.arguments
+    end
   end
 end

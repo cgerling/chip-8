@@ -123,6 +123,10 @@ defmodule Chip8.Instruction.Decoder do
     Instruction.new(DRW, %{x: x, y: y, nibble: nibble})
   end
 
+  defp decode_data({0xF, x, 0x1, 0xE}) do
+    Instruction.new(ADD, %{x: x})
+  end
+
   defp build_address(address1, address2, address3) do
     Integer.undigits([address1, address2, address3], @hex_base)
   end
