@@ -45,5 +45,20 @@ defmodule Chip8.Instruction.ADDTest do
 
       assert 0xB0 == VRegisters.get(executed_runtime.v, x)
     end
+
+    test "should return a runtime with i set to the sum of i and v register x" do
+      runtime = Runtime.new()
+      x = 0xC
+      x_value = 0x2C
+      i_value = 0x64
+      v_registers = VRegisters.set(runtime.v, x, x_value)
+      runtime = put_in(runtime.v, v_registers)
+      runtime = put_in(runtime.i, i_value)
+
+      arguments = %{x: x}
+      executed_runtime = ADD.execute(runtime, arguments)
+
+      assert 0x90 == executed_runtime.i
+    end
   end
 end
