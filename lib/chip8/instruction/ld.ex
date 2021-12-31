@@ -4,6 +4,8 @@ defmodule Chip8.Instruction.LD do
   @behaviour Chip8.Instruction
 
   alias Chip8.Font
+  alias Chip8.Instruction
+  alias Chip8.Keyboard
   alias Chip8.Memory
   alias Chip8.Runtime
   alias Chip8.VRegisters
@@ -66,6 +68,17 @@ defmodule Chip8.Instruction.LD do
   def execute(%Runtime{} = runtime, %{x: x, operation: :store, to: :st}) do
     register_x = VRegisters.get(runtime.v, x)
     %{runtime | st: register_x}
+  end
+
+  def execute(%Runtime{} = runtime, %{x: x, operation: :store, from: :keyboard}) do
+    key_pressed = Keyboard.keys() |> Enum.find(&Keyboard.is_pressed?(runtime.keyboard, &1))
+
+    if is_nil(key_pressed) do
+      %{runtime | pc: runtime.pc - Instruction.byte_size()}
+    else
+      v_registers = VRegisters.set(runtime.v, x, key_pressed)
+      %{runtime | v: v_registers}
+    end
   end
 
   def execute(%Runtime{} = runtime, %{x: x}) do
