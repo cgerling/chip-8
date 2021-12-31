@@ -40,4 +40,11 @@ defmodule Chip8.Instruction.LD do
     v_registers = VRegisters.set(runtime.v, x, byte)
     %{runtime | v: v_registers}
   end
+
+  def execute(%Runtime{} = runtime, %{x: x, y: y}) do
+    register_y = VRegisters.get(runtime.v, y)
+
+    v_registers = VRegisters.set(runtime.v, x, register_y)
+    %{runtime | v: v_registers}
+  end
 end
