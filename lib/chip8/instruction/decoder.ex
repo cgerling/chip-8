@@ -15,6 +15,7 @@ defmodule Chip8.Instruction.Decoder do
   alias Chip8.Instruction.SE
   alias Chip8.Instruction.SHL
   alias Chip8.Instruction.SHR
+  alias Chip8.Instruction.SKP
   alias Chip8.Instruction.SNE
   alias Chip8.Instruction.SUB
   alias Chip8.Instruction.SUBN
@@ -161,6 +162,10 @@ defmodule Chip8.Instruction.Decoder do
 
   defp decode_data({0xD, x, y, nibble}) do
     Instruction.new(DRW, %{x: x, y: y, nibble: nibble})
+  end
+
+  defp decode_data({0xE, x, 0x9, 0xE}) do
+    Instruction.new(SKP, %{x: x})
   end
 
   defp decode_data({0xF, x, 0x0, 0x7}) do
