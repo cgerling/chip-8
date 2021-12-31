@@ -167,6 +167,10 @@ defmodule Chip8.Instruction.Decoder do
     Instruction.new(ADD, %{x: x})
   end
 
+  defp decode_data({0xF, x, 0x2, 0x9}) do
+    Instruction.new(LD, %{x: x})
+  end
+
   defp decode_data({0xF, x, 0x3, 0x3}) do
     Instruction.new(LD, %{x: x, operation: :bcd})
   end
