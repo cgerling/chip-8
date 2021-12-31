@@ -18,6 +18,9 @@ defmodule Chip8.Keyboard do
     %__MODULE__{keys: keys}
   end
 
+  @spec keys() :: list(key())
+  def keys, do: Enum.to_list(0x0..0xF)
+
   @spec is_pressed?(t(), key()) :: boolean()
   def is_pressed?(%__MODULE__{} = keyboard, key) when is_integer(key) and key in 0x0..0xF do
     keyboard.keys[key] == :pressed

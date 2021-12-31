@@ -11,6 +11,14 @@ defmodule Chip8.KeyboardTest do
     end
   end
 
+  describe "keys/0" do
+    test "should return a list of all keys" do
+      keys = Keyboard.keys()
+
+      assert Enum.to_list(0x0..0xF) == keys
+    end
+  end
+
   describe "is_pressed?/2" do
     test "should return true when given key is pressed" do
       keyboard = Keyboard.new()
