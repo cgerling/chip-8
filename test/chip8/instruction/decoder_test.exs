@@ -389,4 +389,16 @@ defmodule Chip8.Instruction.DecoderTest do
       assert %{x: 0xF, y: :memory} == instruction.arguments
     end
   end
+
+  defp build_instruction_bytes(instruction) when is_integer(instruction) and instruction > 0 do
+    digits = Integer.digits(instruction, 16)
+
+    padding_size = 4 - Enum.count(digits)
+    padding = List.duplicate(0, padding_size)
+
+    [padding | digits]
+    |> List.flatten()
+    |> Enum.chunk_every(2)
+    |> Enum.map(&Integer.undigits(&1, 16))
+  end
 end
