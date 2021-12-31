@@ -102,5 +102,18 @@ defmodule Chip8.Instruction.LDTest do
 
       assert address == executed_runtime.i
     end
+
+    test "should return a runtime with i set to the address of the character set in v register x" do
+      runtime = Runtime.new()
+      x = :rand.uniform(0xF)
+      x_value = 0xD
+      v_registers = VRegisters.set(runtime.v, x, x_value)
+      runtime = put_in(runtime.v, v_registers)
+
+      arguments = %{x: x}
+      executed_runtime = LD.execute(runtime, arguments)
+
+      assert 0x91 == executed_runtime.i
+    end
   end
 end

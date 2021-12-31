@@ -3,6 +3,7 @@ defmodule Chip8.Instruction.LD do
 
   @behaviour Chip8.Instruction
 
+  alias Chip8.Font
   alias Chip8.Memory
   alias Chip8.Runtime
   alias Chip8.VRegisters
@@ -50,5 +51,12 @@ defmodule Chip8.Instruction.LD do
 
   def execute(%Runtime{} = runtime, %{address: address}) do
     %{runtime | i: address}
+  end
+
+  def execute(%Runtime{} = runtime, %{x: x}) do
+    register_x = VRegisters.get(runtime.v, x)
+    character_address = Font.address(register_x)
+
+    %{runtime | i: character_address}
   end
 end
