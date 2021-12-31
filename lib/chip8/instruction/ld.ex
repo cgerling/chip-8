@@ -53,6 +53,11 @@ defmodule Chip8.Instruction.LD do
     %{runtime | i: address}
   end
 
+  def execute(%Runtime{} = runtime, %{x: x, operation: :store, from: :dt}) do
+    v_registers = VRegisters.set(runtime.v, x, runtime.dt)
+    %{runtime | v: v_registers}
+  end
+
   def execute(%Runtime{} = runtime, %{x: x}) do
     register_x = VRegisters.get(runtime.v, x)
     character_address = Font.address(register_x)

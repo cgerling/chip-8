@@ -115,5 +115,17 @@ defmodule Chip8.Instruction.LDTest do
 
       assert 0x91 == executed_runtime.i
     end
+
+    test "should return a runtime with v register x set to the delay timer" do
+      runtime = Runtime.new()
+      x = :rand.uniform(0xF)
+      dt_value = :rand.uniform(0xFFF)
+      runtime = put_in(runtime.dt, dt_value)
+
+      arguments = %{x: x, operation: :store, from: :dt}
+      executed_runtime = LD.execute(runtime, arguments)
+
+      assert dt_value == VRegisters.get(executed_runtime.v, x)
+    end
   end
 end
