@@ -28,4 +28,23 @@ defmodule Chip8.Memory do
       when is_integer(address) and is_integer(amount) and address >= 0 and amount >= 0 do
     Enum.slice(data, address, amount)
   end
+
+  @spec write(t(), byte(), data()) :: t()
+  def write(%__MODULE__{} = memory, _address, []), do: memory
+
+  def write(%__MODULE__{} = memory, address, _data) when address >= memory.size, do: memory
+
+  def write(%__MODULE__{} = memory, address, data) when is_integer(address) and is_list(data) do
+    writtable_data_size = max(memory.size - address, 0)
+
+    data =
+      data
+      |> Enum.slice(0, writtable_data_size)
+      |> Enum.with_index()
+      |> Enum.reduce(memory.data, fn {byte, index}, data ->
+        List.replace_at(data, address + index, byte)
+      end)
+
+    %{memory | data: data}
+  end
 end

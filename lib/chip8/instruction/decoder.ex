@@ -7,6 +7,7 @@ defmodule Chip8.Instruction.Decoder do
   alias Chip8.Instruction.CALL
   alias Chip8.Instruction.CLS
   alias Chip8.Instruction.DRW
+  alias Chip8.Instruction.LD
   alias Chip8.Instruction.OR
   alias Chip8.Instruction.RET
   alias Chip8.Instruction.RND
@@ -135,6 +136,18 @@ defmodule Chip8.Instruction.Decoder do
 
   defp decode_data({0xF, x, 0x1, 0xE}) do
     Instruction.new(ADD, %{x: x})
+  end
+
+  defp decode_data({0xF, x, 0x3, 0x3}) do
+    Instruction.new(LD, %{x: x, operation: :bcd})
+  end
+
+  defp decode_data({0xF, x, 0x5, 0x5}) do
+    Instruction.new(LD, %{x: x, operation: :store})
+  end
+
+  defp decode_data({0xF, x, 0x6, 0x5}) do
+    Instruction.new(LD, %{x: x, operation: :load})
   end
 
   defp build_address(address1, address2, address3) do
