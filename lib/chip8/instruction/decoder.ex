@@ -174,19 +174,19 @@ defmodule Chip8.Instruction.Decoder do
   end
 
   defp decode_data({0xF, x, 0x0, 0x7}) do
-    Instruction.new(LD, %{x: x, operation: :store, from: :dt})
+    Instruction.new(LD, %{x: x, y: :dt})
   end
 
   defp decode_data({0xF, x, 0x0, 0xA}) do
-    Instruction.new(LD, %{x: x, operation: :store, from: :keyboard})
+    Instruction.new(LD, %{x: x, y: :keyboard})
   end
 
-  defp decode_data({0xF, x, 0x1, 0x5}) do
-    Instruction.new(LD, %{x: x, operation: :store, to: :dt})
+  defp decode_data({0xF, y, 0x1, 0x5}) do
+    Instruction.new(LD, %{x: :dt, y: y})
   end
 
-  defp decode_data({0xF, x, 0x1, 0x8}) do
-    Instruction.new(LD, %{x: x, operation: :store, to: :st})
+  defp decode_data({0xF, y, 0x1, 0x8}) do
+    Instruction.new(LD, %{x: :st, y: y})
   end
 
   defp decode_data({0xF, x, 0x1, 0xE}) do
@@ -197,16 +197,16 @@ defmodule Chip8.Instruction.Decoder do
     Instruction.new(LD, %{x: x})
   end
 
-  defp decode_data({0xF, x, 0x3, 0x3}) do
-    Instruction.new(LD, %{x: x, operation: :bcd})
+  defp decode_data({0xF, y, 0x3, 0x3}) do
+    Instruction.new(LD, %{x: :bcd, y: y})
   end
 
-  defp decode_data({0xF, x, 0x5, 0x5}) do
-    Instruction.new(LD, %{x: x, operation: :store, to: :memory})
+  defp decode_data({0xF, y, 0x5, 0x5}) do
+    Instruction.new(LD, %{x: :memory, y: y})
   end
 
   defp decode_data({0xF, x, 0x6, 0x5}) do
-    Instruction.new(LD, %{x: x, operation: :load, from: :memory})
+    Instruction.new(LD, %{x: x, y: :memory})
   end
 
   defp build_address(address1, address2, address3) do
