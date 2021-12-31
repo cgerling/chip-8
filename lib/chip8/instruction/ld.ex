@@ -17,14 +17,14 @@ defmodule Chip8.Instruction.LD do
     %{runtime | memory: memory}
   end
 
-  def execute(%Runtime{} = runtime, %{x: x, operation: :store}) do
+  def execute(%Runtime{} = runtime, %{x: x, operation: :store, to: :memory}) do
     registers = Enum.map(0..x, &VRegisters.get(runtime.v, &1))
 
     memory = Memory.write(runtime.memory, runtime.i, registers)
     %{runtime | memory: memory}
   end
 
-  def execute(%Runtime{} = runtime, %{x: x, operation: :load}) do
+  def execute(%Runtime{} = runtime, %{x: x, operation: :load, from: :memory}) do
     data = Memory.read(runtime.memory, runtime.i, x + 1)
 
     v_registers =
@@ -51,6 +51,21 @@ defmodule Chip8.Instruction.LD do
 
   def execute(%Runtime{} = runtime, %{address: address}) do
     %{runtime | i: address}
+  end
+
+  def execute(%Runtime{} = runtime, %{x: x, operation: :store, from: :dt}) do
+    v_registers = VRegisters.set(runtime.v, x, runtime.dt)
+    %{runtime | v: v_registers}
+  end
+
+  def execute(%Runtime{} = runtime, %{x: x, operation: :store, to: :dt}) do
+    register_x = VRegisters.get(runtime.v, x)
+    %{runtime | dt: register_x}
+  end
+
+  def execute(%Runtime{} = runtime, %{x: x, operation: :store, to: :st}) do
+    register_x = VRegisters.get(runtime.v, x)
+    %{runtime | st: register_x}
   end
 
   def execute(%Runtime{} = runtime, %{x: x}) do

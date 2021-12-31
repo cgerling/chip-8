@@ -163,6 +163,18 @@ defmodule Chip8.Instruction.Decoder do
     Instruction.new(DRW, %{x: x, y: y, nibble: nibble})
   end
 
+  defp decode_data({0xF, x, 0x0, 0x7}) do
+    Instruction.new(LD, %{x: x, operation: :store, from: :dt})
+  end
+
+  defp decode_data({0xF, x, 0x1, 0x5}) do
+    Instruction.new(LD, %{x: x, operation: :store, to: :dt})
+  end
+
+  defp decode_data({0xF, x, 0x1, 0x8}) do
+    Instruction.new(LD, %{x: x, operation: :store, to: :st})
+  end
+
   defp decode_data({0xF, x, 0x1, 0xE}) do
     Instruction.new(ADD, %{x: x})
   end
@@ -176,11 +188,11 @@ defmodule Chip8.Instruction.Decoder do
   end
 
   defp decode_data({0xF, x, 0x5, 0x5}) do
-    Instruction.new(LD, %{x: x, operation: :store})
+    Instruction.new(LD, %{x: x, operation: :store, to: :memory})
   end
 
   defp decode_data({0xF, x, 0x6, 0x5}) do
-    Instruction.new(LD, %{x: x, operation: :load})
+    Instruction.new(LD, %{x: x, operation: :load, from: :memory})
   end
 
   defp build_address(address1, address2, address3) do

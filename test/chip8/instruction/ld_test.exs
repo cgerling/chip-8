@@ -42,7 +42,7 @@ defmodule Chip8.Instruction.LDTest do
       runtime = put_in(runtime.i, i_value)
       runtime = put_in(runtime.v, v_registers)
 
-      arguments = %{x: x, operation: :store}
+      arguments = %{x: x, operation: :store, to: :memory}
       executed_runtime = LD.execute(runtime, arguments)
 
       assert Enum.to_list(0..x) == Memory.read(executed_runtime.memory, i_value, x + 1)
@@ -58,7 +58,7 @@ defmodule Chip8.Instruction.LDTest do
       runtime = put_in(runtime.i, address)
       runtime = put_in(runtime.memory, memory)
 
-      arguments = %{x: x, operation: :load}
+      arguments = %{x: x, operation: :load, from: :memory}
       executed_runtime = LD.execute(runtime, arguments)
 
       assert data
@@ -114,6 +114,44 @@ defmodule Chip8.Instruction.LDTest do
       executed_runtime = LD.execute(runtime, arguments)
 
       assert 0x91 == executed_runtime.i
+    end
+
+    test "should return a runtime with v register x set to the delay timer" do
+      runtime = Runtime.new()
+      x = :rand.uniform(0xF)
+      dt_value = :rand.uniform(0xFFF)
+      runtime = put_in(runtime.dt, dt_value)
+
+      arguments = %{x: x, operation: :store, from: :dt}
+      executed_runtime = LD.execute(runtime, arguments)
+
+      assert dt_value == VRegisters.get(executed_runtime.v, x)
+    end
+
+    test "should return a runtime with delay timer set to the v register x" do
+      runtime = Runtime.new()
+      x = :rand.uniform(0xF)
+      x_value = :rand.uniform(0xFFF)
+      v_registers = VRegisters.set(runtime.v, x, x_value)
+      runtime = put_in(runtime.v, v_registers)
+
+      arguments = %{x: x, operation: :store, to: :dt}
+      executed_runtime = LD.execute(runtime, arguments)
+
+      assert x_value == executed_runtime.dt
+    end
+
+    test "should return a runtime with sound timer set to the v register x" do
+      runtime = Runtime.new()
+      x = :rand.uniform(0xF)
+      x_value = :rand.uniform(0xFFF)
+      v_registers = VRegisters.set(runtime.v, x, x_value)
+      runtime = put_in(runtime.v, v_registers)
+
+      arguments = %{x: x, operation: :store, to: :st}
+      executed_runtime = LD.execute(runtime, arguments)
+
+      assert x_value == executed_runtime.st
     end
   end
 end
