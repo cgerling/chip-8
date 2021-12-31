@@ -42,7 +42,7 @@ defmodule Chip8.Instruction.LDTest do
       runtime = put_in(runtime.i, i_value)
       runtime = put_in(runtime.v, v_registers)
 
-      arguments = %{x: x, operation: :store}
+      arguments = %{x: x, operation: :store, to: :memory}
       executed_runtime = LD.execute(runtime, arguments)
 
       assert Enum.to_list(0..x) == Memory.read(executed_runtime.memory, i_value, x + 1)
@@ -58,7 +58,7 @@ defmodule Chip8.Instruction.LDTest do
       runtime = put_in(runtime.i, address)
       runtime = put_in(runtime.memory, memory)
 
-      arguments = %{x: x, operation: :load}
+      arguments = %{x: x, operation: :load, from: :memory}
       executed_runtime = LD.execute(runtime, arguments)
 
       assert data

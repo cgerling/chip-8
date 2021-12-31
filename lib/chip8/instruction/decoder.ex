@@ -176,11 +176,11 @@ defmodule Chip8.Instruction.Decoder do
   end
 
   defp decode_data({0xF, x, 0x5, 0x5}) do
-    Instruction.new(LD, %{x: x, operation: :store})
+    Instruction.new(LD, %{x: x, operation: :store, to: :memory})
   end
 
   defp decode_data({0xF, x, 0x6, 0x5}) do
-    Instruction.new(LD, %{x: x, operation: :load})
+    Instruction.new(LD, %{x: x, operation: :load, from: :memory})
   end
 
   defp build_address(address1, address2, address3) do
