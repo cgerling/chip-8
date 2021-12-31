@@ -7,13 +7,12 @@ defmodule Chip8.Instruction.ADD do
   alias Chip8.VRegisters
 
   @impl Chip8.Instruction
-  def execute(%Runtime{} = runtime, %{x: x, byte: byte}) do
-    register_x = VRegisters.get(runtime.v, x)
+  def execute(%Runtime{} = runtime, %{x: :i, y: y}) do
+    register_y = VRegisters.get(runtime.v, y)
 
-    add_result = register_x + byte
+    add_result = runtime.i + register_y
 
-    v_registers = VRegisters.set(runtime.v, x, add_result)
-    %{runtime | v: v_registers}
+    %{runtime | i: add_result}
   end
 
   def execute(%Runtime{} = runtime, %{x: x, y: y}) do
@@ -26,11 +25,12 @@ defmodule Chip8.Instruction.ADD do
     %{runtime | v: v_registers}
   end
 
-  def execute(%Runtime{} = runtime, %{x: x}) do
+  def execute(%Runtime{} = runtime, %{x: x, byte: byte}) do
     register_x = VRegisters.get(runtime.v, x)
 
-    add_result = runtime.i + register_x
+    add_result = register_x + byte
 
-    %{runtime | i: add_result}
+    v_registers = VRegisters.set(runtime.v, x, add_result)
+    %{runtime | v: v_registers}
   end
 end
