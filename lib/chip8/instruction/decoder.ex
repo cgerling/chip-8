@@ -131,6 +131,12 @@ defmodule Chip8.Instruction.Decoder do
     Instruction.new(SNE, %{x: x, y: y})
   end
 
+  defp decode_data({0xB, address1, address2, address3}) do
+    address = build_address(address1, address2, address3)
+
+    Instruction.new(JP, %{x: 0, address: address})
+  end
+
   defp decode_data({0xC, x, byte1, byte2}) do
     byte = build_byte(byte1, byte2)
 
