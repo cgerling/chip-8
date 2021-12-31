@@ -141,6 +141,42 @@ defmodule Chip8.Instruction.LDTest do
       assert x_value == executed_runtime.dt
     end
 
+    test "should return a runtime with pc set to the previous instruction when a key is not pressed" do
+      runtime = Runtime.new()
+      pc_value = :rand.uniform(0xFFF)
+      runtime = put_in(runtime.pc, pc_value)
+
+      x = :rand.uniform(0xF)
+      arguments = %{x: x, operation: :store, from: :keyboard}
+      executed_runtime = LD.execute(runtime, arguments)
+
+      assert runtime.pc - 2 == executed_runtime.pc
+    end
+
+    test "should return a runtime with pc unchanged when a key is pressed" do
+      runtime = Runtime.new()
+      key = :rand.uniform(0xF)
+      runtime = put_in(runtime.keyboard.keys[key], :pressed)
+
+      x = :rand.uniform(0xF)
+      arguments = %{x: x, operation: :store, from: :keyboard}
+      executed_runtime = LD.execute(runtime, arguments)
+
+      assert runtime.pc == executed_runtime.pc
+    end
+
+    test "should return a runtime with v register x set to the key pressed when a key is pressed" do
+      runtime = Runtime.new()
+      key = :rand.uniform(0xF)
+      runtime = put_in(runtime.keyboard.keys[key], :pressed)
+
+      x = :rand.uniform(0xF)
+      arguments = %{x: x, operation: :store, from: :keyboard}
+      executed_runtime = LD.execute(runtime, arguments)
+
+      assert key == VRegisters.get(executed_runtime.v, x)
+    end
+
     test "should return a runtime with sound timer set to the v register x" do
       runtime = Runtime.new()
       x = :rand.uniform(0xF)
