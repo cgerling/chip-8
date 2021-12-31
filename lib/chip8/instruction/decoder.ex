@@ -15,6 +15,7 @@ defmodule Chip8.Instruction.Decoder do
   alias Chip8.Instruction.SE
   alias Chip8.Instruction.SHL
   alias Chip8.Instruction.SHR
+  alias Chip8.Instruction.SKNP
   alias Chip8.Instruction.SKP
   alias Chip8.Instruction.SNE
   alias Chip8.Instruction.SUB
@@ -166,6 +167,10 @@ defmodule Chip8.Instruction.Decoder do
 
   defp decode_data({0xE, x, 0x9, 0xE}) do
     Instruction.new(SKP, %{x: x})
+  end
+
+  defp decode_data({0xE, x, 0xA, 0x1}) do
+    Instruction.new(SKNP, %{x: x})
   end
 
   defp decode_data({0xF, x, 0x0, 0x7}) do
