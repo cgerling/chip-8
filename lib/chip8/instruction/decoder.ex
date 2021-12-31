@@ -89,10 +89,20 @@ defmodule Chip8.Instruction.Decoder do
     Instruction.new(SE, %{x: x, y: y})
   end
 
+  defp decode_data({0x6, x, byte1, byte2}) do
+    byte = build_byte(byte1, byte2)
+
+    Instruction.new(LD, %{x: x, byte: byte})
+  end
+
   defp decode_data({0x7, x, byte1, byte2}) do
     byte = build_byte(byte1, byte2)
 
     Instruction.new(ADD, %{x: x, byte: byte})
+  end
+
+  defp decode_data({0x8, x, y, 0x0}) do
+    Instruction.new(LD, %{x: x, y: y})
   end
 
   defp decode_data({0x8, x, y, 0x1}) do
@@ -131,6 +141,12 @@ defmodule Chip8.Instruction.Decoder do
     Instruction.new(SNE, %{x: x, y: y})
   end
 
+  defp decode_data({0xA, address1, address2, address3}) do
+    address = build_address(address1, address2, address3)
+
+    Instruction.new(LD, %{address: address})
+  end
+
   defp decode_data({0xB, address1, address2, address3}) do
     address = build_address(address1, address2, address3)
 
@@ -149,6 +165,10 @@ defmodule Chip8.Instruction.Decoder do
 
   defp decode_data({0xF, x, 0x1, 0xE}) do
     Instruction.new(ADD, %{x: x})
+  end
+
+  defp decode_data({0xF, x, 0x2, 0x9}) do
+    Instruction.new(LD, %{x: x})
   end
 
   defp decode_data({0xF, x, 0x3, 0x3}) do

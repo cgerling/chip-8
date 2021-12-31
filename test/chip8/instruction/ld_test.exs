@@ -67,5 +67,53 @@ defmodule Chip8.Instruction.LDTest do
                value == VRegisters.get(executed_runtime.v, index)
              end)
     end
+
+    test "should return a runtime with v register x set to the given byte" do
+      runtime = Runtime.new()
+
+      x = :rand.uniform(0xF)
+      byte = :rand.uniform(0xFF)
+      arguments = %{x: x, byte: byte}
+      executed_runtime = LD.execute(runtime, arguments)
+
+      assert byte == VRegisters.get(executed_runtime.v, x)
+    end
+
+    test "should return a runtime with v register x set to v register y" do
+      runtime = Runtime.new()
+      x = 0xF
+      y = 0xE
+      y_value = 0x580
+      v_registers = VRegisters.set(runtime.v, y, y_value)
+      runtime = put_in(runtime.v, v_registers)
+
+      arguments = %{x: x, y: y}
+      executed_runtime = LD.execute(runtime, arguments)
+
+      assert y_value == VRegisters.get(executed_runtime.v, x)
+    end
+
+    test "should return a runtime with i set to the given address" do
+      runtime = Runtime.new()
+
+      address = :rand.uniform(0xFFF)
+      arguments = %{address: address}
+      executed_runtime = LD.execute(runtime, arguments)
+
+      assert address == executed_runtime.i
+    end
+
+    test "should return a runtime with i set to the address of the character set in v register x" do
+      runtime = Runtime.new()
+      x = :rand.uniform(0xF)
+      x_value = 0xD
+      v_registers = VRegisters.set(runtime.v, x, x_value)
+      runtime = put_in(runtime.v, v_registers)
+
+      arguments = %{x: x}
+      executed_runtime = LD.execute(runtime, arguments)
+
+      assert 0x91 == executed_runtime.i
+    end
   end
 end
