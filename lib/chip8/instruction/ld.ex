@@ -35,4 +35,9 @@ defmodule Chip8.Instruction.LD do
 
     %{runtime | v: v_registers}
   end
+
+  def execute(%Runtime{} = runtime, %{x: x, byte: byte}) do
+    v_registers = VRegisters.set(runtime.v, x, byte)
+    %{runtime | v: v_registers}
+  end
 end

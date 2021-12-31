@@ -67,5 +67,16 @@ defmodule Chip8.Instruction.LDTest do
                value == VRegisters.get(executed_runtime.v, index)
              end)
     end
+
+    test "should return a runtime with v register x set to the given byte" do
+      runtime = Runtime.new()
+
+      x = :rand.uniform(0xF)
+      byte = :rand.uniform(0xFF)
+      arguments = %{x: x, byte: byte}
+      executed_runtime = LD.execute(runtime, arguments)
+
+      assert byte == VRegisters.get(executed_runtime.v, x)
+    end
   end
 end
