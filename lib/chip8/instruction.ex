@@ -4,7 +4,16 @@ defmodule Chip8.Instruction do
   alias Chip8.Instruction.Decoder
   alias Chip8.Runtime
 
-  @type arguments :: %{atom() => term()}
+  @type register :: atom() | integer()
+  @type address :: 0x000..0xFFF
+  @type nibble :: 0x0..0xF
+  @type arguments ::
+          %{}
+          | %{x: register()}
+          | %{x: register(), address: address()}
+          | %{x: register(), byte: byte()}
+          | %{x: register(), y: register()}
+          | %{x: register(), y: register(), nibble: nibble()}
 
   @callback execute(Runtime.t(), arguments()) :: Runtime.t()
 
