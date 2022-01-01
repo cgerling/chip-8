@@ -6,17 +6,6 @@ defmodule Chip8.Instruction.XORTest do
   alias Chip8.VRegisters
 
   describe "execute/2" do
-    test "should return a runtime struct" do
-      runtime = Runtime.new()
-
-      x = :rand.uniform(0xF)
-      y = :rand.uniform(0xF)
-      arguments = %{x: x, y: y}
-      executed_runtime = XOR.execute(runtime, arguments)
-
-      assert %Runtime{} = executed_runtime
-    end
-
     test "should return a runtime with v register x set to the result of a bitwise xor of v register x and v register y" do
       runtime = Runtime.new()
       x = 0x1
@@ -29,6 +18,7 @@ defmodule Chip8.Instruction.XORTest do
       arguments = %{x: x, y: y}
       executed_runtime = XOR.execute(runtime, arguments)
 
+      assert %Runtime{} = executed_runtime
       assert 0x3B == VRegisters.get(executed_runtime.v, x)
     end
   end
