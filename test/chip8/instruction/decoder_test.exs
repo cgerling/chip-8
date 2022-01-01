@@ -12,7 +12,7 @@ defmodule Chip8.Instruction.DecoderTest do
 
       assert %Instruction{} = instruction
 
-      assert Chip8.Instruction.CLS == instruction.module
+      assert Instruction.CLS == instruction.module
       assert %{} == instruction.arguments
     end
 
@@ -23,7 +23,7 @@ defmodule Chip8.Instruction.DecoderTest do
 
       assert %Instruction{} = instruction
 
-      assert Chip8.Instruction.RET == instruction.module
+      assert Instruction.RET == instruction.module
       assert %{} == instruction.arguments
     end
 
@@ -34,7 +34,7 @@ defmodule Chip8.Instruction.DecoderTest do
 
       assert %Instruction{} = instruction
 
-      assert Chip8.Instruction.SYS == instruction.module
+      assert Instruction.SYS == instruction.module
       assert %{address: 0xA4F} == instruction.arguments
     end
 
@@ -45,7 +45,7 @@ defmodule Chip8.Instruction.DecoderTest do
 
       assert %Instruction{} = instruction
 
-      assert Chip8.Instruction.JP == instruction.module
+      assert Instruction.JP == instruction.module
       assert %{address: 0x4ED} == instruction.arguments
     end
 
@@ -56,7 +56,7 @@ defmodule Chip8.Instruction.DecoderTest do
 
       assert %Instruction{} = instruction
 
-      assert Chip8.Instruction.CALL == instruction.module
+      assert Instruction.CALL == instruction.module
       assert %{address: 0xB06} == instruction.arguments
     end
 
@@ -67,7 +67,7 @@ defmodule Chip8.Instruction.DecoderTest do
 
       assert %Instruction{} = instruction
 
-      assert Chip8.Instruction.SE == instruction.module
+      assert Instruction.SE == instruction.module
       assert %{x: 0x3, byte: 0xA8} == instruction.arguments
     end
 
@@ -78,7 +78,7 @@ defmodule Chip8.Instruction.DecoderTest do
 
       assert %Instruction{} = instruction
 
-      assert Chip8.Instruction.SNE == instruction.module
+      assert Instruction.SNE == instruction.module
       assert %{x: 0x9, byte: 0x8F} == instruction.arguments
     end
 
@@ -89,7 +89,7 @@ defmodule Chip8.Instruction.DecoderTest do
 
       assert %Instruction{} = instruction
 
-      assert Chip8.Instruction.SE == instruction.module
+      assert Instruction.SE == instruction.module
       assert %{x: 0xE, y: 0x0} == instruction.arguments
     end
 
@@ -100,7 +100,7 @@ defmodule Chip8.Instruction.DecoderTest do
 
       assert %Instruction{} = instruction
 
-      assert Chip8.Instruction.LD == instruction.module
+      assert Instruction.LD == instruction.module
       assert %{x: 0x6, byte: 0x29} == instruction.arguments
     end
 
@@ -111,7 +111,7 @@ defmodule Chip8.Instruction.DecoderTest do
 
       assert %Instruction{} = instruction
 
-      assert Chip8.Instruction.ADD == instruction.module
+      assert Instruction.ADD == instruction.module
       assert %{x: 0x5, byte: 0xDB} == instruction.arguments
     end
 
@@ -122,7 +122,7 @@ defmodule Chip8.Instruction.DecoderTest do
 
       assert %Instruction{} = instruction
 
-      assert Chip8.Instruction.LD == instruction.module
+      assert Instruction.LD == instruction.module
       assert %{x: 0x9, y: 0x7} == instruction.arguments
     end
 
@@ -133,7 +133,7 @@ defmodule Chip8.Instruction.DecoderTest do
 
       assert %Instruction{} = instruction
 
-      assert Chip8.Instruction.OR == instruction.module
+      assert Instruction.OR == instruction.module
       assert %{x: 0xA, y: 0x3} == instruction.arguments
     end
 
@@ -144,7 +144,7 @@ defmodule Chip8.Instruction.DecoderTest do
 
       assert %Instruction{} = instruction
 
-      assert Chip8.Instruction.AND == instruction.module
+      assert Instruction.AND == instruction.module
       assert %{x: 0x6, y: 0xD} == instruction.arguments
     end
 
@@ -155,7 +155,7 @@ defmodule Chip8.Instruction.DecoderTest do
 
       assert %Instruction{} = instruction
 
-      assert Chip8.Instruction.XOR == instruction.module
+      assert Instruction.XOR == instruction.module
       assert %{x: 0xC, y: 0x0} == instruction.arguments
     end
 
@@ -166,7 +166,7 @@ defmodule Chip8.Instruction.DecoderTest do
 
       assert %Instruction{} = instruction
 
-      assert Chip8.Instruction.ADD == instruction.module
+      assert Instruction.ADD == instruction.module
       assert %{x: 0xF, y: 0x7} == instruction.arguments
     end
 
@@ -177,7 +177,7 @@ defmodule Chip8.Instruction.DecoderTest do
 
       assert %Instruction{} = instruction
 
-      assert Chip8.Instruction.SUB == instruction.module
+      assert Instruction.SUB == instruction.module
       assert %{x: 0x5, y: 0xB} == instruction.arguments
     end
 
@@ -188,7 +188,7 @@ defmodule Chip8.Instruction.DecoderTest do
 
       assert %Instruction{} = instruction
 
-      assert Chip8.Instruction.SHR == instruction.module
+      assert Instruction.SHR == instruction.module
       assert %{x: 0xC, y: 0x9} == instruction.arguments
     end
 
@@ -199,7 +199,7 @@ defmodule Chip8.Instruction.DecoderTest do
 
       assert %Instruction{} = instruction
 
-      assert Chip8.Instruction.SUBN == instruction.module
+      assert Instruction.SUBN == instruction.module
       assert %{x: 0x3, y: 0x0} == instruction.arguments
     end
 
@@ -210,7 +210,7 @@ defmodule Chip8.Instruction.DecoderTest do
 
       assert %Instruction{} = instruction
 
-      assert Chip8.Instruction.SHL == instruction.module
+      assert Instruction.SHL == instruction.module
       assert %{x: 0xA, y: 0xE} == instruction.arguments
     end
 
@@ -221,7 +221,7 @@ defmodule Chip8.Instruction.DecoderTest do
 
       assert %Instruction{} = instruction
 
-      assert Chip8.Instruction.SNE == instruction.module
+      assert Instruction.SNE == instruction.module
       assert %{x: 0x0, y: 0xD} == instruction.arguments
     end
 
@@ -231,7 +231,7 @@ defmodule Chip8.Instruction.DecoderTest do
       instruction = Decoder.decode(bytes)
 
       assert %Instruction{} = instruction
-      assert Chip8.Instruction.LD == instruction.module
+      assert Instruction.LD == instruction.module
       assert %{address: 0x3FF} == instruction.arguments
     end
 
@@ -242,7 +242,7 @@ defmodule Chip8.Instruction.DecoderTest do
 
       assert %Instruction{} = instruction
 
-      assert Chip8.Instruction.JP == instruction.module
+      assert Instruction.JP == instruction.module
       assert %{x: 0x0, address: 0x47B} == instruction.arguments
     end
 
@@ -253,7 +253,7 @@ defmodule Chip8.Instruction.DecoderTest do
 
       assert %Instruction{} = instruction
 
-      assert Chip8.Instruction.RND == instruction.module
+      assert Instruction.RND == instruction.module
       assert %{x: 0x8, byte: 0x6A} == instruction.arguments
     end
 
@@ -264,7 +264,7 @@ defmodule Chip8.Instruction.DecoderTest do
 
       assert %Instruction{} = instruction
 
-      assert Chip8.Instruction.DRW == instruction.module
+      assert Instruction.DRW == instruction.module
       assert %{x: 0x7, y: 0xF, nibble: 0x2} == instruction.arguments
     end
 
@@ -275,7 +275,7 @@ defmodule Chip8.Instruction.DecoderTest do
 
       assert %Instruction{} = instruction
 
-      assert Chip8.Instruction.SKP == instruction.module
+      assert Instruction.SKP == instruction.module
       assert %{x: 0xC} == instruction.arguments
     end
 
@@ -286,7 +286,7 @@ defmodule Chip8.Instruction.DecoderTest do
 
       assert %Instruction{} = instruction
 
-      assert Chip8.Instruction.SKNP == instruction.module
+      assert Instruction.SKNP == instruction.module
       assert %{x: 0xD} == instruction.arguments
     end
 
@@ -297,7 +297,7 @@ defmodule Chip8.Instruction.DecoderTest do
 
       assert %Instruction{} = instruction
 
-      assert Chip8.Instruction.LD == instruction.module
+      assert Instruction.LD == instruction.module
       assert %{x: 0xA, y: :dt} == instruction.arguments
     end
 
@@ -308,7 +308,7 @@ defmodule Chip8.Instruction.DecoderTest do
 
       assert %Instruction{} = instruction
 
-      assert Chip8.Instruction.LD == instruction.module
+      assert Instruction.LD == instruction.module
       assert %{x: 0x5, y: :keyboard} == instruction.arguments
     end
 
@@ -319,7 +319,7 @@ defmodule Chip8.Instruction.DecoderTest do
 
       assert %Instruction{} = instruction
 
-      assert Chip8.Instruction.LD == instruction.module
+      assert Instruction.LD == instruction.module
       assert %{x: :dt, y: 0x3} == instruction.arguments
     end
 
@@ -330,7 +330,7 @@ defmodule Chip8.Instruction.DecoderTest do
 
       assert %Instruction{} = instruction
 
-      assert Chip8.Instruction.LD == instruction.module
+      assert Instruction.LD == instruction.module
       assert %{x: :st, y: 0xF} == instruction.arguments
     end
 
@@ -341,7 +341,7 @@ defmodule Chip8.Instruction.DecoderTest do
 
       assert %Instruction{} = instruction
 
-      assert Chip8.Instruction.ADD == instruction.module
+      assert Instruction.ADD == instruction.module
       assert %{x: 0x2} == instruction.arguments
     end
 
@@ -352,7 +352,7 @@ defmodule Chip8.Instruction.DecoderTest do
 
       assert %Instruction{} = instruction
 
-      assert Chip8.Instruction.LD == instruction.module
+      assert Instruction.LD == instruction.module
       assert %{x: 0x6} == instruction.arguments
     end
 
@@ -363,7 +363,7 @@ defmodule Chip8.Instruction.DecoderTest do
 
       assert %Instruction{} = instruction
 
-      assert Chip8.Instruction.LD == instruction.module
+      assert Instruction.LD == instruction.module
       assert %{x: :bcd, y: 0x4} == instruction.arguments
     end
 
@@ -374,7 +374,7 @@ defmodule Chip8.Instruction.DecoderTest do
 
       assert %Instruction{} = instruction
 
-      assert Chip8.Instruction.LD == instruction.module
+      assert Instruction.LD == instruction.module
       assert %{x: :memory, y: 0xD} == instruction.arguments
     end
 
@@ -385,7 +385,7 @@ defmodule Chip8.Instruction.DecoderTest do
 
       assert %Instruction{} = instruction
 
-      assert Chip8.Instruction.LD == instruction.module
+      assert Instruction.LD == instruction.module
       assert %{x: 0xF, y: :memory} == instruction.arguments
     end
   end
