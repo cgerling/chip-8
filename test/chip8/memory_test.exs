@@ -4,33 +4,16 @@ defmodule Chip8.MemoryTest do
   alias Chip8.Memory
 
   describe "new/1" do
-    test "should return a memory struct" do
-      memory = Memory.new(10)
-
-      assert %Memory{} = memory
-    end
-
-    test "should return a memory with the given size" do
+    test "should return a memory struct with the given size" do
       size = :rand.uniform(100)
       memory = Memory.new(size)
 
+      assert %Memory{} = memory
       assert size == memory.size
     end
   end
 
   describe "read/3" do
-    test "should return a list of memory data" do
-      size = :rand.uniform(100)
-      memory = Memory.new(size)
-
-      address = size - :rand.uniform(size)
-      amount = :rand.uniform(10)
-
-      data = Memory.read(memory, address, amount)
-
-      assert is_list(data)
-    end
-
     test "should return a list of memory data with size as the given amount" do
       size = :rand.uniform(100)
       memory = Memory.new(size)
@@ -71,19 +54,7 @@ defmodule Chip8.MemoryTest do
   end
 
   describe "write/3" do
-    test "should return a memory struct" do
-      memory = Memory.new(10)
-
-      data_size = memory.size |> Integer.floor_div(2) |> :rand.uniform()
-      data = Enum.to_list(1..data_size)
-      address = :rand.uniform(memory.size) - data_size
-
-      written_memory = Memory.write(memory, address, data)
-
-      assert %Memory{} = written_memory
-    end
-
-    test "should return memory unchanged when the given data is empty" do
+    test "should return a memory struct unchanged when the given data is empty" do
       memory = Memory.new(10)
 
       data = []
@@ -91,10 +62,11 @@ defmodule Chip8.MemoryTest do
 
       written_memory = Memory.write(memory, address, data)
 
+      assert %Memory{} = written_memory
       assert memory == written_memory
     end
 
-    test "should return memory unchanged when address is out of bounds of memory" do
+    test "should return a memory struct unchanged when address is out of bounds of memory" do
       memory = Memory.new(10)
 
       data_size = memory.size |> Integer.floor_div(2) |> :rand.uniform()
@@ -103,10 +75,11 @@ defmodule Chip8.MemoryTest do
 
       written_memory = Memory.write(memory, address, data)
 
+      assert %Memory{} = written_memory
       assert memory == written_memory
     end
 
-    test "should return memory with data written on the given address" do
+    test "should return a memory struct with data written on the given address" do
       memory = Memory.new(10)
 
       data_size = Integer.floor_div(memory.size, 2)
@@ -115,10 +88,11 @@ defmodule Chip8.MemoryTest do
 
       written_memory = Memory.write(memory, address, data)
 
+      assert %Memory{} = written_memory
       assert [1, 2, 3, 4, 5, 0, 0, 0, 0, 0] == written_memory.data
     end
 
-    test "should return memory with data truncated on the given address when data overflows memory" do
+    test "should return a memory struct with data truncated on the given address when data overflows memory" do
       memory = Memory.new(10)
 
       data = Enum.to_list(1..memory.size)
@@ -126,6 +100,7 @@ defmodule Chip8.MemoryTest do
 
       written_memory = Memory.write(memory, address, data)
 
+      assert %Memory{} = written_memory
       assert [0, 0, 0, 0, 0, 0, 1, 2, 3, 4] == written_memory.data
     end
   end
