@@ -6,15 +6,6 @@ defmodule Chip8.Instruction.CLSTest do
   alias Chip8.Runtime
 
   describe "execute/2" do
-    test "should return a runtime struct" do
-      runtime = Runtime.new()
-
-      arguments = %{}
-      executed_runtime = CLS.execute(runtime, arguments)
-
-      assert %Runtime{} = executed_runtime
-    end
-
     test "should return a runtime with the display clear" do
       runtime = Runtime.new()
       display_height = runtime.display.height
@@ -27,6 +18,7 @@ defmodule Chip8.Instruction.CLSTest do
       arguments = %{}
       executed_runtime = CLS.execute(runtime, arguments)
 
+      assert %Runtime{} = executed_runtime
       assert empty_display == executed_runtime.display
     end
   end
