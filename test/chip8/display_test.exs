@@ -5,36 +5,24 @@ defmodule Chip8.DisplayTest do
   alias Chip8.Sprite
 
   describe "new/2" do
-    test "should return a display struct" do
-      display = Display.new(10, 10)
-
-      assert %Display{} = display
-    end
-
-    test "should return a display with the given dimensions" do
+    test "should return a display struct with the given dimensions" do
       display = Display.new(10, 20)
 
+      assert %Display{} = display
       assert display.height == 10
       assert display.width == 20
     end
   end
 
   describe "clear/1" do
-    test "should return a display struct" do
-      display = Display.new(10, 10)
-
-      cleared_display = Display.clear(display)
-
-      assert %Display{} = cleared_display
-    end
-
-    test "should return a display with all pixels off" do
+    test "should return a display struct with all pixels off" do
       display = Display.new(10, 10)
       filled_pixels = List.duplicate(1, display.height * display.width)
       display = %{display | pixels: filled_pixels}
 
       cleared_display = Display.clear(display)
 
+      assert %Display{} = cleared_display
       assert display.height == cleared_display.height
       assert display.width == cleared_display.width
       assert Enum.all?(cleared_display.pixels, &(&1 == 0))
@@ -42,17 +30,7 @@ defmodule Chip8.DisplayTest do
   end
 
   describe "get_coordinates/3" do
-    test "should return a coordinates tuple" do
-      display = Display.new(100, 100)
-      x = :rand.uniform(display.height - 1)
-      y = :rand.uniform(display.width - 1)
-
-      coordinates = Display.get_coordinates(display, x, y)
-
-      assert {x, y} == coordinates
-    end
-
-    test "should return coordinates wrapped when x is equals to display's height" do
+    test "should return a coordinates tuple wrapped when x is equals to display's height" do
       display = Display.new(100, 100)
       x = display.height
       y = :rand.uniform(display.width - 1)
@@ -62,7 +40,7 @@ defmodule Chip8.DisplayTest do
       assert {0, y} == coordinates
     end
 
-    test "should return coordinates wrapped when x is greather than display's height" do
+    test "should return a coordinates tuple wrapped when x is greather than display's height" do
       display = Display.new(100, 100)
       x = :rand.uniform(display.height - 1)
       y = :rand.uniform(display.width - 1)
@@ -74,7 +52,7 @@ defmodule Chip8.DisplayTest do
       assert {x, y} == coordinates
     end
 
-    test "should return coordinates when x is negative" do
+    test "should return a coordinates tuple when x is negative" do
       display = Display.new(100, 100)
       x = :rand.uniform(display.height - 1)
       y = :rand.uniform(display.width - 1)
@@ -86,7 +64,7 @@ defmodule Chip8.DisplayTest do
       assert {x, y} == coordinates
     end
 
-    test "should return coordinates wrapped when y is equals to display's width" do
+    test "should return a coordinates tuple wrapped when y is equals to display's width" do
       display = Display.new(100, 100)
       x = :rand.uniform(display.height - 1)
       y = display.width
@@ -96,7 +74,7 @@ defmodule Chip8.DisplayTest do
       assert {x, 0} == coordinates
     end
 
-    test "should return coordinates wrapped when y is greather than display's width" do
+    test "should return a coordinates tuple wrapped when y is greather than display's width" do
       display = Display.new(100, 100)
       x = :rand.uniform(display.height - 1)
       y = :rand.uniform(display.width - 1)
@@ -108,7 +86,7 @@ defmodule Chip8.DisplayTest do
       assert {x, y} == coordinates
     end
 
-    test "should return coordinates when y is negative" do
+    test "should return a coordinates tuple when y is negative" do
       display = Display.new(100, 100)
       x = :rand.uniform(display.height - 1)
       y = :rand.uniform(display.width - 1)
@@ -122,17 +100,7 @@ defmodule Chip8.DisplayTest do
   end
 
   describe "draw/3" do
-    test "should return a display struct" do
-      display = Display.new(8, 8)
-      sprite = Sprite.new([0xFF])
-      coordinates = {0, 0}
-
-      drawed_display = Display.draw(display, coordinates, sprite)
-
-      assert %Display{} = drawed_display
-    end
-
-    test "should return a display with sprite rendered into the given coordinates" do
+    test "should return a display struct with sprite rendered into the given coordinates" do
       display = Display.new(8, 8)
       sprite = Sprite.new([0xAA, 0x55, 0xAA, 0x55])
       coordinates = {0, 2}
@@ -141,6 +109,7 @@ defmodule Chip8.DisplayTest do
 
       display_matrix = Enum.chunk_every(drawed_display.pixels, display.width)
 
+      assert %Display{} = drawed_display
       assert 16 == Enum.count(drawed_display.pixels, &(&1 == 1))
 
       assert display_matrix == [
@@ -155,7 +124,7 @@ defmodule Chip8.DisplayTest do
              ]
     end
 
-    test "should return a display with the sprite erased when rendered twice into the same coordinates" do
+    test "should return a display struct with the sprite erased when rendered twice into the same coordinates" do
       display = Display.new(8, 8)
       sprite = Sprite.new([0xAA, 0x55, 0xAA, 0x55])
       coordinates = {0, 2}
@@ -166,6 +135,7 @@ defmodule Chip8.DisplayTest do
 
       display_matrix = Enum.chunk_every(drawed_display.pixels, display.width)
 
+      assert %Display{} = drawed_display
       assert Enum.all?(drawed_display.pixels, &(&1 == 0))
 
       assert display_matrix == [
@@ -180,7 +150,7 @@ defmodule Chip8.DisplayTest do
              ]
     end
 
-    test "should return a display with the sprite cropped horizontally when it overflows the display's width" do
+    test "should return a display struct with the sprite cropped horizontally when it overflows the display's width" do
       display = Display.new(8, 8)
       sprite = Sprite.new([0xFF, 0xFF])
       coordinates = {4, 0}
@@ -189,6 +159,7 @@ defmodule Chip8.DisplayTest do
 
       display_matrix = Enum.chunk_every(drawed_display.pixels, display.width)
 
+      assert %Display{} = drawed_display
       assert 8 == Enum.count(drawed_display.pixels, &(&1 == 1))
 
       assert display_matrix == [
@@ -203,7 +174,7 @@ defmodule Chip8.DisplayTest do
              ]
     end
 
-    test "should return a display with the sprite cropped vertically when it overflows the display's height" do
+    test "should return a display struct with the sprite cropped vertically when it overflows the display's height" do
       display = Display.new(8, 8)
       sprite = Sprite.new([0x0F, 0x0F, 0x0F, 0x0F])
       coordinates = {0, 6}
@@ -212,6 +183,7 @@ defmodule Chip8.DisplayTest do
 
       display_matrix = Enum.chunk_every(drawed_display.pixels, display.width)
 
+      assert %Display{} = drawed_display
       assert 8 == Enum.count(drawed_display.pixels, &(&1 == 1))
 
       assert display_matrix == [
@@ -228,14 +200,6 @@ defmodule Chip8.DisplayTest do
   end
 
   describe "has_collision?/2" do
-    test "should return a boolean" do
-      display = Display.new(8, 8)
-
-      has_collision? = Display.has_collision?(display, display)
-
-      assert is_boolean(has_collision?)
-    end
-
     test "should return true when any of the pixels on in the before display are off in the after display" do
       display = Display.new(8, 8)
       coordinates = {0, 0}
