@@ -6,17 +6,6 @@ defmodule Chip8.Instruction.ANDTest do
   alias Chip8.VRegisters
 
   describe "execute/2" do
-    test "should return a runtime struct" do
-      runtime = Runtime.new()
-
-      x = :rand.uniform(0xF)
-      y = :rand.uniform(0xF)
-      arguments = %{x: x, y: y}
-      executed_runtime = AND.execute(runtime, arguments)
-
-      assert %Runtime{} = executed_runtime
-    end
-
     test "should return a runtime with v register x set to the result of a bitwise and of v register x and v register y" do
       runtime = Runtime.new()
       x = 0xB
@@ -29,6 +18,7 @@ defmodule Chip8.Instruction.ANDTest do
       arguments = %{x: x, y: y}
       executed_runtime = AND.execute(runtime, arguments)
 
+      assert %Runtime{} = executed_runtime
       assert 0x41 == VRegisters.get(executed_runtime.v, x)
     end
   end
