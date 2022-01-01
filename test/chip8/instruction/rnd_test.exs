@@ -6,17 +6,6 @@ defmodule Chip8.Instruction.RNDTest do
   alias Chip8.VRegisters
 
   describe "execute/2" do
-    test "should return a runtime struct" do
-      runtime = Runtime.new()
-
-      x = :rand.uniform(0xF)
-      byte = :rand.uniform(0xFF)
-      arguments = %{x: x, byte: byte}
-      executed_runtime = RND.execute(runtime, arguments)
-
-      assert %Runtime{} = executed_runtime
-    end
-
     test "should return a runtime with v register x set to the result of a bitwise and of a random byte and the given byte" do
       runtime = Runtime.new()
 
@@ -29,6 +18,7 @@ defmodule Chip8.Instruction.RNDTest do
       arguments = %{x: x, byte: byte}
       executed_runtime = RND.execute(runtime, arguments)
 
+      assert %Runtime{} = executed_runtime
       assert 0x8 == VRegisters.get(executed_runtime.v, x)
     end
   end
