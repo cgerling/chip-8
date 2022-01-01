@@ -1,10 +1,30 @@
 defmodule Chip8.InstructionTest do
   use ExUnit.Case, async: true
 
-  alias Chip8.Fixture.ArgumentsInstruction
-  alias Chip8.Fixture.IdentityInstruction
   alias Chip8.Instruction
   alias Chip8.Runtime
+
+  defmodule IdentityInstruction do
+    @behaviour Chip8.Instruction
+
+    alias Chip8.Runtime
+
+    @impl Chip8.Instruction
+    def execute(%Runtime{} = runtime, %{}) do
+      runtime
+    end
+  end
+
+  defmodule SetPCInstruction do
+    @behaviour Chip8.Instruction
+
+    alias Chip8.Runtime
+
+    @impl Chip8.Instruction
+    def execute(%Runtime{} = runtime, %{value: value}) do
+      %{runtime | pc: value}
+    end
+  end
 
   describe "new/1" do
     test "should return a instruction struct for the given module" do
@@ -18,10 +38,10 @@ defmodule Chip8.InstructionTest do
 
   describe "new/2" do
     test "should return a instruction struct for the given module with the given arguments" do
-      instruction = Instruction.new(ArgumentsInstruction, %{foo: :bar})
+      instruction = Instruction.new(IdentityInstruction, %{foo: :bar})
 
       assert %Instruction{} = instruction
-      assert ArgumentsInstruction == instruction.module
+      assert IdentityInstruction == instruction.module
       assert %{foo: :bar} == instruction.arguments
     end
   end
@@ -43,7 +63,7 @@ defmodule Chip8.InstructionTest do
       runtime = Runtime.new()
 
       pc_value = :rand.uniform(0xFFFF)
-      instruction = Instruction.new(ArgumentsInstruction, %{value: pc_value})
+      instruction = Instruction.new(SetPCInstruction, %{value: pc_value})
 
       executed_runtime = Instruction.execute(instruction, runtime)
 
