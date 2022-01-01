@@ -5,16 +5,6 @@ defmodule Chip8.Instruction.CALLTest do
   alias Chip8.Runtime
 
   describe "execute/2" do
-    test "should return a runtime struct" do
-      runtime = Runtime.new()
-
-      address = :rand.uniform(0xFFF)
-      arguments = %{address: address}
-      executed_runtime = CALL.execute(runtime, arguments)
-
-      assert %Runtime{} = executed_runtime
-    end
-
     test "should return a runtime with pc set to the given address" do
       runtime = Runtime.new()
 
@@ -22,6 +12,7 @@ defmodule Chip8.Instruction.CALLTest do
       arguments = %{address: address}
       executed_runtime = CALL.execute(runtime, arguments)
 
+      assert %Runtime{} = executed_runtime
       assert address == executed_runtime.pc
     end
 
@@ -32,6 +23,7 @@ defmodule Chip8.Instruction.CALLTest do
       arguments = %{address: address}
       executed_runtime = CALL.execute(runtime, arguments)
 
+      assert %Runtime{} = executed_runtime
       assert [runtime.pc] == executed_runtime.stack.data
       assert 1 == executed_runtime.stack.size
     end
