@@ -1,7 +1,7 @@
 defmodule Chip8.Instruction.SE do
   @moduledoc false
 
-  @behaviour Chip8.Instruction
+  use Chip8.Instruction
 
   alias Chip8.Instruction
   alias Chip8.Runtime

@@ -1,7 +1,7 @@
 defmodule Chip8.Instruction.AND do
   @moduledoc false
 
-  @behaviour Chip8.Instruction
+  use Chip8.Instruction
 
   alias Chip8.Runtime
   alias Chip8.VRegisters

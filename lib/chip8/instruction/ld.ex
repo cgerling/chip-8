@@ -1,7 +1,7 @@
 defmodule Chip8.Instruction.LD do
   @moduledoc false
 
-  @behaviour Chip8.Instruction
+  use Chip8.Instruction
 
   alias Chip8.Font
   alias Chip8.Instruction
