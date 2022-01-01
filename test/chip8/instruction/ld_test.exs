@@ -7,16 +7,6 @@ defmodule Chip8.Instruction.LDTest do
   alias Chip8.VRegisters
 
   describe "execute/2" do
-    test "should return a runtime struct" do
-      runtime = Runtime.new()
-
-      y = :rand.uniform(0xF)
-      arguments = %{x: :bcd, y: y}
-      executed_runtime = LD.execute(runtime, arguments)
-
-      assert %Runtime{} = executed_runtime
-    end
-
     test "should return a runtime with memory holding the decimal digits of v register y" do
       runtime = Runtime.new()
 
@@ -30,6 +20,7 @@ defmodule Chip8.Instruction.LDTest do
       arguments = %{x: :bcd, y: y}
       executed_runtime = LD.execute(runtime, arguments)
 
+      assert %Runtime{} = executed_runtime
       assert [2, 2, 4] == Memory.read(executed_runtime.memory, i_value, 3)
     end
 
@@ -45,6 +36,7 @@ defmodule Chip8.Instruction.LDTest do
       arguments = %{x: :memory, y: y}
       executed_runtime = LD.execute(runtime, arguments)
 
+      assert %Runtime{} = executed_runtime
       assert Enum.to_list(0..y) == Memory.read(executed_runtime.memory, i_value, y + 1)
     end
 
@@ -60,6 +52,8 @@ defmodule Chip8.Instruction.LDTest do
 
       arguments = %{x: x, y: :memory}
       executed_runtime = LD.execute(runtime, arguments)
+
+      assert %Runtime{} = executed_runtime
 
       assert data
              |> Enum.with_index()
@@ -77,6 +71,7 @@ defmodule Chip8.Instruction.LDTest do
       arguments = %{x: x, y: :dt}
       executed_runtime = LD.execute(runtime, arguments)
 
+      assert %Runtime{} = executed_runtime
       assert dt_value == VRegisters.get(executed_runtime.v, x)
     end
 
@@ -90,6 +85,7 @@ defmodule Chip8.Instruction.LDTest do
       arguments = %{x: :dt, y: y}
       executed_runtime = LD.execute(runtime, arguments)
 
+      assert %Runtime{} = executed_runtime
       assert y_value == executed_runtime.dt
     end
 
@@ -103,6 +99,7 @@ defmodule Chip8.Instruction.LDTest do
       arguments = %{x: :st, y: y}
       executed_runtime = LD.execute(runtime, arguments)
 
+      assert %Runtime{} = executed_runtime
       assert y_value == executed_runtime.st
     end
 
@@ -115,6 +112,7 @@ defmodule Chip8.Instruction.LDTest do
       arguments = %{x: x, y: :keyboard}
       executed_runtime = LD.execute(runtime, arguments)
 
+      assert %Runtime{} = executed_runtime
       assert runtime.pc - 2 == executed_runtime.pc
     end
 
@@ -127,6 +125,7 @@ defmodule Chip8.Instruction.LDTest do
       arguments = %{x: x, y: :keyboard}
       executed_runtime = LD.execute(runtime, arguments)
 
+      assert %Runtime{} = executed_runtime
       assert runtime.pc == executed_runtime.pc
     end
 
@@ -139,6 +138,7 @@ defmodule Chip8.Instruction.LDTest do
       arguments = %{x: x, y: :keyboard}
       executed_runtime = LD.execute(runtime, arguments)
 
+      assert %Runtime{} = executed_runtime
       assert key == VRegisters.get(executed_runtime.v, x)
     end
 
@@ -153,6 +153,7 @@ defmodule Chip8.Instruction.LDTest do
       arguments = %{x: x, y: y}
       executed_runtime = LD.execute(runtime, arguments)
 
+      assert %Runtime{} = executed_runtime
       assert y_value == VRegisters.get(executed_runtime.v, x)
     end
 
@@ -164,6 +165,7 @@ defmodule Chip8.Instruction.LDTest do
       arguments = %{x: x, byte: byte}
       executed_runtime = LD.execute(runtime, arguments)
 
+      assert %Runtime{} = executed_runtime
       assert byte == VRegisters.get(executed_runtime.v, x)
     end
 
@@ -174,6 +176,7 @@ defmodule Chip8.Instruction.LDTest do
       arguments = %{address: address}
       executed_runtime = LD.execute(runtime, arguments)
 
+      assert %Runtime{} = executed_runtime
       assert address == executed_runtime.i
     end
 
@@ -187,6 +190,7 @@ defmodule Chip8.Instruction.LDTest do
       arguments = %{x: x}
       executed_runtime = LD.execute(runtime, arguments)
 
+      assert %Runtime{} = executed_runtime
       assert 0x91 == executed_runtime.i
     end
   end
