@@ -5,7 +5,7 @@ defmodule Chip8.InstructionTest do
   alias Chip8.Runtime
 
   defmodule IdentityInstruction do
-    @behaviour Chip8.Instruction
+    use Chip8.Instruction
 
     alias Chip8.Runtime
 
@@ -16,13 +16,23 @@ defmodule Chip8.InstructionTest do
   end
 
   defmodule SetPCInstruction do
-    @behaviour Chip8.Instruction
+    use Chip8.Instruction
 
     alias Chip8.Runtime
 
     @impl Chip8.Instruction
     def execute(%Runtime{} = runtime, %{value: value}) do
       %{runtime | pc: value}
+    end
+  end
+
+  describe "new/1" do
+    test "should return a instruction struct of the given module with the given arguments" do
+      instruction = IdentityInstruction.new(%{})
+
+      assert %Instruction{} = instruction
+      assert IdentityInstruction == instruction.module
+      assert %{} == instruction.arguments
     end
   end
 
