@@ -25,9 +25,8 @@ defmodule Chip8.Instruction do
           module: module()
         }
 
-  @spec new(module()) :: t()
   @spec new(module(), arguments()) :: t()
-  def new(module, arguments \\ %{}) when is_atom(module) and is_map(arguments) do
+  def new(module, arguments) when is_atom(module) and is_map(arguments) do
     %__MODULE__{
       arguments: arguments,
       module: module

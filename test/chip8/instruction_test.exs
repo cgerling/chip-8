@@ -26,16 +26,6 @@ defmodule Chip8.InstructionTest do
     end
   end
 
-  describe "new/1" do
-    test "should return a instruction struct for the given module" do
-      instruction = Instruction.new(IdentityInstruction)
-
-      assert %Instruction{} = instruction
-      assert IdentityInstruction == instruction.module
-      assert %{} == instruction.arguments
-    end
-  end
-
   describe "new/2" do
     test "should return a instruction struct for the given module with the given arguments" do
       instruction = Instruction.new(IdentityInstruction, %{foo: :bar})
