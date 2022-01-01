@@ -2,26 +2,6 @@ defmodule Chip8.Instruction.Decoder do
   @moduledoc false
 
   alias Chip8.Instruction
-  alias Chip8.Instruction.ADD
-  alias Chip8.Instruction.AND
-  alias Chip8.Instruction.CALL
-  alias Chip8.Instruction.CLS
-  alias Chip8.Instruction.DRW
-  alias Chip8.Instruction.JP
-  alias Chip8.Instruction.LD
-  alias Chip8.Instruction.OR
-  alias Chip8.Instruction.RET
-  alias Chip8.Instruction.RND
-  alias Chip8.Instruction.SE
-  alias Chip8.Instruction.SHL
-  alias Chip8.Instruction.SHR
-  alias Chip8.Instruction.SKNP
-  alias Chip8.Instruction.SKP
-  alias Chip8.Instruction.SNE
-  alias Chip8.Instruction.SUB
-  alias Chip8.Instruction.SUBN
-  alias Chip8.Instruction.SYS
-  alias Chip8.Instruction.XOR
   alias Chip8.Memory
 
   @hex_base 16
@@ -50,163 +30,163 @@ defmodule Chip8.Instruction.Decoder do
   defp pad_byte([_nibble1, _nibble2] = byte), do: byte
 
   defp decode_data({0x0, 0x0, 0xE, 0x0}) do
-    Instruction.new(CLS, %{})
+    Instruction.CLS.new(%{})
   end
 
   defp decode_data({0x0, 0x0, 0xE, 0xE}) do
-    Instruction.new(RET, %{})
+    Instruction.RET.new(%{})
   end
 
   defp decode_data({0x0, address1, address2, address3}) do
     address = build_address(address1, address2, address3)
 
-    Instruction.new(SYS, %{address: address})
+    Instruction.SYS.new(%{address: address})
   end
 
   defp decode_data({0x1, address1, address2, address3}) do
     address = build_address(address1, address2, address3)
 
-    Instruction.new(JP, %{address: address})
+    Instruction.JP.new(%{address: address})
   end
 
   defp decode_data({0x2, address1, address2, address3}) do
     address = build_address(address1, address2, address3)
 
-    Instruction.new(CALL, %{address: address})
+    Instruction.CALL.new(%{address: address})
   end
 
   defp decode_data({0x3, x, byte1, byte2}) do
     byte = build_byte(byte1, byte2)
 
-    Instruction.new(SE, %{x: x, byte: byte})
+    Instruction.SE.new(%{x: x, byte: byte})
   end
 
   defp decode_data({0x4, x, byte1, byte2}) do
     byte = build_byte(byte1, byte2)
 
-    Instruction.new(SNE, %{x: x, byte: byte})
+    Instruction.SNE.new(%{x: x, byte: byte})
   end
 
   defp decode_data({0x5, x, y, 0x0}) do
-    Instruction.new(SE, %{x: x, y: y})
+    Instruction.SE.new(%{x: x, y: y})
   end
 
   defp decode_data({0x6, x, byte1, byte2}) do
     byte = build_byte(byte1, byte2)
 
-    Instruction.new(LD, %{x: x, byte: byte})
+    Instruction.LD.new(%{x: x, byte: byte})
   end
 
   defp decode_data({0x7, x, byte1, byte2}) do
     byte = build_byte(byte1, byte2)
 
-    Instruction.new(ADD, %{x: x, byte: byte})
+    Instruction.ADD.new(%{x: x, byte: byte})
   end
 
   defp decode_data({0x8, x, y, 0x0}) do
-    Instruction.new(LD, %{x: x, y: y})
+    Instruction.LD.new(%{x: x, y: y})
   end
 
   defp decode_data({0x8, x, y, 0x1}) do
-    Instruction.new(OR, %{x: x, y: y})
+    Instruction.OR.new(%{x: x, y: y})
   end
 
   defp decode_data({0x8, x, y, 0x2}) do
-    Instruction.new(AND, %{x: x, y: y})
+    Instruction.AND.new(%{x: x, y: y})
   end
 
   defp decode_data({0x8, x, y, 0x3}) do
-    Instruction.new(XOR, %{x: x, y: y})
+    Instruction.XOR.new(%{x: x, y: y})
   end
 
   defp decode_data({0x8, x, y, 0x4}) do
-    Instruction.new(ADD, %{x: x, y: y})
+    Instruction.ADD.new(%{x: x, y: y})
   end
 
   defp decode_data({0x8, x, y, 0x5}) do
-    Instruction.new(SUB, %{x: x, y: y})
+    Instruction.SUB.new(%{x: x, y: y})
   end
 
   defp decode_data({0x8, x, y, 0x6}) do
-    Instruction.new(SHR, %{x: x, y: y})
+    Instruction.SHR.new(%{x: x, y: y})
   end
 
   defp decode_data({0x8, x, y, 0x7}) do
-    Instruction.new(SUBN, %{x: x, y: y})
+    Instruction.SUBN.new(%{x: x, y: y})
   end
 
   defp decode_data({0x8, x, y, 0xE}) do
-    Instruction.new(SHL, %{x: x, y: y})
+    Instruction.SHL.new(%{x: x, y: y})
   end
 
   defp decode_data({0x9, x, y, 0x0}) do
-    Instruction.new(SNE, %{x: x, y: y})
+    Instruction.SNE.new(%{x: x, y: y})
   end
 
   defp decode_data({0xA, address1, address2, address3}) do
     address = build_address(address1, address2, address3)
 
-    Instruction.new(LD, %{address: address})
+    Instruction.LD.new(%{address: address})
   end
 
   defp decode_data({0xB, address1, address2, address3}) do
     address = build_address(address1, address2, address3)
 
-    Instruction.new(JP, %{x: 0, address: address})
+    Instruction.JP.new(%{x: 0, address: address})
   end
 
   defp decode_data({0xC, x, byte1, byte2}) do
     byte = build_byte(byte1, byte2)
 
-    Instruction.new(RND, %{x: x, byte: byte})
+    Instruction.RND.new(%{x: x, byte: byte})
   end
 
   defp decode_data({0xD, x, y, nibble}) do
-    Instruction.new(DRW, %{x: x, y: y, nibble: nibble})
+    Instruction.DRW.new(%{x: x, y: y, nibble: nibble})
   end
 
   defp decode_data({0xE, x, 0x9, 0xE}) do
-    Instruction.new(SKP, %{x: x})
+    Instruction.SKP.new(%{x: x})
   end
 
   defp decode_data({0xE, x, 0xA, 0x1}) do
-    Instruction.new(SKNP, %{x: x})
+    Instruction.SKNP.new(%{x: x})
   end
 
   defp decode_data({0xF, x, 0x0, 0x7}) do
-    Instruction.new(LD, %{x: x, y: :dt})
+    Instruction.LD.new(%{x: x, y: :dt})
   end
 
   defp decode_data({0xF, x, 0x0, 0xA}) do
-    Instruction.new(LD, %{x: x, y: :keyboard})
+    Instruction.LD.new(%{x: x, y: :keyboard})
   end
 
   defp decode_data({0xF, y, 0x1, 0x5}) do
-    Instruction.new(LD, %{x: :dt, y: y})
+    Instruction.LD.new(%{x: :dt, y: y})
   end
 
   defp decode_data({0xF, y, 0x1, 0x8}) do
-    Instruction.new(LD, %{x: :st, y: y})
+    Instruction.LD.new(%{x: :st, y: y})
   end
 
   defp decode_data({0xF, x, 0x1, 0xE}) do
-    Instruction.new(ADD, %{x: x})
+    Instruction.ADD.new(%{x: x})
   end
 
   defp decode_data({0xF, x, 0x2, 0x9}) do
-    Instruction.new(LD, %{x: x})
+    Instruction.LD.new(%{x: x})
   end
 
   defp decode_data({0xF, y, 0x3, 0x3}) do
-    Instruction.new(LD, %{x: :bcd, y: y})
+    Instruction.LD.new(%{x: :bcd, y: y})
   end
 
   defp decode_data({0xF, y, 0x5, 0x5}) do
-    Instruction.new(LD, %{x: :memory, y: y})
+    Instruction.LD.new(%{x: :memory, y: y})
   end
 
   defp decode_data({0xF, x, 0x6, 0x5}) do
-    Instruction.new(LD, %{x: x, y: :memory})
+    Instruction.LD.new(%{x: x, y: :memory})
   end
 
   defp build_address(address1, address2, address3) do
