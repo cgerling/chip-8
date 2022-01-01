@@ -6,17 +6,6 @@ defmodule Chip8.Instruction.SHLTest do
   alias Chip8.VRegisters
 
   describe "execute/2" do
-    test "should return a runtime struct" do
-      runtime = Runtime.new()
-
-      x = :rand.uniform(0xF)
-      y = :rand.uniform(0xF)
-      arguments = %{x: x, y: y}
-      executed_runtime = SHL.execute(runtime, arguments)
-
-      assert %Runtime{} = executed_runtime
-    end
-
     test "should return a runtime with v register F set to the most significant bit of v register y" do
       runtime = Runtime.new()
       x = 0x8
@@ -28,6 +17,7 @@ defmodule Chip8.Instruction.SHLTest do
       arguments = %{x: x, y: y}
       executed_runtime = SHL.execute(runtime, arguments)
 
+      assert %Runtime{} = executed_runtime
       assert 1 == VRegisters.get(executed_runtime.v, 0xF)
     end
 
@@ -42,6 +32,7 @@ defmodule Chip8.Instruction.SHLTest do
       arguments = %{x: x, y: y}
       executed_runtime = SHL.execute(runtime, arguments)
 
+      assert %Runtime{} = executed_runtime
       assert 0x8A == VRegisters.get(executed_runtime.v, x)
     end
   end
