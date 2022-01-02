@@ -6,17 +6,6 @@ defmodule Chip8.Instruction.SNETest do
   alias Chip8.VRegisters
 
   describe "execute/2" do
-    test "should return a runtime struct" do
-      runtime = Runtime.new()
-
-      x = :rand.uniform(0xF)
-      byte = :rand.uniform(0xFF)
-      arguments = %{x: x, byte: byte}
-      executed_runtime = SNE.execute(runtime, arguments)
-
-      assert %Runtime{} = executed_runtime
-    end
-
     test "should return a runtime with pc unchanged when v register x is equals to the given byte" do
       runtime = Runtime.new()
       x = :rand.uniform(0xF)
@@ -27,6 +16,7 @@ defmodule Chip8.Instruction.SNETest do
       arguments = %{x: x, byte: byte}
       executed_runtime = SNE.execute(runtime, arguments)
 
+      assert %Runtime{} = executed_runtime
       assert runtime.pc == executed_runtime.pc
     end
 
@@ -41,6 +31,7 @@ defmodule Chip8.Instruction.SNETest do
       arguments = %{x: x, byte: byte}
       executed_runtime = SNE.execute(runtime, arguments)
 
+      assert %Runtime{} = executed_runtime
       assert runtime.pc + 2 == executed_runtime.pc
     end
 
@@ -55,6 +46,7 @@ defmodule Chip8.Instruction.SNETest do
       arguments = %{x: x, y: y}
       executed_runtime = SNE.execute(runtime, arguments)
 
+      assert %Runtime{} = executed_runtime
       assert runtime.pc == executed_runtime.pc
     end
 
@@ -70,6 +62,7 @@ defmodule Chip8.Instruction.SNETest do
       arguments = %{x: x, y: y}
       executed_runtime = SNE.execute(runtime, arguments)
 
+      assert %Runtime{} = executed_runtime
       assert runtime.pc + 2 == executed_runtime.pc
     end
   end

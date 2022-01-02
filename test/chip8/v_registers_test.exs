@@ -12,15 +12,6 @@ defmodule Chip8.VRegistersTest do
   end
 
   describe "get/2" do
-    test "should return an integer" do
-      v_registers = VRegisters.new()
-
-      register = :rand.uniform(0xF)
-      value = VRegisters.get(v_registers, register)
-
-      assert is_integer(value)
-    end
-
     test "should return the value stored in the given register" do
       v_registers = VRegisters.new()
 
@@ -32,7 +23,7 @@ defmodule Chip8.VRegistersTest do
   end
 
   describe "set/3" do
-    test "should return a v registers struct" do
+    test "should return a v registers struct with value stored in register at the given index" do
       v_registers = VRegisters.new()
 
       register = :rand.uniform(0xF)
@@ -41,16 +32,6 @@ defmodule Chip8.VRegistersTest do
       setted_v_registers = VRegisters.set(v_registers, register, value)
 
       assert %VRegisters{} = setted_v_registers
-    end
-
-    test "should return a v registers with value stored in register at the given index" do
-      v_registers = VRegisters.new()
-
-      register = :rand.uniform(0xF)
-      value = :rand.uniform(0xFF)
-
-      setted_v_registers = VRegisters.set(v_registers, register, value)
-
       assert value == VRegisters.get(setted_v_registers, register)
     end
   end

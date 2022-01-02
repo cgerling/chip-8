@@ -6,19 +6,6 @@ defmodule Chip8.Instruction.DRWTest do
   alias Chip8.VRegisters
 
   describe "execute/2" do
-    test "should return a runtime struct" do
-      runtime = Runtime.new()
-
-      x = :rand.uniform(0xF)
-      y = :rand.uniform(0xF)
-      nibble = :rand.uniform(0xF)
-
-      arguments = %{x: x, y: y, nibble: nibble}
-      executed_runtime = DRW.execute(runtime, arguments)
-
-      assert %Runtime{} = executed_runtime
-    end
-
     test "should return a runtime with sprite at address I rendered in the display" do
       runtime = Runtime.new()
       i = :rand.uniform(0xFFF)
@@ -35,6 +22,7 @@ defmodule Chip8.Instruction.DRWTest do
 
       sprite_rendered_pixels = Enum.slice(executed_runtime.display.pixels, 0, 8)
 
+      assert %Runtime{} = executed_runtime
       assert [1, 1, 0, 1, 1, 0, 0, 1] == sprite_rendered_pixels
     end
 
@@ -48,9 +36,8 @@ defmodule Chip8.Instruction.DRWTest do
       arguments = %{x: x, y: y, nibble: nibble}
       executed_runtime = DRW.execute(runtime, arguments)
 
-      vf = VRegisters.get(executed_runtime.v, 0xF)
-
-      assert 0 == vf
+      assert %Runtime{} = executed_runtime
+      assert 0 == VRegisters.get(executed_runtime.v, 0xF)
     end
 
     test "should return a runtime with VF set to 1 when there was a pixel collision" do
@@ -69,9 +56,8 @@ defmodule Chip8.Instruction.DRWTest do
       arguments = %{x: x, y: y, nibble: nibble}
       executed_runtime = DRW.execute(runtime, arguments)
 
-      vf = VRegisters.get(executed_runtime.v, 0xF)
-
-      assert 1 == vf
+      assert %Runtime{} = executed_runtime
+      assert 1 == VRegisters.get(executed_runtime.v, 0xF)
     end
   end
 end

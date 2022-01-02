@@ -6,15 +6,6 @@ defmodule Chip8.Instruction.RETTest do
   alias Chip8.Stack
 
   describe "execute/2" do
-    test "should return a runtime struct" do
-      runtime = Runtime.new()
-
-      arguments = %{}
-      executed_runtime = RET.execute(runtime, arguments)
-
-      assert %Runtime{} = executed_runtime
-    end
-
     test "should return a runtime with pc set to the last item in the stack" do
       runtime = Runtime.new()
       address = :rand.uniform(0xFFF)
@@ -24,6 +15,7 @@ defmodule Chip8.Instruction.RETTest do
       arguments = %{}
       executed_runtime = RET.execute(runtime, arguments)
 
+      assert %Runtime{} = executed_runtime
       assert address == executed_runtime.pc
     end
 
@@ -38,6 +30,7 @@ defmodule Chip8.Instruction.RETTest do
 
       empty_stack = Stack.new()
 
+      assert %Runtime{} = executed_runtime
       assert empty_stack == executed_runtime.stack
     end
 
@@ -47,6 +40,7 @@ defmodule Chip8.Instruction.RETTest do
       arguments = %{}
       executed_runtime = RET.execute(runtime, arguments)
 
+      assert %Runtime{} = executed_runtime
       assert runtime == executed_runtime
     end
   end

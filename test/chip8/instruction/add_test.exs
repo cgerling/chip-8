@@ -6,17 +6,6 @@ defmodule Chip8.Instruction.ADDTest do
   alias Chip8.VRegisters
 
   describe "execute/2" do
-    test "should return a runtime struct" do
-      runtime = Runtime.new()
-
-      x = :rand.uniform(0xF)
-      byte = :rand.uniform(0xFF)
-      arguments = %{x: x, byte: byte}
-      executed_runtime = ADD.execute(runtime, arguments)
-
-      assert %Runtime{} = executed_runtime
-    end
-
     test "should return a runtime with i set to the sum of i and v register y" do
       runtime = Runtime.new()
       y = 0xC
@@ -29,6 +18,7 @@ defmodule Chip8.Instruction.ADDTest do
       arguments = %{x: :i, y: y}
       executed_runtime = ADD.execute(runtime, arguments)
 
+      assert %Runtime{} = executed_runtime
       assert 0x90 == executed_runtime.i
     end
 
@@ -44,6 +34,7 @@ defmodule Chip8.Instruction.ADDTest do
       arguments = %{x: x, y: y}
       executed_runtime = ADD.execute(runtime, arguments)
 
+      assert %Runtime{} = executed_runtime
       assert 0xB0 == VRegisters.get(executed_runtime.v, x)
     end
 
@@ -58,6 +49,7 @@ defmodule Chip8.Instruction.ADDTest do
       arguments = %{x: x, byte: byte}
       executed_runtime = ADD.execute(runtime, arguments)
 
+      assert %Runtime{} = executed_runtime
       assert 0x123 == VRegisters.get(executed_runtime.v, x)
     end
   end

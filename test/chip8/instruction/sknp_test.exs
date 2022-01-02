@@ -6,16 +6,6 @@ defmodule Chip8.Instruction.SKNPTest do
   alias Chip8.VRegisters
 
   describe "execute/2" do
-    test "should return a runtime struct" do
-      runtime = Runtime.new()
-
-      x = :rand.uniform(0xF)
-      arguments = %{x: x}
-      executed_runtime = SKNP.execute(runtime, arguments)
-
-      assert %Runtime{} = executed_runtime
-    end
-
     test "should return a runtime with pc set to next instruction when key of v register x is not pressed" do
       runtime = Runtime.new()
       x = :rand.uniform(0xF)
@@ -26,6 +16,7 @@ defmodule Chip8.Instruction.SKNPTest do
       arguments = %{x: x}
       executed_runtime = SKNP.execute(runtime, arguments)
 
+      assert %Runtime{} = executed_runtime
       assert runtime.pc + 2 == executed_runtime.pc
     end
 
@@ -40,6 +31,7 @@ defmodule Chip8.Instruction.SKNPTest do
       arguments = %{x: x}
       executed_runtime = SKNP.execute(runtime, arguments)
 
+      assert %Runtime{} = executed_runtime
       assert runtime.pc == executed_runtime.pc
     end
   end
