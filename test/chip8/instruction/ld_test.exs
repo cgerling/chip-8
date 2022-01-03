@@ -4,18 +4,16 @@ defmodule Chip8.Instruction.LDTest do
   alias Chip8.Instruction.LD
   alias Chip8.Memory
   alias Chip8.Runtime
-  alias Chip8.VRegisters
 
   describe "execute/2" do
     test "should return a runtime with memory holding the decimal digits of v register y" do
       runtime = Runtime.new()
 
       i_value = 0xFFA
+      runtime = put_in(runtime.i, i_value)
       y = :rand.uniform(0xF)
       y_value = 0xE0
-      v_registers = VRegisters.set(runtime.v, y, y_value)
-      runtime = put_in(runtime.i, i_value)
-      runtime = put_in(runtime.v, v_registers)
+      runtime = put_in(runtime.v[y], y_value)
 
       arguments = %{x: :bcd, y: y}
       executed_runtime = LD.execute(runtime, arguments)
@@ -28,10 +26,9 @@ defmodule Chip8.Instruction.LDTest do
       runtime = Runtime.new()
 
       y = :rand.uniform(0xE) + 1
+      runtime = Enum.reduce(0..y, runtime, &put_in(&2.v[&1], &1))
       i_value = :rand.uniform(runtime.memory.size - y)
-      v_registers = Enum.reduce(0..y, runtime.v, &VRegisters.set(&2, &1, &1))
       runtime = put_in(runtime.i, i_value)
-      runtime = put_in(runtime.v, v_registers)
 
       arguments = %{x: :memory, y: y}
       executed_runtime = LD.execute(runtime, arguments)
@@ -44,10 +41,10 @@ defmodule Chip8.Instruction.LDTest do
       runtime = Runtime.new()
 
       x = :rand.uniform(0xE) + 1
-      data = Enum.to_list(1..x)
       address = :rand.uniform(runtime.memory.size - x)
-      memory = Memory.write(runtime.memory, address, data)
       runtime = put_in(runtime.i, address)
+      data = Enum.to_list(1..x)
+      memory = Memory.write(runtime.memory, address, data)
       runtime = put_in(runtime.memory, memory)
 
       arguments = %{x: x, y: :memory}
@@ -64,10 +61,10 @@ defmodule Chip8.Instruction.LDTest do
 
     test "should return a runtime with v register x set to the delay timer" do
       runtime = Runtime.new()
-      x = :rand.uniform(0xF)
       dt_value = :rand.uniform(0xFFF)
       runtime = put_in(runtime.dt, dt_value)
 
+      x = :rand.uniform(0xF)
       arguments = %{x: x, y: :dt}
       executed_runtime = LD.execute(runtime, arguments)
 
@@ -79,8 +76,7 @@ defmodule Chip8.Instruction.LDTest do
       runtime = Runtime.new()
       y = :rand.uniform(0xF)
       y_value = :rand.uniform(0xFFF)
-      v_registers = VRegisters.set(runtime.v, y, y_value)
-      runtime = put_in(runtime.v, v_registers)
+      runtime = put_in(runtime.v[y], y_value)
 
       arguments = %{x: :dt, y: y}
       executed_runtime = LD.execute(runtime, arguments)
@@ -93,8 +89,7 @@ defmodule Chip8.Instruction.LDTest do
       runtime = Runtime.new()
       y = :rand.uniform(0xF)
       y_value = :rand.uniform(0xFFF)
-      v_registers = VRegisters.set(runtime.v, y, y_value)
-      runtime = put_in(runtime.v, v_registers)
+      runtime = put_in(runtime.v[y], y_value)
 
       arguments = %{x: :st, y: y}
       executed_runtime = LD.execute(runtime, arguments)
@@ -144,12 +139,11 @@ defmodule Chip8.Instruction.LDTest do
 
     test "should return a runtime with v register x set to v register y" do
       runtime = Runtime.new()
-      x = 0xF
       y = 0xE
       y_value = 0x580
-      v_registers = VRegisters.set(runtime.v, y, y_value)
-      runtime = put_in(runtime.v, v_registers)
+      runtime = put_in(runtime.v[y], y_value)
 
+      x = 0xF
       arguments = %{x: x, y: y}
       executed_runtime = LD.execute(runtime, arguments)
 
@@ -184,8 +178,7 @@ defmodule Chip8.Instruction.LDTest do
       runtime = Runtime.new()
       x = :rand.uniform(0xF)
       x_value = 0xD
-      v_registers = VRegisters.set(runtime.v, x, x_value)
-      runtime = put_in(runtime.v, v_registers)
+      runtime = put_in(runtime.v[x], x_value)
 
       arguments = %{x: x}
       executed_runtime = LD.execute(runtime, arguments)
