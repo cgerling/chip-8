@@ -15,6 +15,7 @@ defmodule Chip8.Instruction do
           | %{x: register(), y: register()}
           | %{x: register(), y: register(), nibble: nibble()}
 
+  @callback new(arguments()) :: t()
   @callback execute(Runtime.t(), arguments()) :: Runtime.t()
 
   @enforce_keys [:arguments, :module]
@@ -25,9 +26,22 @@ defmodule Chip8.Instruction do
           module: module()
         }
 
-  @spec new(module()) :: t()
+  defmacro __using__(_) do
+    instruction_module = __MODULE__
+
+    quote do
+      @behaviour unquote(instruction_module)
+
+      @impl unquote(instruction_module)
+      def new(arguments) when is_map(arguments),
+        do: unquote(instruction_module).new(__MODULE__, arguments)
+
+      defoverridable new: 1
+    end
+  end
+
   @spec new(module(), arguments()) :: t()
-  def new(module, arguments \\ %{}) when is_atom(module) and is_map(arguments) do
+  def new(module, arguments) when is_atom(module) and is_map(arguments) do
     %__MODULE__{
       arguments: arguments,
       module: module

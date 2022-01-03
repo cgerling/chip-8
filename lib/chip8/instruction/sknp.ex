@@ -1,7 +1,7 @@
 defmodule Chip8.Instruction.SKNP do
   @moduledoc false
 
-  @behaviour Chip8.Instruction
+  use Chip8.Instruction
 
   alias Chip8.Instruction
   alias Chip8.Keyboard
