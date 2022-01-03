@@ -6,7 +6,7 @@ defmodule Chip8.Instruction.LDTest do
   alias Chip8.Runtime
 
   describe "execute/2" do
-    test "should return a runtime with memory holding the decimal digits of v register y" do
+    test "should return a runtime with memory holding the decimal digits of vy" do
       runtime = Runtime.new()
 
       i_value = 0xFFA
@@ -22,7 +22,7 @@ defmodule Chip8.Instruction.LDTest do
       assert [2, 2, 4] == Memory.read(executed_runtime.memory, i_value, 3)
     end
 
-    test "should return a runtime with memory holding the contents of v register 0 up to v register y" do
+    test "should return a runtime with memory holding the contents of v register 0 up to vy" do
       runtime = Runtime.new()
 
       y = :rand.uniform(0xE) + 1
@@ -37,7 +37,7 @@ defmodule Chip8.Instruction.LDTest do
       assert Enum.to_list(0..y) == Memory.read(executed_runtime.memory, i_value, y + 1)
     end
 
-    test "should return a runtime with v register 0 up to v register x holding the contents of memory" do
+    test "should return a runtime with v register 0 up to vx holding the contents of memory" do
       runtime = Runtime.new()
 
       x = :rand.uniform(0xE) + 1
@@ -59,7 +59,7 @@ defmodule Chip8.Instruction.LDTest do
              end)
     end
 
-    test "should return a runtime with v register x set to the delay timer" do
+    test "should return a runtime with vx set to the delay timer" do
       runtime = Runtime.new()
       dt_value = :rand.uniform(0xFFF)
       runtime = put_in(runtime.dt, dt_value)
@@ -72,7 +72,7 @@ defmodule Chip8.Instruction.LDTest do
       assert dt_value == executed_runtime.v[x]
     end
 
-    test "should return a runtime with delay timer set to the v register x" do
+    test "should return a runtime with delay timer set to the vx" do
       runtime = Runtime.new()
       y = :rand.uniform(0xF)
       y_value = :rand.uniform(0xFFF)
@@ -85,7 +85,7 @@ defmodule Chip8.Instruction.LDTest do
       assert y_value == executed_runtime.dt
     end
 
-    test "should return a runtime with sound timer set to the v register x" do
+    test "should return a runtime with sound timer set to the vx" do
       runtime = Runtime.new()
       y = :rand.uniform(0xF)
       y_value = :rand.uniform(0xFFF)
@@ -124,7 +124,7 @@ defmodule Chip8.Instruction.LDTest do
       assert runtime.pc == executed_runtime.pc
     end
 
-    test "should return a runtime with v register x set to the key pressed when a key is pressed" do
+    test "should return a runtime with vx set to the key pressed when a key is pressed" do
       runtime = Runtime.new()
       key = :rand.uniform(0xF)
       runtime = put_in(runtime.keyboard.keys[key], :pressed)
@@ -137,7 +137,7 @@ defmodule Chip8.Instruction.LDTest do
       assert key == executed_runtime.v[x]
     end
 
-    test "should return a runtime with v register x set to v register y" do
+    test "should return a runtime with vx set to vy" do
       runtime = Runtime.new()
       y = 0xE
       y_value = 0x580
@@ -151,7 +151,7 @@ defmodule Chip8.Instruction.LDTest do
       assert y_value == executed_runtime.v[x]
     end
 
-    test "should return a runtime with v register x set to the given byte" do
+    test "should return a runtime with vx set to the given byte" do
       runtime = Runtime.new()
 
       x = :rand.uniform(0xF)
@@ -174,7 +174,7 @@ defmodule Chip8.Instruction.LDTest do
       assert address == executed_runtime.i
     end
 
-    test "should return a runtime with i set to the address of the character set in v register x" do
+    test "should return a runtime with i set to the address of the character set in vx" do
       runtime = Runtime.new()
       x = :rand.uniform(0xF)
       x_value = 0xD

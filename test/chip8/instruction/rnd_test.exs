@@ -5,7 +5,7 @@ defmodule Chip8.Instruction.RNDTest do
   alias Chip8.Runtime
 
   describe "execute/2" do
-    test "should return a runtime with v register x set to the result of a bitwise and of a random byte and the given byte" do
+    test "should return a runtime with vx set to the result of a bitwise and of a random byte and the given byte" do
       runtime = Runtime.new()
 
       seed = {1406, 407_414, 139_258}

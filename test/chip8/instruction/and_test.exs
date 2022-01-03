@@ -5,7 +5,7 @@ defmodule Chip8.Instruction.ANDTest do
   alias Chip8.Runtime
 
   describe "execute/2" do
-    test "should return a runtime with v register x set to the result of a bitwise and of v register x and v register y" do
+    test "should return a runtime with vx set to the result of a bitwise and of vx and vy" do
       runtime = Runtime.new()
       x = 0xB
       x_value = 0x43

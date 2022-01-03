@@ -5,7 +5,7 @@ defmodule Chip8.Instruction.SHLTest do
   alias Chip8.Runtime
 
   describe "execute/2" do
-    test "should return a runtime with v register F set to the most significant bit of v register y" do
+    test "should return a runtime with v register F set to the most significant bit of vy" do
       runtime = Runtime.new()
       y = 0x0
       y_value = 0xF7
@@ -19,7 +19,7 @@ defmodule Chip8.Instruction.SHLTest do
       assert 1 == executed_runtime.v[0xF]
     end
 
-    test "should return a runtime with v register x set to v register y shifted one bit to the left" do
+    test "should return a runtime with vx set to vy shifted one bit to the left" do
       runtime = Runtime.new()
       y = 0x5
       y_value = 0x45

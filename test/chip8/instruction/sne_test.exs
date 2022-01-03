@@ -6,7 +6,7 @@ defmodule Chip8.Instruction.SNETest do
   alias Chip8.VRegisters
 
   describe "execute/2" do
-    test "should return a runtime with pc unchanged when v register x is equals to the given byte" do
+    test "should return a runtime with pc unchanged when vx is equals to the given byte" do
       runtime = Runtime.new()
       x = :rand.uniform(0xF)
       byte = :rand.uniform(0xFF)
@@ -20,7 +20,7 @@ defmodule Chip8.Instruction.SNETest do
       assert runtime.pc == executed_runtime.pc
     end
 
-    test "should return a runtime with pc set to next instruction when v register x is not equals to the given byte" do
+    test "should return a runtime with pc set to next instruction when vx is not equals to the given byte" do
       runtime = Runtime.new()
       x = :rand.uniform(0xF)
       x_value = 0x95
@@ -35,7 +35,7 @@ defmodule Chip8.Instruction.SNETest do
       assert runtime.pc + 2 == executed_runtime.pc
     end
 
-    test "should return a runtime with pc unchanged when v register x is equals to v register y" do
+    test "should return a runtime with pc unchanged when vx is equals to vy" do
       runtime = Runtime.new()
       value = :rand.uniform(0xFF)
       x = 0x2
@@ -50,7 +50,7 @@ defmodule Chip8.Instruction.SNETest do
       assert runtime.pc == executed_runtime.pc
     end
 
-    test "should return a runtime with pc set to next instruction when v register x is not equals to v register y" do
+    test "should return a runtime with pc set to next instruction when vx is not equals to vy" do
       runtime = Runtime.new()
       x = 0xE
       x_value = 0x95

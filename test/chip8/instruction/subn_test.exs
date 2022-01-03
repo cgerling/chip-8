@@ -5,7 +5,7 @@ defmodule Chip8.Instruction.SUBNTest do
   alias Chip8.Runtime
 
   describe "execute/2" do
-    test "should return a runtime with v register x set to the difference of v register y and v register x when v register y is larger than v register x" do
+    test "should return a runtime with vx set to the difference of vy and vx when vy is larger than vx" do
       runtime = Runtime.new()
       x = 0xC
       x_value = 0x83
@@ -21,7 +21,7 @@ defmodule Chip8.Instruction.SUBNTest do
       assert 0x62 == executed_runtime.v[x]
     end
 
-    test "should return a runtime with v register x set to the difference of v register y and v register x when v register y is equals to v register x" do
+    test "should return a runtime with vx set to the difference of vy and vx when vy is equals to vx" do
       runtime = Runtime.new()
       x = 0xC
       y = 0x4
@@ -36,7 +36,7 @@ defmodule Chip8.Instruction.SUBNTest do
       assert 0x0 == executed_runtime.v[x]
     end
 
-    test "should return a runtime with v register x set to the difference of v register y and v register x when v register y is less than v register x" do
+    test "should return a runtime with vx set to the difference of vy and vx when vy is less than vx" do
       runtime = Runtime.new()
       x = 0x0
       x_value = 0xB6
@@ -52,7 +52,7 @@ defmodule Chip8.Instruction.SUBNTest do
       assert 0x53 == executed_runtime.v[x]
     end
 
-    test "should return a runtime with v register F set to 1 when v register y is greather than v register x" do
+    test "should return a runtime with v register F set to 1 when vy is greather than vx" do
       runtime = Runtime.new()
       x = 0xE
       x_value = 0x19
@@ -68,7 +68,7 @@ defmodule Chip8.Instruction.SUBNTest do
       assert 1 == executed_runtime.v[0xF]
     end
 
-    test "should return a runtime with v register F set to 0 when v register y is equals to v register x" do
+    test "should return a runtime with v register F set to 0 when vy is equals to vx" do
       runtime = Runtime.new()
       x = 0xF
       y = 0xC
@@ -83,7 +83,7 @@ defmodule Chip8.Instruction.SUBNTest do
       assert 0 == executed_runtime.v[0xF]
     end
 
-    test "should return a runtime with v register F set to 0 when v register y is less than v register x" do
+    test "should return a runtime with v register F set to 0 when vy is less than vx" do
       runtime = Runtime.new()
       x = 0xC
       x_value = 0x8B
