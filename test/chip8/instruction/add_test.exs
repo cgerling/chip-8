@@ -35,7 +35,7 @@ defmodule Chip8.Instruction.ADDTest do
       executed_runtime = ADD.execute(runtime, arguments)
 
       assert %Runtime{} = executed_runtime
-      assert 0xB0 == VRegisters.get(executed_runtime.v, x)
+      assert 0xB0 == executed_runtime.v[x]
     end
 
     test "should return a runtime with v register x set to the sum of v register x and the given byte" do
@@ -50,7 +50,7 @@ defmodule Chip8.Instruction.ADDTest do
       executed_runtime = ADD.execute(runtime, arguments)
 
       assert %Runtime{} = executed_runtime
-      assert 0x123 == VRegisters.get(executed_runtime.v, x)
+      assert 0x123 == executed_runtime.v[x]
     end
   end
 end

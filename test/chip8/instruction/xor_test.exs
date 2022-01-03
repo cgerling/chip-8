@@ -19,7 +19,7 @@ defmodule Chip8.Instruction.XORTest do
       executed_runtime = XOR.execute(runtime, arguments)
 
       assert %Runtime{} = executed_runtime
-      assert 0x3B == VRegisters.get(executed_runtime.v, x)
+      assert 0x3B == executed_runtime.v[x]
     end
   end
 end

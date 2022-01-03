@@ -19,7 +19,7 @@ defmodule Chip8.Instruction.ORTest do
       executed_runtime = OR.execute(runtime, arguments)
 
       assert %Runtime{} = executed_runtime
-      assert 0xD5 == VRegisters.get(executed_runtime.v, x)
+      assert 0xD5 == executed_runtime.v[x]
     end
   end
 end

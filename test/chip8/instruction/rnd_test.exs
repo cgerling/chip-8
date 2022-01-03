@@ -19,7 +19,7 @@ defmodule Chip8.Instruction.RNDTest do
       executed_runtime = RND.execute(runtime, arguments)
 
       assert %Runtime{} = executed_runtime
-      assert 0x8 == VRegisters.get(executed_runtime.v, x)
+      assert 0x8 == executed_runtime.v[x]
     end
   end
 end

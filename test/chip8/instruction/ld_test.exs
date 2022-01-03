@@ -58,7 +58,7 @@ defmodule Chip8.Instruction.LDTest do
       assert data
              |> Enum.with_index()
              |> Enum.all?(fn {value, index} ->
-               value == VRegisters.get(executed_runtime.v, index)
+               value == executed_runtime.v[index]
              end)
     end
 
@@ -72,7 +72,7 @@ defmodule Chip8.Instruction.LDTest do
       executed_runtime = LD.execute(runtime, arguments)
 
       assert %Runtime{} = executed_runtime
-      assert dt_value == VRegisters.get(executed_runtime.v, x)
+      assert dt_value == executed_runtime.v[x]
     end
 
     test "should return a runtime with delay timer set to the v register x" do
@@ -139,7 +139,7 @@ defmodule Chip8.Instruction.LDTest do
       executed_runtime = LD.execute(runtime, arguments)
 
       assert %Runtime{} = executed_runtime
-      assert key == VRegisters.get(executed_runtime.v, x)
+      assert key == executed_runtime.v[x]
     end
 
     test "should return a runtime with v register x set to v register y" do
@@ -154,7 +154,7 @@ defmodule Chip8.Instruction.LDTest do
       executed_runtime = LD.execute(runtime, arguments)
 
       assert %Runtime{} = executed_runtime
-      assert y_value == VRegisters.get(executed_runtime.v, x)
+      assert y_value == executed_runtime.v[x]
     end
 
     test "should return a runtime with v register x set to the given byte" do
@@ -166,7 +166,7 @@ defmodule Chip8.Instruction.LDTest do
       executed_runtime = LD.execute(runtime, arguments)
 
       assert %Runtime{} = executed_runtime
-      assert byte == VRegisters.get(executed_runtime.v, x)
+      assert byte == executed_runtime.v[x]
     end
 
     test "should return a runtime with i set to the given address" do

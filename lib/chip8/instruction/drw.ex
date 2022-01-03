@@ -16,16 +16,12 @@ defmodule Chip8.Instruction.DRW do
       |> Memory.read(runtime.i, nibble)
       |> Sprite.new()
 
-    register_x = VRegisters.get(runtime.v, x)
-    register_y = VRegisters.get(runtime.v, y)
-
-    coordinates = Display.get_coordinates(runtime.display, register_x, register_y)
+    coordinates = Display.get_coordinates(runtime.display, runtime.v[x], runtime.v[y])
 
     drawed_display = Display.draw(runtime.display, coordinates, sprite)
+
     collision = if Display.has_collision?(runtime.display, drawed_display), do: 1, else: 0
-
     v_registers = VRegisters.set(runtime.v, 0xF, collision)
-
     %{runtime | display: drawed_display, v: v_registers}
   end
 end

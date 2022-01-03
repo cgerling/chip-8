@@ -37,7 +37,7 @@ defmodule Chip8.Instruction.DRWTest do
       executed_runtime = DRW.execute(runtime, arguments)
 
       assert %Runtime{} = executed_runtime
-      assert 0 == VRegisters.get(executed_runtime.v, 0xF)
+      assert 0 == executed_runtime.v[0xF]
     end
 
     test "should return a runtime with VF set to 1 when there was a pixel collision" do
@@ -57,7 +57,7 @@ defmodule Chip8.Instruction.DRWTest do
       executed_runtime = DRW.execute(runtime, arguments)
 
       assert %Runtime{} = executed_runtime
-      assert 1 == VRegisters.get(executed_runtime.v, 0xF)
+      assert 1 == executed_runtime.v[0xF]
     end
   end
 end

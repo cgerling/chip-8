@@ -19,7 +19,7 @@ defmodule Chip8.Instruction.SUBTest do
       executed_runtime = SUB.execute(runtime, arguments)
 
       assert %Runtime{} = executed_runtime
-      assert 0x0D == VRegisters.get(executed_runtime.v, x)
+      assert 0x0D == executed_runtime.v[x]
     end
 
     test "should return a runtime with v register x set to the difference of v register x and v register y when v register x is equals to v register y" do
@@ -34,7 +34,7 @@ defmodule Chip8.Instruction.SUBTest do
       executed_runtime = SUB.execute(runtime, arguments)
 
       assert %Runtime{} = executed_runtime
-      assert 0x0 == VRegisters.get(executed_runtime.v, x)
+      assert 0x0 == executed_runtime.v[x]
     end
 
     test "should return a runtime with v register x set to the difference of v register x and v register y when v register x is less than v register y" do
@@ -50,7 +50,7 @@ defmodule Chip8.Instruction.SUBTest do
       executed_runtime = SUB.execute(runtime, arguments)
 
       assert %Runtime{} = executed_runtime
-      assert 0xC6 == VRegisters.get(executed_runtime.v, x)
+      assert 0xC6 == executed_runtime.v[x]
     end
 
     test "should return a runtime with v register F set to 1 when v register x is greather than v register y" do
@@ -66,7 +66,7 @@ defmodule Chip8.Instruction.SUBTest do
       executed_runtime = SUB.execute(runtime, arguments)
 
       assert %Runtime{} = executed_runtime
-      assert 1 == VRegisters.get(executed_runtime.v, 0xF)
+      assert 1 == executed_runtime.v[0xF]
     end
 
     test "should return a runtime with v register F set to 0 when v register x is equals to v register y" do
@@ -81,7 +81,7 @@ defmodule Chip8.Instruction.SUBTest do
       executed_runtime = SUB.execute(runtime, arguments)
 
       assert %Runtime{} = executed_runtime
-      assert 0 == VRegisters.get(executed_runtime.v, 0xF)
+      assert 0 == executed_runtime.v[0xF]
     end
 
     test "should return a runtime with v register F set to 0 when v register x is less than v register y" do
@@ -97,7 +97,7 @@ defmodule Chip8.Instruction.SUBTest do
       executed_runtime = SUB.execute(runtime, arguments)
 
       assert %Runtime{} = executed_runtime
-      assert 0 == VRegisters.get(executed_runtime.v, 0xF)
+      assert 0 == executed_runtime.v[0xF]
     end
   end
 end

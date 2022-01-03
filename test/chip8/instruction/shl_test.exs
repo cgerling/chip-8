@@ -18,7 +18,7 @@ defmodule Chip8.Instruction.SHLTest do
       executed_runtime = SHL.execute(runtime, arguments)
 
       assert %Runtime{} = executed_runtime
-      assert 1 == VRegisters.get(executed_runtime.v, 0xF)
+      assert 1 == executed_runtime.v[0xF]
     end
 
     test "should return a runtime with v register x set to v register y shifted one bit to the left" do
@@ -33,7 +33,7 @@ defmodule Chip8.Instruction.SHLTest do
       executed_runtime = SHL.execute(runtime, arguments)
 
       assert %Runtime{} = executed_runtime
-      assert 0x8A == VRegisters.get(executed_runtime.v, x)
+      assert 0x8A == executed_runtime.v[x]
     end
   end
 end

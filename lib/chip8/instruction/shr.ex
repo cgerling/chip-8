@@ -8,9 +8,8 @@ defmodule Chip8.Instruction.SHR do
 
   @impl Chip8.Instruction
   def execute(%Runtime{} = runtime, %{x: x, y: y}) do
-    register_y = VRegisters.get(runtime.v, y)
-    least_significant_bit = Bitwise.band(register_y, 0b00000001)
-    sr_result = Bitwise.bsr(register_y, 1)
+    least_significant_bit = Bitwise.band(runtime.v[y], 0b00000001)
+    sr_result = Bitwise.bsr(runtime.v[y], 1)
 
     v_registers =
       runtime.v

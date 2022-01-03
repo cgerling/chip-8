@@ -19,7 +19,7 @@ defmodule Chip8.Instruction.ANDTest do
       executed_runtime = AND.execute(runtime, arguments)
 
       assert %Runtime{} = executed_runtime
-      assert 0x41 == VRegisters.get(executed_runtime.v, x)
+      assert 0x41 == executed_runtime.v[x]
     end
   end
 end
