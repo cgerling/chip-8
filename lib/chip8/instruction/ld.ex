@@ -4,7 +4,6 @@ defmodule Chip8.Instruction.LD do
   use Chip8.Instruction
 
   alias Chip8.Font
-  alias Chip8.Instruction
   alias Chip8.Keyboard
   alias Chip8.Memory
   alias Chip8.Runtime
@@ -55,7 +54,7 @@ defmodule Chip8.Instruction.LD do
     key_pressed = Keyboard.keys() |> Enum.find(&Keyboard.is_pressed?(runtime.keyboard, &1))
 
     if is_nil(key_pressed) do
-      %{runtime | pc: runtime.pc - Instruction.byte_size()}
+      Runtime.to_previous_instruction(runtime)
     else
       v_registers = VRegisters.set(runtime.v, x, key_pressed)
       %{runtime | v: v_registers}
