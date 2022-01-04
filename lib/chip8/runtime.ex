@@ -57,4 +57,10 @@ defmodule Chip8.Runtime do
     next_instruction_address = runtime.pc + @instruction_size
     %{runtime | pc: next_instruction_address}
   end
+
+  @spec to_previous_instruction(t()) :: t()
+  def to_previous_instruction(%__MODULE__{} = runtime) do
+    previous_instruction_address = runtime.pc - @instruction_size
+    %{runtime | pc: previous_instruction_address}
+  end
 end
