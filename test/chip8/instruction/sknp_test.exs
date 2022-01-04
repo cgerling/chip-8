@@ -6,7 +6,7 @@ defmodule Chip8.Instruction.SKNPTest do
   alias Chip8.VRegisters
 
   describe "execute/2" do
-    test "should return a runtime with pc set to next instruction when key of v register x is not pressed" do
+    test "should return a runtime with pc set to next instruction when key of vx is not pressed" do
       runtime = Runtime.new()
       x = :rand.uniform(0xF)
       x_value = :rand.uniform(0xF)
@@ -20,7 +20,7 @@ defmodule Chip8.Instruction.SKNPTest do
       assert runtime.pc + 2 == executed_runtime.pc
     end
 
-    test "should return a runtime with pc unchanged when key of v register x is pressed" do
+    test "should return a runtime with pc unchanged when key of vx is pressed" do
       runtime = Runtime.new()
       x = :rand.uniform(0xF)
       x_value = :rand.uniform(0xF)

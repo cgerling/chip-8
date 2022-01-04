@@ -12,15 +12,14 @@ defmodule Chip8.Instruction.LD do
 
   @impl Chip8.Instruction
   def execute(%Runtime{} = runtime, %{x: :bcd, y: y}) do
-    register_y = VRegisters.get(runtime.v, y)
-    decimal_digits = Integer.digits(register_y, 10)
+    decimal_digits = Integer.digits(runtime.v[y], 10)
 
     memory = Memory.write(runtime.memory, runtime.i, decimal_digits)
     %{runtime | memory: memory}
   end
 
   def execute(%Runtime{} = runtime, %{x: :memory, y: y}) do
-    registers = Enum.map(0..y, &VRegisters.get(runtime.v, &1))
+    registers = Enum.map(0..y, &runtime.v[&1])
 
     memory = Memory.write(runtime.memory, runtime.i, registers)
     %{runtime | memory: memory}
@@ -45,13 +44,11 @@ defmodule Chip8.Instruction.LD do
   end
 
   def execute(%Runtime{} = runtime, %{x: :dt, y: y}) do
-    register_y = VRegisters.get(runtime.v, y)
-    %{runtime | dt: register_y}
+    %{runtime | dt: runtime.v[y]}
   end
 
   def execute(%Runtime{} = runtime, %{x: :st, y: y}) do
-    register_y = VRegisters.get(runtime.v, y)
-    %{runtime | st: register_y}
+    %{runtime | st: runtime.v[y]}
   end
 
   def execute(%Runtime{} = runtime, %{x: x, y: :keyboard}) do
@@ -66,9 +63,7 @@ defmodule Chip8.Instruction.LD do
   end
 
   def execute(%Runtime{} = runtime, %{x: x, y: y}) do
-    register_y = VRegisters.get(runtime.v, y)
-
-    v_registers = VRegisters.set(runtime.v, x, register_y)
+    v_registers = VRegisters.set(runtime.v, x, runtime.v[y])
     %{runtime | v: v_registers}
   end
 
@@ -82,9 +77,7 @@ defmodule Chip8.Instruction.LD do
   end
 
   def execute(%Runtime{} = runtime, %{x: x}) do
-    register_x = VRegisters.get(runtime.v, x)
-    character_address = Font.address(register_x)
-
+    character_address = Font.address(runtime.v[x])
     %{runtime | i: character_address}
   end
 end

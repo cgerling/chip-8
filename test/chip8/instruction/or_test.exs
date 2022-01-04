@@ -6,7 +6,7 @@ defmodule Chip8.Instruction.ORTest do
   alias Chip8.VRegisters
 
   describe "execute/2" do
-    test "should return a runtime with v register x set to the result of a bitwise or of v register x and v register y" do
+    test "should return a runtime with vx set to the result of a bitwise or of vx and vy" do
       runtime = Runtime.new()
       x = 0xC
       x_value = 0xD1
@@ -19,7 +19,7 @@ defmodule Chip8.Instruction.ORTest do
       executed_runtime = OR.execute(runtime, arguments)
 
       assert %Runtime{} = executed_runtime
-      assert 0xD5 == VRegisters.get(executed_runtime.v, x)
+      assert 0xD5 == executed_runtime.v[x]
     end
   end
 end
