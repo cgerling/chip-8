@@ -80,4 +80,10 @@ defmodule Chip8.Runtime do
 
     %{runtime | memory: memory_with_font}
   end
+
+  @spec load_program(t(), Memory.data()) :: t()
+  def load_program(%__MODULE__{} = runtime, program) when is_list(program) do
+    memory = Memory.write(runtime.memory, @initial_pc, program)
+    %{runtime | memory: memory}
+  end
 end

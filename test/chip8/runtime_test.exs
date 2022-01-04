@@ -109,4 +109,16 @@ defmodule Chip8.RuntimeTest do
       assert Memory.read(loaded_runtime.memory, font_address, font_size) == font_data
     end
   end
+
+  describe "load_program/2" do
+    test "should return a runtime struct with program data loaded on memory" do
+      runtime = Runtime.new()
+      program = [0x6A, 0x95, 0x27, 0x76, 0x38, 0x78, 0x25, 0x82]
+
+      loaded_runtime = Runtime.load_program(runtime, program)
+
+      assert %Runtime{} = loaded_runtime
+      assert Memory.read(loaded_runtime.memory, 0x200, 8) == program
+    end
+  end
 end
