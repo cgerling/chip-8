@@ -2,6 +2,7 @@ defmodule Chip8.Runtime do
   @moduledoc false
 
   alias Chip8.Display
+  alias Chip8.Instruction
   alias Chip8.Keyboard
   alias Chip8.Memory
   alias Chip8.Stack
@@ -28,6 +29,8 @@ defmodule Chip8.Runtime do
   @display_width 64
   @memory_size 4096
 
+  @instruction_size Instruction.byte_size()
+
   @spec new() :: t()
   def new do
     display = Display.new(@display_height, @display_width)
@@ -47,5 +50,11 @@ defmodule Chip8.Runtime do
       stack: stack,
       v: v
     }
+  end
+
+  @spec to_next_instruction(t()) :: t()
+  def to_next_instruction(%__MODULE__{} = runtime) do
+    next_instruction_address = runtime.pc + @instruction_size
+    %{runtime | pc: next_instruction_address}
   end
 end
