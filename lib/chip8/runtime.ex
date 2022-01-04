@@ -86,4 +86,16 @@ defmodule Chip8.Runtime do
     memory = Memory.write(runtime.memory, @initial_pc, program)
     %{runtime | memory: memory}
   end
+
+  @spec run_cycle(t()) :: t()
+  def run_cycle(%__MODULE__{} = runtime) do
+    instruction =
+      runtime.memory
+      |> Memory.read(runtime.pc, @instruction_size)
+      |> Instruction.decode()
+
+    runtime = to_next_instruction(runtime)
+
+    Instruction.execute(instruction, runtime)
+  end
 end

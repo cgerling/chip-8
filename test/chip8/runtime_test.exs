@@ -121,4 +121,27 @@ defmodule Chip8.RuntimeTest do
       assert Memory.read(loaded_runtime.memory, 0x200, 8) == program
     end
   end
+
+  describe "run_cycle/1" do
+    test "should return a runtime struct after executing the current instruction" do
+      runtime = Runtime.new()
+      jp_bytes = [0x1B, 0xF0]
+      memory = Memory.write(runtime.memory, runtime.pc, jp_bytes)
+      runtime = put_in(runtime.memory, memory)
+
+      runned_runtime = Runtime.run_cycle(runtime)
+
+      assert %Runtime{} = runned_runtime
+      assert 0xBF0 == runned_runtime.pc
+    end
+
+    test "should return a runtime struct with pc set to the next instruction address" do
+      runtime = Runtime.new()
+
+      runned_runtime = Runtime.run_cycle(runtime)
+
+      assert %Runtime{} = runned_runtime
+      assert runtime.pc + @instruction_size == runned_runtime.pc
+    end
+  end
 end
