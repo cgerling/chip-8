@@ -31,6 +31,7 @@ defmodule Chip8.Runtime do
   @display_width 64
   @memory_size 4096
 
+  @initial_pc 0x200
   @instruction_size Instruction.byte_size()
   @font_address 0x050
   @character_size Font.character_byte_size()
@@ -40,6 +41,7 @@ defmodule Chip8.Runtime do
     display = Display.new(@display_height, @display_width)
     keyboard = Keyboard.new()
     memory = Memory.new(@memory_size)
+    pc = @initial_pc
     stack = Stack.new()
     v = VRegisters.new()
 
@@ -49,7 +51,7 @@ defmodule Chip8.Runtime do
       i: 0,
       keyboard: keyboard,
       memory: memory,
-      pc: 0,
+      pc: pc,
       st: 0,
       stack: stack,
       v: v

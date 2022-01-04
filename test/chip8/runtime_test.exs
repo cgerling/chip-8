@@ -7,10 +7,11 @@ defmodule Chip8.RuntimeTest do
   @instruction_size Instruction.byte_size()
 
   describe "new/0" do
-    test "should return a runtime struct" do
-      system = Runtime.new()
+    test "should return a runtime initialized" do
+      runtime = Runtime.new()
 
-      assert %Runtime{} = system
+      assert %Runtime{} = runtime
+      assert 0x200 == runtime.pc
     end
   end
 
