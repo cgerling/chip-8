@@ -1,7 +1,9 @@
 defmodule Chip8.RuntimeTest do
   use ExUnit.Case, async: true
 
+  alias Chip8.Font
   alias Chip8.Instruction
+  alias Chip8.Memory
   alias Chip8.Runtime
 
   @instruction_size Instruction.byte_size()
@@ -90,6 +92,21 @@ defmodule Chip8.RuntimeTest do
         assert is_integer(address)
         assert character_address == address
       end
+    end
+  end
+
+  describe "load_font/2" do
+    test "should return a runtime with font data loaded on memory" do
+      runtime = Runtime.new()
+
+      font_address = 0x050
+      font_data = Font.data()
+      font_size = Enum.count(font_data)
+
+      loaded_runtime = Runtime.load_font(runtime, font_data)
+
+      assert %Runtime{} = loaded_runtime
+      assert Memory.read(loaded_runtime.memory, font_address, font_size) == font_data
     end
   end
 end

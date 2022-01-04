@@ -73,4 +73,11 @@ defmodule Chip8.Runtime do
   @spec get_font_character_address(0x0..0xF) :: non_neg_integer()
   def get_font_character_address(character) when is_integer(character) and character in 0x0..0xF,
     do: @font_address + @character_size * character
+
+  @spec load_font(t(), Memory.data()) :: t()
+  def load_font(%__MODULE__{} = runtime, font_data) when is_list(font_data) do
+    memory_with_font = Memory.write(runtime.memory, @font_address, font_data)
+
+    %{runtime | memory: memory_with_font}
+  end
 end
