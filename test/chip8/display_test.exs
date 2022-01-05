@@ -40,48 +40,44 @@ defmodule Chip8.DisplayTest do
       assert {x, y} == coordinates
     end
 
-    test "should return a coordinates tuple wrapped when x is equals to display's height" do
+    test "should return a coordinates tuple wrapped when x is equals to display's width" do
       display = Display.new(100, 100)
-      x = display.height
-      y = :rand.uniform(display.width - 1)
+      x = display.width
+      y = :rand.uniform(display.height - 1)
 
       coordinates = Display.get_coordinates(display, x, y)
 
       assert {0, y} == coordinates
     end
 
-    test "should return a coordinates tuple wrapped when x is greather than display's height" do
+    test "should return a coordinates tuple wrapped when x is greather than display's width" do
       display = Display.new(100, 100)
-      x = :rand.uniform(display.height - 1)
-      y = :rand.uniform(display.width - 1)
+      x = :rand.uniform(display.width - 1)
+      y = :rand.uniform(display.height - 1)
 
-      overflow_x = display.height + x
+      overflow_x = display.width + x
 
       coordinates = Display.get_coordinates(display, overflow_x, y)
 
       assert {x, y} == coordinates
     end
 
-
-
-
-
-    test "should return a coordinates tuple wrapped when y is equals to display's width" do
+    test "should return a coordinates tuple wrapped when y is equals to display's height" do
       display = Display.new(100, 100)
-      x = :rand.uniform(display.height - 1)
-      y = display.width
+      x = :rand.uniform(display.width - 1)
+      y = display.height
 
       coordinates = Display.get_coordinates(display, x, y)
 
       assert {x, 0} == coordinates
     end
 
-    test "should return a coordinates tuple wrapped when y is greather than display's width" do
+    test "should return a coordinates tuple wrapped when y is greather than display's height" do
       display = Display.new(100, 100)
-      x = :rand.uniform(display.height - 1)
-      y = :rand.uniform(display.width - 1)
+      x = :rand.uniform(display.width - 1)
+      y = :rand.uniform(display.height - 1)
 
-      overflow_y = display.width + y
+      overflow_y = display.height + y
 
       coordinates = Display.get_coordinates(display, x, overflow_y)
 
