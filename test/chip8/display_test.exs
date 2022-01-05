@@ -31,7 +31,7 @@ defmodule Chip8.DisplayTest do
 
   describe "get_coordinates/3" do
     test "should return a coordinates tuple from x and y values" do
-      display = Display.new(100, 100)
+      display = Display.new(50, 100)
       x = :rand.uniform(display.width - 1)
       y = :rand.uniform(display.height - 1)
 
@@ -41,7 +41,7 @@ defmodule Chip8.DisplayTest do
     end
 
     test "should return a coordinates tuple wrapped when x is equals to display's width" do
-      display = Display.new(100, 100)
+      display = Display.new(50, 100)
       x = display.width
       y = :rand.uniform(display.height - 1)
 
@@ -51,7 +51,7 @@ defmodule Chip8.DisplayTest do
     end
 
     test "should return a coordinates tuple wrapped when x is greather than display's width" do
-      display = Display.new(100, 100)
+      display = Display.new(50, 100)
       x = :rand.uniform(display.width - 1)
       y = :rand.uniform(display.height - 1)
 
@@ -63,7 +63,7 @@ defmodule Chip8.DisplayTest do
     end
 
     test "should return a coordinates tuple wrapped when y is equals to display's height" do
-      display = Display.new(100, 100)
+      display = Display.new(50, 100)
       x = :rand.uniform(display.width - 1)
       y = display.height
 
@@ -73,7 +73,7 @@ defmodule Chip8.DisplayTest do
     end
 
     test "should return a coordinates tuple wrapped when y is greather than display's height" do
-      display = Display.new(100, 100)
+      display = Display.new(50, 100)
       x = :rand.uniform(display.width - 1)
       y = :rand.uniform(display.height - 1)
 
