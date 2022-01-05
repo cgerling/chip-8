@@ -52,17 +52,9 @@ defmodule Chip8.DisplayTest do
       assert {x, y} == coordinates
     end
 
-    test "should return a coordinates tuple when x is negative" do
-      display = Display.new(100, 100)
-      x = :rand.uniform(display.height - 1)
-      y = :rand.uniform(display.width - 1)
 
-      negative_x = x * -1
 
-      coordinates = Display.get_coordinates(display, negative_x, y)
 
-      assert {x, y} == coordinates
-    end
 
     test "should return a coordinates tuple wrapped when y is equals to display's width" do
       display = Display.new(100, 100)
@@ -82,18 +74,6 @@ defmodule Chip8.DisplayTest do
       overflow_y = display.width + y
 
       coordinates = Display.get_coordinates(display, x, overflow_y)
-
-      assert {x, y} == coordinates
-    end
-
-    test "should return a coordinates tuple when y is negative" do
-      display = Display.new(100, 100)
-      x = :rand.uniform(display.height - 1)
-      y = :rand.uniform(display.width - 1)
-
-      negative_y = y * -1
-
-      coordinates = Display.get_coordinates(display, x, negative_y)
 
       assert {x, y} == coordinates
     end
