@@ -32,10 +32,10 @@ defmodule Chip8.Display do
     new(height, width)
   end
 
-  @spec get_coordinates(t(), integer(), integer()) :: coordinates()
+  @spec get_coordinates(t(), non_neg_integer(), non_neg_integer()) :: coordinates()
   def get_coordinates(%__MODULE__{} = display, x, y) when is_integer(x) and is_integer(y) do
-    coordinate_x = rem(abs(x), display.height)
-    coordinate_y = rem(abs(y), display.width)
+    coordinate_x = rem(x, display.width)
+    coordinate_y = rem(y, display.height)
 
     {coordinate_x, coordinate_y}
   end
