@@ -30,6 +30,16 @@ defmodule Chip8.DisplayTest do
   end
 
   describe "get_coordinates/3" do
+    test "should return a coordinates tuple from x and y values" do
+      display = Display.new(100, 100)
+      x = :rand.uniform(display.width - 1)
+      y = :rand.uniform(display.height - 1)
+
+      coordinates = Display.get_coordinates(display, x, y)
+
+      assert {x, y} == coordinates
+    end
+
     test "should return a coordinates tuple wrapped when x is equals to display's height" do
       display = Display.new(100, 100)
       x = display.height
