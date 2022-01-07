@@ -16,7 +16,7 @@ defmodule Chip8.Runtime do
   @type t :: %__MODULE__{
           display: Display.t(),
           dt: timer(),
-          i: byte(),
+          i: non_neg_integer(),
           keyboard: Keyboard.t(),
           memory: Memory.t(),
           pc: non_neg_integer(),
