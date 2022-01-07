@@ -25,6 +25,17 @@ defmodule Chip8.RuntimeTest do
       assert %Runtime{} = next_instruction_runtime
       assert pc_value + @instruction_size == next_instruction_runtime.pc
     end
+
+    test "should return a runtime struct with pc set to the next instruction address wrapped to 12 bits" do
+      runtime = Runtime.new()
+      pc_value = 0xFFF
+      runtime = put_in(runtime.pc, pc_value)
+
+      next_instruction_runtime = Runtime.to_next_instruction(runtime)
+
+      assert %Runtime{} = next_instruction_runtime
+      assert 1 == next_instruction_runtime.pc
+    end
   end
 
   describe "to_previous_instruction/1" do
@@ -37,6 +48,17 @@ defmodule Chip8.RuntimeTest do
 
       assert %Runtime{} = previous_instruction_runtime
       assert pc_value - @instruction_size == previous_instruction_runtime.pc
+    end
+
+    test "should return a runtime struct with pc set to the previous instruction address wrapped to 12 bits" do
+      runtime = Runtime.new()
+      pc_value = 0x0
+      runtime = put_in(runtime.pc, pc_value)
+
+      previous_instruction_runtime = Runtime.to_previous_instruction(runtime)
+
+      assert %Runtime{} = previous_instruction_runtime
+      assert 4094 == previous_instruction_runtime.pc
     end
   end
 end

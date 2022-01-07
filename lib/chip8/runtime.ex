@@ -6,6 +6,7 @@ defmodule Chip8.Runtime do
   alias Chip8.Keyboard
   alias Chip8.Memory
   alias Chip8.Stack
+  alias Chip8.UInt
   alias Chip8.VRegisters
 
   @enforce_keys [:display, :dt, :i, :keyboard, :memory, :pc, :st, :stack, :v]
@@ -54,13 +55,13 @@ defmodule Chip8.Runtime do
 
   @spec to_next_instruction(t()) :: t()
   def to_next_instruction(%__MODULE__{} = runtime) do
-    next_instruction_address = runtime.pc + @instruction_size
+    next_instruction_address = UInt.to_uint12(runtime.pc + @instruction_size)
     %{runtime | pc: next_instruction_address}
   end
 
   @spec to_previous_instruction(t()) :: t()
   def to_previous_instruction(%__MODULE__{} = runtime) do
-    previous_instruction_address = runtime.pc - @instruction_size
+    previous_instruction_address = UInt.to_uint12(runtime.pc - @instruction_size)
     %{runtime | pc: previous_instruction_address}
   end
 end
