@@ -4,12 +4,13 @@ defmodule Chip8.Instruction.SHL do
   use Chip8.Instruction
 
   alias Chip8.Runtime
+  alias Chip8.UInt
   alias Chip8.VRegisters
 
   @impl Chip8.Instruction
   def execute(%Runtime{} = runtime, %{x: x, y: y}) do
     most_significant_bit = runtime.v[y] |> Bitwise.band(0b10000000) |> Bitwise.bsr(7)
-    sl_result = Bitwise.bsl(runtime.v[y], 1)
+    sl_result = runtime.v[y] |> Bitwise.bsl(1) |> UInt.to_uint8()
 
     v_registers =
       runtime.v

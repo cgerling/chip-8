@@ -32,5 +32,19 @@ defmodule Chip8.Instruction.SHLTest do
       assert %Runtime{} = executed_runtime
       assert 0x8A == executed_runtime.v[x]
     end
+
+    test "should return a runtime with vx set to vy shifted one bit to the left wrapped to 8 bits" do
+      runtime = Runtime.new()
+      y = 0x5
+      y_value = 0xD5
+      runtime = put_in(runtime.v[y], y_value)
+
+      x = 0x9
+      arguments = %{x: x, y: y}
+      executed_runtime = SHL.execute(runtime, arguments)
+
+      assert %Runtime{} = executed_runtime
+      assert 0xAA == executed_runtime.v[x]
+    end
   end
 end
