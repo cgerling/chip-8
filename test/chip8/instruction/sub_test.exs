@@ -5,7 +5,7 @@ defmodule Chip8.Instruction.SUBTest do
   alias Chip8.Runtime
 
   describe "execute/2" do
-    test "should return a runtime with vx set to the difference of vx and vy when vx is larger than vy" do
+    test "should return a runtime with vx set to the difference of vx and vy wrapped to 8 bits when vx is larger than vy" do
       runtime = Runtime.new()
       x = 0x5
       x_value = 0x36
@@ -21,7 +21,7 @@ defmodule Chip8.Instruction.SUBTest do
       assert 0x0D == executed_runtime.v[x]
     end
 
-    test "should return a runtime with vx set to the difference of vx and vy when vx is equals to vy" do
+    test "should return a runtime with vx set to the difference of vx and vy wrapped to 8 bits when vx is equals to vy wrapped to 8 bits" do
       runtime = Runtime.new()
       x = 0xB
       y = 0x2
@@ -36,7 +36,7 @@ defmodule Chip8.Instruction.SUBTest do
       assert 0x0 == executed_runtime.v[x]
     end
 
-    test "should return a runtime with vx set to the difference of vx and vy when vx is less than vy" do
+    test "should return a runtime with vx set to the difference of vx and vy wrapped to 8 bits when vx is less than vy wrapped to 8 bits" do
       runtime = Runtime.new()
       x = 0xB
       x_value = 0x1D
@@ -49,7 +49,7 @@ defmodule Chip8.Instruction.SUBTest do
       executed_runtime = SUB.execute(runtime, arguments)
 
       assert %Runtime{} = executed_runtime
-      assert 0xC6 == executed_runtime.v[x]
+      assert 0x3A == executed_runtime.v[x]
     end
 
     test "should return a runtime with v register F set to 1 when vx is greather than vy" do

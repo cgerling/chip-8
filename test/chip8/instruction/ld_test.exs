@@ -163,6 +163,19 @@ defmodule Chip8.Instruction.LDTest do
       assert byte == executed_runtime.v[x]
     end
 
+    test "should return a runtime with vx set to the given byte wrapped to 8 bits" do
+      runtime = Runtime.new()
+
+      x = :rand.uniform(0xF)
+      value = :rand.uniform(0xFF)
+      byte = 0xFF + value
+      arguments = %{x: x, byte: byte}
+      executed_runtime = LD.execute(runtime, arguments)
+
+      assert %Runtime{} = executed_runtime
+      assert value - 1 == executed_runtime.v[x]
+    end
+
     test "should return a runtime with i set to the given address" do
       runtime = Runtime.new()
 
@@ -172,6 +185,18 @@ defmodule Chip8.Instruction.LDTest do
 
       assert %Runtime{} = executed_runtime
       assert address == executed_runtime.i
+    end
+
+    test "should return a runtime with i set to the given address wrapped to 16 bits" do
+      runtime = Runtime.new()
+
+      value = :rand.uniform(0xFFFF)
+      address = 0xFFFF + value
+      arguments = %{address: address}
+      executed_runtime = LD.execute(runtime, arguments)
+
+      assert %Runtime{} = executed_runtime
+      assert value - 1 == executed_runtime.i
     end
 
     test "should return a runtime with i set to the address of the character set in vx" do
