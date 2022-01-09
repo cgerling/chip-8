@@ -2,6 +2,7 @@ defmodule Chip8.Runtime do
   @moduledoc false
 
   alias Chip8.Display
+  alias Chip8.Font
   alias Chip8.Instruction
   alias Chip8.Keyboard
   alias Chip8.Memory
@@ -31,6 +32,8 @@ defmodule Chip8.Runtime do
   @memory_size 4096
 
   @instruction_size Instruction.byte_size()
+  @font_address 0x050
+  @character_size Font.character_byte_size()
 
   @spec new() :: t()
   def new do
@@ -64,4 +67,8 @@ defmodule Chip8.Runtime do
     previous_instruction_address = UInt.to_uint12(runtime.pc - @instruction_size)
     %{runtime | pc: previous_instruction_address}
   end
+
+  @spec get_font_character_address(0x0..0xF) :: non_neg_integer()
+  def get_font_character_address(character) when is_integer(character) and character in 0x0..0xF,
+    do: @font_address + @character_size * character
 end

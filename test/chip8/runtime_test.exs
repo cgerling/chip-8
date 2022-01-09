@@ -61,4 +61,34 @@ defmodule Chip8.RuntimeTest do
       assert 4094 == previous_instruction_runtime.pc
     end
   end
+
+  describe "get_font_character_address/1" do
+    test "should return a memory address for all characters based on the given address" do
+      characters_with_address = [
+        {0x0, 0x050},
+        {0x1, 0x055},
+        {0x2, 0x05A},
+        {0x3, 0x05F},
+        {0x4, 0x064},
+        {0x5, 0x069},
+        {0x6, 0x06E},
+        {0x7, 0x073},
+        {0x8, 0x078},
+        {0x9, 0x07D},
+        {0xA, 0x082},
+        {0xB, 0x087},
+        {0xC, 0x08C},
+        {0xD, 0x091},
+        {0xE, 0x096},
+        {0xF, 0x09B}
+      ]
+
+      for {character, character_address} <- characters_with_address do
+        address = Runtime.get_font_character_address(character)
+
+        assert is_integer(address)
+        assert character_address == address
+      end
+    end
+  end
 end
