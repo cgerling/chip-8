@@ -3,33 +3,56 @@ defmodule Chip8.FontTest do
 
   alias Chip8.Font
 
-  describe "address/1" do
-    test "should return the memory address for all characters" do
-      characters_with_address = [
-        {0x0, 0x050},
-        {0x1, 0x055},
-        {0x2, 0x05A},
-        {0x3, 0x05F},
-        {0x4, 0x064},
-        {0x5, 0x069},
-        {0x6, 0x06E},
-        {0x7, 0x073},
-        {0x8, 0x078},
-        {0x9, 0x07D},
-        {0xA, 0x082},
-        {0xB, 0x087},
-        {0xC, 0x08C},
-        {0xD, 0x091},
-        {0xE, 0x096},
-        {0xF, 0x09B}
-      ]
+  describe "character_byte_size/0" do
+    test "should return the size in bytes of a character" do
+      character_byte_size = Font.character_byte_size()
 
-      for {character, character_address} <- characters_with_address do
-        address = Font.address(character)
+      assert character_byte_size == 5
+    end
+  end
 
-        assert is_integer(address)
-        assert character_address == address
-      end
+  describe "data/0" do
+    test "should return all font characters as a list of bytes" do
+      char_0 = [0xF0, 0x90, 0x90, 0x90, 0xF0]
+      char_1 = [0x20, 0x60, 0x20, 0x20, 0x70]
+      char_2 = [0xF0, 0x10, 0xF0, 0x80, 0xF0]
+      char_3 = [0xF0, 0x10, 0xF0, 0x10, 0xF0]
+      char_4 = [0x90, 0x90, 0xF0, 0x10, 0x10]
+      char_5 = [0xF0, 0x80, 0xF0, 0x10, 0xF0]
+      char_6 = [0xF0, 0x80, 0xF0, 0x90, 0xF0]
+      char_7 = [0xF0, 0x10, 0x20, 0x40, 0x40]
+      char_8 = [0xF0, 0x90, 0xF0, 0x90, 0xF0]
+      char_9 = [0xF0, 0x90, 0xF0, 0x10, 0xF0]
+      char_a = [0xF0, 0x90, 0xF0, 0x90, 0x90]
+      char_b = [0xE0, 0x90, 0xE0, 0x90, 0xE0]
+      char_c = [0xF0, 0x80, 0x80, 0x80, 0xF0]
+      char_d = [0xE0, 0x90, 0x90, 0x90, 0xE0]
+      char_e = [0xF0, 0x80, 0xF0, 0x80, 0xF0]
+      char_f = [0xF0, 0x80, 0xF0, 0x80, 0x80]
+
+      font_data =
+        List.flatten([
+          char_0,
+          char_1,
+          char_2,
+          char_3,
+          char_4,
+          char_5,
+          char_6,
+          char_7,
+          char_8,
+          char_9,
+          char_a,
+          char_b,
+          char_c,
+          char_d,
+          char_e,
+          char_f
+        ])
+
+      data = Font.data()
+
+      assert font_data == data
     end
   end
 end
