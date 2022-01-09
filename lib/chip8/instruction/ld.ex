@@ -3,7 +3,6 @@ defmodule Chip8.Instruction.LD do
 
   use Chip8.Instruction
 
-  alias Chip8.Font
   alias Chip8.Keyboard
   alias Chip8.Memory
   alias Chip8.Runtime
@@ -79,7 +78,7 @@ defmodule Chip8.Instruction.LD do
   end
 
   def execute(%Runtime{} = runtime, %{x: x}) do
-    character_address = Font.address(runtime.v[x])
+    character_address = Runtime.get_font_character_address(runtime.v[x])
     %{runtime | i: character_address}
   end
 end
