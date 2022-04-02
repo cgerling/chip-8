@@ -1,6 +1,7 @@
 defmodule Chip8.Instruction.XORTest do
   use ExUnit.Case, async: true
 
+  alias Chip8.Instruction.Argument.Register
   alias Chip8.Instruction.XOR
   alias Chip8.Runtime
 
@@ -14,11 +15,13 @@ defmodule Chip8.Instruction.XORTest do
       y_value = 0x44
       runtime = put_in(runtime.v[y], y_value)
 
-      arguments = %{x: x, y: y}
+      vx = %Register{value: x}
+      vy = %Register{value: y}
+      arguments = {vx, vy}
       executed_runtime = XOR.execute(runtime, arguments)
 
       assert %Runtime{} = executed_runtime
-      assert 0x3B == executed_runtime.v[x]
+      assert 0x3B == executed_runtime.v[vx.value]
     end
   end
 end
