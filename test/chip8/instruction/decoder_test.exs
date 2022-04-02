@@ -367,7 +367,7 @@ defmodule Chip8.Instruction.DecoderTest do
       assert %Instruction{} = instruction
 
       assert Instruction.LD == instruction.module
-      assert %{x: :bcd, y: 0x4} == instruction.arguments
+      assert {Register.bcd(), Register.v(0x4)} == instruction.arguments
     end
 
     test "should return a instruction struct for the `LD I, Vy` instruction" do

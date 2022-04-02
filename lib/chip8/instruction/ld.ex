@@ -12,6 +12,7 @@ defmodule Chip8.Instruction.LD do
   alias Chip8.UInt
   alias Chip8.VRegisters
 
+  @bcd Register.bcd()
   @dt Register.dt()
   @font Register.font()
   @i Register.i()
@@ -19,8 +20,8 @@ defmodule Chip8.Instruction.LD do
   @st Register.st()
 
   @impl Chip8.Instruction
-  def execute(%Runtime{} = runtime, %{x: :bcd, y: y}) do
-    decimal_digits = Integer.digits(runtime.v[y], 10)
+  def execute(%Runtime{} = runtime, {@bcd, %Register{} = x}) do
+    decimal_digits = Integer.digits(runtime.v[x.value], 10)
 
     memory = Memory.write(runtime.memory, runtime.i, decimal_digits)
     %{runtime | memory: memory}

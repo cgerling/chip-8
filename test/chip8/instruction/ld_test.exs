@@ -14,11 +14,13 @@ defmodule Chip8.Instruction.LDTest do
 
       i_value = 0xFFA
       runtime = put_in(runtime.i, i_value)
-      y = :rand.uniform(0xF)
-      y_value = 0xE0
-      runtime = put_in(runtime.v[y], y_value)
+      x = :rand.uniform(0xF)
+      x_value = 0xE0
+      runtime = put_in(runtime.v[x], x_value)
 
-      arguments = %{x: :bcd, y: y}
+      bcd = Register.bcd()
+      vx = %Register{value: x}
+      arguments = {bcd, vx}
       executed_runtime = LD.execute(runtime, arguments)
 
       assert %Runtime{} = executed_runtime

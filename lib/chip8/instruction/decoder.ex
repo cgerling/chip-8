@@ -247,8 +247,11 @@ defmodule Chip8.Instruction.Decoder do
     Instruction.LD.new({font, vx})
   end
 
-  defp decode_data({0xF, y, 0x3, 0x3}) do
-    Instruction.LD.new(%{x: :bcd, y: y})
+  defp decode_data({0xF, x, 0x3, 0x3}) do
+    bcd = Register.bcd()
+    vx = Register.v(x)
+
+    Instruction.LD.new({bcd, vx})
   end
 
   defp decode_data({0xF, y, 0x5, 0x5}) do
