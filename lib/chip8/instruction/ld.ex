@@ -49,8 +49,8 @@ defmodule Chip8.Instruction.LD do
     %{runtime | v: v_registers}
   end
 
-  def execute(%Runtime{} = runtime, %{x: :dt, y: y}) do
-    %{runtime | dt: runtime.v[y]}
+  def execute(%Runtime{} = runtime, {@dt, %Register{} = x}) do
+    %{runtime | dt: runtime.v[x.value]}
   end
 
   def execute(%Runtime{} = runtime, %{x: :st, y: y}) do
