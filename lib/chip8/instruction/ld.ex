@@ -17,6 +17,7 @@ defmodule Chip8.Instruction.LD do
   @font Register.font()
   @i Register.i()
   @keyboard Register.keyboard()
+  @memory Register.memory()
   @st Register.st()
 
   @impl Chip8.Instruction
@@ -27,8 +28,8 @@ defmodule Chip8.Instruction.LD do
     %{runtime | memory: memory}
   end
 
-  def execute(%Runtime{} = runtime, %{x: :memory, y: y}) do
-    registers = Enum.map(0..y, &runtime.v[&1])
+  def execute(%Runtime{} = runtime, {@memory, %Register{} = x}) do
+    registers = Enum.map(0..x.value, &runtime.v[&1])
 
     memory = Memory.write(runtime.memory, runtime.i, registers)
     %{runtime | memory: memory}

@@ -30,16 +30,20 @@ defmodule Chip8.Instruction.LDTest do
     test "should return a runtime with memory holding the contents of v register 0 up to vy" do
       runtime = Runtime.new()
 
-      y = :rand.uniform(0xE) + 1
-      runtime = Enum.reduce(0..y, runtime, &put_in(&2.v[&1], &1))
-      i_value = :rand.uniform(runtime.memory.size - y)
+      x = :rand.uniform(0xE) + 1
+      runtime = Enum.reduce(0..x, runtime, &put_in(&2.v[&1], &1))
+      i_value = :rand.uniform(runtime.memory.size - x)
       runtime = put_in(runtime.i, i_value)
 
-      arguments = %{x: :memory, y: y}
+      memory = Register.memory()
+      vx = %Register{value: x}
+      arguments = {memory, vx}
       executed_runtime = LD.execute(runtime, arguments)
 
       assert %Runtime{} = executed_runtime
-      assert Enum.to_list(0..y) == Memory.read(executed_runtime.memory, i_value, y + 1)
+
+      assert Enum.to_list(0..vx.value) ==
+               Memory.read(executed_runtime.memory, i_value, vx.value + 1)
     end
 
     test "should return a runtime with v register 0 up to vx holding the contents of memory" do
