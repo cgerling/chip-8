@@ -107,8 +107,9 @@ defmodule Chip8.Instruction.LDTest do
       pc_value = :rand.uniform(0xFFF)
       runtime = put_in(runtime.pc, pc_value)
 
-      x = :rand.uniform(0xF)
-      arguments = %{x: x, y: :keyboard}
+      vx = %Register{value: :rand.uniform(0xF)}
+      keyboard = Register.keyboard()
+      arguments = {vx, keyboard}
       executed_runtime = LD.execute(runtime, arguments)
 
       assert %Runtime{} = executed_runtime
@@ -120,8 +121,9 @@ defmodule Chip8.Instruction.LDTest do
       key = :rand.uniform(0xF)
       runtime = put_in(runtime.keyboard.keys[key], :pressed)
 
-      x = :rand.uniform(0xF)
-      arguments = %{x: x, y: :keyboard}
+      vx = %Register{value: :rand.uniform(0xF)}
+      keyboard = Register.keyboard()
+      arguments = {vx, keyboard}
       executed_runtime = LD.execute(runtime, arguments)
 
       assert %Runtime{} = executed_runtime
@@ -133,12 +135,13 @@ defmodule Chip8.Instruction.LDTest do
       key = :rand.uniform(0xF)
       runtime = put_in(runtime.keyboard.keys[key], :pressed)
 
-      x = :rand.uniform(0xF)
-      arguments = %{x: x, y: :keyboard}
+      vx = %Register{value: :rand.uniform(0xF)}
+      keyboard = Register.keyboard()
+      arguments = {vx, keyboard}
       executed_runtime = LD.execute(runtime, arguments)
 
       assert %Runtime{} = executed_runtime
-      assert key == executed_runtime.v[x]
+      assert key == executed_runtime.v[vx.value]
     end
 
     test "should return a runtime with vx set to vy" do

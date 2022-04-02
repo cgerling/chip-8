@@ -213,7 +213,10 @@ defmodule Chip8.Instruction.Decoder do
   end
 
   defp decode_data({0xF, x, 0x0, 0xA}) do
-    Instruction.LD.new(%{x: x, y: :keyboard})
+    vx = Register.v(x)
+    keyboard = Register.keyboard()
+
+    Instruction.LD.new({vx, keyboard})
   end
 
   defp decode_data({0xF, y, 0x1, 0x5}) do

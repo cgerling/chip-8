@@ -14,6 +14,7 @@ defmodule Chip8.Instruction.LD do
 
   @dt Register.dt()
   @i Register.i()
+  @keyboard Register.keyboard()
 
   @impl Chip8.Instruction
   def execute(%Runtime{} = runtime, %{x: :bcd, y: y}) do
@@ -61,13 +62,13 @@ defmodule Chip8.Instruction.LD do
     %{runtime | i: character_address}
   end
 
-  def execute(%Runtime{} = runtime, %{x: x, y: :keyboard}) do
+  def execute(%Runtime{} = runtime, {%Register{} = x, @keyboard}) do
     key_pressed = Keyboard.keys() |> Enum.find(&Keyboard.is_pressed?(runtime.keyboard, &1))
 
     if is_nil(key_pressed) do
       Runtime.to_previous_instruction(runtime)
     else
-      v_registers = VRegisters.set(runtime.v, x, key_pressed)
+      v_registers = VRegisters.set(runtime.v, x.value, key_pressed)
       %{runtime | v: v_registers}
     end
   end
