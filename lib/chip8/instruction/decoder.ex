@@ -73,7 +73,10 @@ defmodule Chip8.Instruction.Decoder do
   end
 
   defp decode_data({0x5, x, y, 0x0}) do
-    Instruction.SE.new(%{x: x, y: y})
+    vx = Register.v(x)
+    vy = Register.v(y)
+
+    Instruction.SE.new({vx, vy})
   end
 
   defp decode_data({0x6, x, byte1, byte2}) do

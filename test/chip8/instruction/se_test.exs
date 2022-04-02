@@ -2,6 +2,7 @@ defmodule Chip8.Instruction.SETest do
   use ExUnit.Case, async: true
 
   alias Chip8.Instruction.Argument.Byte
+  alias Chip8.Instruction.Argument.Register
   alias Chip8.Instruction.SE
   alias Chip8.Runtime
   alias Chip8.VRegisters
@@ -48,7 +49,9 @@ defmodule Chip8.Instruction.SETest do
       v_registers = runtime.v |> VRegisters.set(x, value) |> VRegisters.set(y, value)
       runtime = put_in(runtime.v, v_registers)
 
-      arguments = %{x: x, y: y}
+      vx = %Register{value: x}
+      vy = %Register{value: y}
+      arguments = {vx, vy}
       executed_runtime = SE.execute(runtime, arguments)
 
       assert %Runtime{} = executed_runtime
@@ -65,7 +68,9 @@ defmodule Chip8.Instruction.SETest do
       v_registers = runtime.v |> VRegisters.set(x, x_value) |> VRegisters.set(y, y_value)
       runtime = put_in(runtime.v, v_registers)
 
-      arguments = %{x: x, y: y}
+      vx = %Register{value: x}
+      vy = %Register{value: y}
+      arguments = {vx, vy}
       executed_runtime = SE.execute(runtime, arguments)
 
       assert %Runtime{} = executed_runtime
