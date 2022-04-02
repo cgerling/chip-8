@@ -46,11 +46,13 @@ defmodule Chip8.Instruction.ADDTest do
       y_value = 0x84
       runtime = put_in(runtime.v[y], y_value)
 
-      arguments = %{x: x, y: y}
+      vx = %Register{value: x}
+      vy = %Register{value: y}
+      arguments = {vx, vy}
       executed_runtime = ADD.execute(runtime, arguments)
 
       assert %Runtime{} = executed_runtime
-      assert 0xB0 == executed_runtime.v[x]
+      assert 0xB0 == executed_runtime.v[vx.value]
     end
 
     test "should return a runtime with vx set to the sum of vx and vy wrapped to 8 bits" do
@@ -62,11 +64,13 @@ defmodule Chip8.Instruction.ADDTest do
       y_value = 0x90
       runtime = put_in(runtime.v[y], y_value)
 
-      arguments = %{x: x, y: y}
+      vx = %Register{value: x}
+      vy = %Register{value: y}
+      arguments = {vx, vy}
       executed_runtime = ADD.execute(runtime, arguments)
 
       assert %Runtime{} = executed_runtime
-      assert 0x3C == executed_runtime.v[x]
+      assert 0x3C == executed_runtime.v[vx.value]
     end
 
     test "should return a runtime with vx set to the sum of vx and the given byte" do
