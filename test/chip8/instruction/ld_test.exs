@@ -145,12 +145,13 @@ defmodule Chip8.Instruction.LDTest do
       y_value = 0x580
       runtime = put_in(runtime.v[y], y_value)
 
-      x = 0xF
-      arguments = %{x: x, y: y}
+      vx = %Register{value: 0xF}
+      vy = %Register{value: y}
+      arguments = {vx, vy}
       executed_runtime = LD.execute(runtime, arguments)
 
       assert %Runtime{} = executed_runtime
-      assert y_value == executed_runtime.v[x]
+      assert y_value == executed_runtime.v[vx.value]
     end
 
     test "should return a runtime with vx set to the given byte" do
