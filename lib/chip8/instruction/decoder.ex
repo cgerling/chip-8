@@ -169,8 +169,8 @@ defmodule Chip8.Instruction.Decoder do
     Instruction.LD.new(%{x: :st, y: y})
   end
 
-  defp decode_data({0xF, x, 0x1, 0xE}) do
-    Instruction.ADD.new(%{x: x})
+  defp decode_data({0xF, y, 0x1, 0xE}) do
+    Instruction.ADD.new(%{x: :i, y: y})
   end
 
   defp decode_data({0xF, x, 0x2, 0x9}) do
