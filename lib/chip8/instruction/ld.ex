@@ -15,6 +15,7 @@ defmodule Chip8.Instruction.LD do
   @dt Register.dt()
   @i Register.i()
   @keyboard Register.keyboard()
+  @st Register.st()
 
   @impl Chip8.Instruction
   def execute(%Runtime{} = runtime, %{x: :bcd, y: y}) do
@@ -53,8 +54,8 @@ defmodule Chip8.Instruction.LD do
     %{runtime | dt: runtime.v[x.value]}
   end
 
-  def execute(%Runtime{} = runtime, %{x: :st, y: y}) do
-    %{runtime | st: runtime.v[y]}
+  def execute(%Runtime{} = runtime, {@st, %Register{} = x}) do
+    %{runtime | st: runtime.v[x.value]}
   end
 
   def execute(%Runtime{} = runtime, %{x: :font, y: y}) do
