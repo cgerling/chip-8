@@ -1,6 +1,7 @@
 defmodule Chip8.Instruction.SUBNTest do
   use ExUnit.Case, async: true
 
+  alias Chip8.Instruction.Argument.Register
   alias Chip8.Instruction.SUBN
   alias Chip8.Runtime
 
@@ -14,11 +15,13 @@ defmodule Chip8.Instruction.SUBNTest do
       y_value = 0xE5
       runtime = put_in(runtime.v[y], y_value)
 
-      arguments = %{x: x, y: y}
+      vx = %Register{value: x}
+      vy = %Register{value: y}
+      arguments = {vx, vy}
       executed_runtime = SUBN.execute(runtime, arguments)
 
       assert %Runtime{} = executed_runtime
-      assert 0x62 == executed_runtime.v[x]
+      assert 0x62 == executed_runtime.v[vx.value]
     end
 
     test "should return a runtime with vx set to the difference of vy and vx wrapped to 8 bits when vy is equals to vx" do
@@ -29,11 +32,13 @@ defmodule Chip8.Instruction.SUBNTest do
       runtime = put_in(runtime.v[x], value)
       runtime = put_in(runtime.v[y], value)
 
-      arguments = %{x: x, y: y}
+      vx = %Register{value: x}
+      vy = %Register{value: y}
+      arguments = {vx, vy}
       executed_runtime = SUBN.execute(runtime, arguments)
 
       assert %Runtime{} = executed_runtime
-      assert 0x0 == executed_runtime.v[x]
+      assert 0x0 == executed_runtime.v[vx.value]
     end
 
     test "should return a runtime with vx set to the difference of vy and vx wrapped to 8 bits when vy is less than vx" do
@@ -45,11 +50,13 @@ defmodule Chip8.Instruction.SUBNTest do
       y_value = 0x63
       runtime = put_in(runtime.v[y], y_value)
 
-      arguments = %{x: x, y: y}
+      vx = %Register{value: x}
+      vy = %Register{value: y}
+      arguments = {vx, vy}
       executed_runtime = SUBN.execute(runtime, arguments)
 
       assert %Runtime{} = executed_runtime
-      assert 0xAD == executed_runtime.v[x]
+      assert 0xAD == executed_runtime.v[vx.value]
     end
 
     test "should return a runtime with v register F set to 1 when vy is greather than vx" do
@@ -61,7 +68,9 @@ defmodule Chip8.Instruction.SUBNTest do
       y_value = 0x90
       runtime = put_in(runtime.v[y], y_value)
 
-      arguments = %{x: x, y: y}
+      vx = %Register{value: x}
+      vy = %Register{value: y}
+      arguments = {vx, vy}
       executed_runtime = SUBN.execute(runtime, arguments)
 
       assert %Runtime{} = executed_runtime
@@ -76,7 +85,9 @@ defmodule Chip8.Instruction.SUBNTest do
       runtime = put_in(runtime.v[x], value)
       runtime = put_in(runtime.v[y], value)
 
-      arguments = %{x: x, y: y}
+      vx = %Register{value: x}
+      vy = %Register{value: y}
+      arguments = {vx, vy}
       executed_runtime = SUBN.execute(runtime, arguments)
 
       assert %Runtime{} = executed_runtime
@@ -92,7 +103,9 @@ defmodule Chip8.Instruction.SUBNTest do
       y_value = 0x07
       runtime = put_in(runtime.v[y], y_value)
 
-      arguments = %{x: x, y: y}
+      vx = %Register{value: x}
+      vy = %Register{value: y}
+      arguments = {vx, vy}
       executed_runtime = SUBN.execute(runtime, arguments)
 
       assert %Runtime{} = executed_runtime
