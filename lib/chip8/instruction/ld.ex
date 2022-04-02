@@ -50,6 +50,11 @@ defmodule Chip8.Instruction.LD do
     %{runtime | st: runtime.v[y]}
   end
 
+  def execute(%Runtime{} = runtime, %{x: :font, y: y}) do
+    character_address = Runtime.get_font_character_address(runtime.v[y])
+    %{runtime | i: character_address}
+  end
+
   def execute(%Runtime{} = runtime, %{x: x, y: :keyboard}) do
     key_pressed = Keyboard.keys() |> Enum.find(&Keyboard.is_pressed?(runtime.keyboard, &1))
 
@@ -75,10 +80,5 @@ defmodule Chip8.Instruction.LD do
   def execute(%Runtime{} = runtime, %{address: address}) do
     address = UInt.to_uint16(address)
     %{runtime | i: address}
-  end
-
-  def execute(%Runtime{} = runtime, %{x: x}) do
-    character_address = Runtime.get_font_character_address(runtime.v[x])
-    %{runtime | i: character_address}
   end
 end
