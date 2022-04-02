@@ -30,7 +30,7 @@ defmodule Chip8.Instruction.Decoder do
   defp pad_byte([_nibble1, _nibble2] = byte), do: byte
 
   defp decode_data({0x0, 0x0, 0xE, 0x0}) do
-    Instruction.CLS.new(%{})
+    Instruction.CLS.new({})
   end
 
   defp decode_data({0x0, 0x0, 0xE, 0xE}) do
