@@ -2,6 +2,7 @@ defmodule Chip8.Instruction.JPTest do
   use ExUnit.Case, async: true
 
   alias Chip8.Instruction.Argument.Address
+  alias Chip8.Instruction.Argument.Register
   alias Chip8.Instruction.JP
   alias Chip8.Runtime
   alias Chip8.VRegisters
@@ -13,12 +14,13 @@ defmodule Chip8.Instruction.JPTest do
       v_registers = VRegisters.set(runtime.v, 0x0, register_value)
       runtime = put_in(runtime.v, v_registers)
 
-      address = :rand.uniform(0xFF)
-      arguments = %{x: 0, address: address}
+      v0 = Register.v(0x0)
+      address = %Address{value: :rand.uniform(0xFFF)}
+      arguments = {v0, address}
       executed_runtime = JP.execute(runtime, arguments)
 
       assert %Runtime{} = executed_runtime
-      assert register_value + address == executed_runtime.pc
+      assert register_value + address.value == executed_runtime.pc
     end
 
     test "should return a runtime with pc set to the sum of v register 0 and the given address wrapped to 12 bits" do
@@ -27,8 +29,9 @@ defmodule Chip8.Instruction.JPTest do
       v_registers = VRegisters.set(runtime.v, 0x0, register_value)
       runtime = put_in(runtime.v, v_registers)
 
-      address = 0x9E3
-      arguments = %{x: 0, address: address}
+      v0 = Register.v(0x0)
+      address = %Address{value: 0x9E3}
+      arguments = {v0, address}
       executed_runtime = JP.execute(runtime, arguments)
 
       assert %Runtime{} = executed_runtime

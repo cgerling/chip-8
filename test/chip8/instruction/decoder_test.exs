@@ -246,7 +246,7 @@ defmodule Chip8.Instruction.DecoderTest do
       assert %Instruction{} = instruction
 
       assert Instruction.JP == instruction.module
-      assert %{x: 0x0, address: 0x47B} == instruction.arguments
+      assert {Register.v(0x0), Address.new(0x47B)} == instruction.arguments
     end
 
     test "should return a instruction struct for the `RND Vx, byte` instruction" do
