@@ -257,7 +257,7 @@ defmodule Chip8.Instruction.DecoderTest do
       assert %Instruction{} = instruction
 
       assert Instruction.RND == instruction.module
-      assert %{x: 0x8, byte: 0x6A} == instruction.arguments
+      assert {Register.v(0x8), Byte.new(0x6A)} == instruction.arguments
     end
 
     test "should return a instruction struct for the `DRW Vx, Vy, nibble` instruction" do
