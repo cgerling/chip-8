@@ -24,7 +24,7 @@ defmodule Chip8.Instruction.DecoderTest do
       assert %Instruction{} = instruction
 
       assert Instruction.RET == instruction.module
-      assert %{} == instruction.arguments
+      assert {} == instruction.arguments
     end
 
     test "should return a instruction struct for `SYS address` instruction" do

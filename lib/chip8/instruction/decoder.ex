@@ -34,7 +34,7 @@ defmodule Chip8.Instruction.Decoder do
   end
 
   defp decode_data({0x0, 0x0, 0xE, 0xE}) do
-    Instruction.RET.new(%{})
+    Instruction.RET.new({})
   end
 
   defp decode_data({0x0, address1, address2, address3}) do
