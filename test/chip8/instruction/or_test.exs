@@ -1,6 +1,7 @@
 defmodule Chip8.Instruction.ORTest do
   use ExUnit.Case, async: true
 
+  alias Chip8.Instruction.Argument.Register
   alias Chip8.Instruction.OR
   alias Chip8.Runtime
   alias Chip8.VRegisters
@@ -15,11 +16,13 @@ defmodule Chip8.Instruction.ORTest do
       v_registers = runtime.v |> VRegisters.set(x, x_value) |> VRegisters.set(y, y_value)
       runtime = put_in(runtime.v, v_registers)
 
-      arguments = %{x: x, y: y}
+      vx = %Register{value: x}
+      vy = %Register{value: y}
+      arguments = {vx, vy}
       executed_runtime = OR.execute(runtime, arguments)
 
       assert %Runtime{} = executed_runtime
-      assert 0xD5 == executed_runtime.v[x]
+      assert 0xD5 == executed_runtime.v[vx.value]
     end
   end
 end
