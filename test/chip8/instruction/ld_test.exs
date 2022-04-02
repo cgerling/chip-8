@@ -1,6 +1,7 @@
 defmodule Chip8.Instruction.LDTest do
   use ExUnit.Case, async: true
 
+  alias Chip8.Instruction.Argument.Address
   alias Chip8.Instruction.Argument.Byte
   alias Chip8.Instruction.Argument.Register
   alias Chip8.Instruction.LD
@@ -182,20 +183,22 @@ defmodule Chip8.Instruction.LDTest do
     test "should return a runtime with i set to the given address" do
       runtime = Runtime.new()
 
-      address = :rand.uniform(0xFFF)
-      arguments = %{address: address}
+      i = Register.i()
+      address = %Address{value: :rand.uniform(0xFFF)}
+      arguments = {i, address}
       executed_runtime = LD.execute(runtime, arguments)
 
       assert %Runtime{} = executed_runtime
-      assert address == executed_runtime.i
+      assert address.value == executed_runtime.i
     end
 
     test "should return a runtime with i set to the given address wrapped to 16 bits" do
       runtime = Runtime.new()
 
+      i = Register.i()
       value = :rand.uniform(0xFFFF)
-      address = 0xFFFF + value
-      arguments = %{address: address}
+      address = %Address{value: 0xFFFF + value}
+      arguments = {i, address}
       executed_runtime = LD.execute(runtime, arguments)
 
       assert %Runtime{} = executed_runtime

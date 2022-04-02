@@ -3,6 +3,7 @@ defmodule Chip8.Instruction.LD do
 
   use Chip8.Instruction
 
+  alias Chip8.Instruction.Argument.Address
   alias Chip8.Instruction.Argument.Byte
   alias Chip8.Instruction.Argument.Register
   alias Chip8.Keyboard
@@ -10,6 +11,8 @@ defmodule Chip8.Instruction.LD do
   alias Chip8.Runtime
   alias Chip8.UInt
   alias Chip8.VRegisters
+
+  @i Register.i()
 
   @impl Chip8.Instruction
   def execute(%Runtime{} = runtime, %{x: :bcd, y: y}) do
@@ -79,8 +82,8 @@ defmodule Chip8.Instruction.LD do
     %{runtime | v: v_registers}
   end
 
-  def execute(%Runtime{} = runtime, %{address: address}) do
-    address = UInt.to_uint16(address)
+  def execute(%Runtime{} = runtime, {@i, %Address{} = address}) do
+    address = UInt.to_uint16(address.value)
     %{runtime | i: address}
   end
 end

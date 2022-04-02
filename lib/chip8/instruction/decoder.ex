@@ -164,9 +164,10 @@ defmodule Chip8.Instruction.Decoder do
   end
 
   defp decode_data({0xA, address1, address2, address3}) do
-    address = build_address(address1, address2, address3)
+    i = Register.i()
+    address = Address.new(address1, address2, address3)
 
-    Instruction.LD.new(%{address: address})
+    Instruction.LD.new({i, address})
   end
 
   defp decode_data({0xB, address1, address2, address3}) do
