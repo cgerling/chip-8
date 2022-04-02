@@ -7,15 +7,17 @@ defmodule Chip8.Instruction.ADDTest do
   alias Chip8.Runtime
 
   describe "execute/2" do
-    test "should return a runtime with i set to the sum of i and vy" do
+    test "should return a runtime with i set to the sum of i and vx" do
       runtime = Runtime.new()
       i_value = 0x64
       runtime = put_in(runtime.i, i_value)
-      y = 0xC
-      y_value = 0x2C
-      runtime = put_in(runtime.v[y], y_value)
+      x = 0xC
+      x_value = 0x2C
+      runtime = put_in(runtime.v[x], x_value)
 
-      arguments = %{x: :i, y: y}
+      i = Register.i()
+      vx = %Register{value: x}
+      arguments = {i, vx}
       executed_runtime = ADD.execute(runtime, arguments)
 
       assert %Runtime{} = executed_runtime
@@ -26,11 +28,13 @@ defmodule Chip8.Instruction.ADDTest do
       runtime = Runtime.new()
       i_value = 0xFF36
       runtime = put_in(runtime.i, i_value)
-      y = 0xC
-      y_value = 0xE5
-      runtime = put_in(runtime.v[y], y_value)
+      x = 0xC
+      x_value = 0xE5
+      runtime = put_in(runtime.v[x], x_value)
 
-      arguments = %{x: :i, y: y}
+      i = Register.i()
+      vx = %Register{value: x}
+      arguments = {i, vx}
       executed_runtime = ADD.execute(runtime, arguments)
 
       assert %Runtime{} = executed_runtime

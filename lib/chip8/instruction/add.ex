@@ -9,9 +9,11 @@ defmodule Chip8.Instruction.ADD do
   alias Chip8.UInt
   alias Chip8.VRegisters
 
+  @i Register.i()
+
   @impl Chip8.Instruction
-  def execute(%Runtime{} = runtime, %{x: :i, y: y}) do
-    add_result = UInt.to_uint16(runtime.i + runtime.v[y])
+  def execute(%Runtime{} = runtime, {@i, %Register{} = x}) do
+    add_result = UInt.to_uint16(runtime.i + runtime.v[x.value])
 
     %{runtime | i: add_result}
   end
