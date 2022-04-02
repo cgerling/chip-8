@@ -215,11 +215,13 @@ defmodule Chip8.Instruction.LDTest do
 
     test "should return a runtime with i set to the address of the character set in vx" do
       runtime = Runtime.new()
-      y = :rand.uniform(0xF)
-      y_value = 0xD
-      runtime = put_in(runtime.v[y], y_value)
+      x = :rand.uniform(0xF)
+      x_value = 0xD
+      runtime = put_in(runtime.v[x], x_value)
 
-      arguments = %{x: :font, y: y}
+      font = Register.font()
+      vx = %Register{value: x}
+      arguments = {font, vx}
       executed_runtime = LD.execute(runtime, arguments)
 
       assert %Runtime{} = executed_runtime

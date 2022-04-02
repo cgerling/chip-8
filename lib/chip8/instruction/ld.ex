@@ -13,6 +13,7 @@ defmodule Chip8.Instruction.LD do
   alias Chip8.VRegisters
 
   @dt Register.dt()
+  @font Register.font()
   @i Register.i()
   @keyboard Register.keyboard()
   @st Register.st()
@@ -58,8 +59,8 @@ defmodule Chip8.Instruction.LD do
     %{runtime | st: runtime.v[x.value]}
   end
 
-  def execute(%Runtime{} = runtime, %{x: :font, y: y}) do
-    character_address = Runtime.get_font_character_address(runtime.v[y])
+  def execute(%Runtime{} = runtime, {@font, %Register{} = x}) do
+    character_address = Runtime.get_font_character_address(runtime.v[x.value])
     %{runtime | i: character_address}
   end
 
