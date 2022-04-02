@@ -2,6 +2,7 @@ defmodule Chip8.Instruction.Decoder do
   @moduledoc false
 
   alias Chip8.Instruction
+  alias Chip8.Instruction.Argument.Address
   alias Chip8.Memory
 
   @hex_base 16
@@ -38,9 +39,9 @@ defmodule Chip8.Instruction.Decoder do
   end
 
   defp decode_data({0x0, address1, address2, address3}) do
-    address = build_address(address1, address2, address3)
+    address = Address.new(address1, address2, address3)
 
-    Instruction.SYS.new(%{address: address})
+    Instruction.SYS.new({address})
   end
 
   defp decode_data({0x1, address1, address2, address3}) do

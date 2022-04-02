@@ -64,7 +64,7 @@ defmodule Chip8.InstructionTest do
 
       assert %Instruction{} = instruction
       assert is_atom(instruction.module)
-      assert is_map(instruction.arguments)
+      assert is_tuple(instruction.arguments)
     end
   end
 

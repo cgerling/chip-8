@@ -1,6 +1,7 @@
 defmodule Chip8.Instruction.SYSTest do
   use ExUnit.Case, async: true
 
+  alias Chip8.Instruction.Argument.Address
   alias Chip8.Instruction.SYS
   alias Chip8.Runtime
 
@@ -8,8 +9,8 @@ defmodule Chip8.Instruction.SYSTest do
     test "should return runtime data unchanged" do
       runtime = Runtime.new()
 
-      address = :rand.uniform(0xFFF)
-      arguments = %{address: address}
+      address = %Address{value: :rand.uniform(0xFFF)}
+      arguments = {address}
       executed_runtime = SYS.execute(runtime, arguments)
 
       assert %Runtime{} = executed_runtime

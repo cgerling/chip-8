@@ -2,6 +2,7 @@ defmodule Chip8.Instruction.DecoderTest do
   use ExUnit.Case, async: true
 
   alias Chip8.Instruction
+  alias Chip8.Instruction.Argument.Address
   alias Chip8.Instruction.Decoder
 
   describe "decode/1" do
@@ -35,7 +36,7 @@ defmodule Chip8.Instruction.DecoderTest do
       assert %Instruction{} = instruction
 
       assert Instruction.SYS == instruction.module
-      assert %{address: 0xA4F} == instruction.arguments
+      assert {Address.new(0xA4F)} == instruction.arguments
     end
 
     test "should return a instruction struct for `JP address` instruction" do
