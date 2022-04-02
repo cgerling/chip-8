@@ -157,7 +157,10 @@ defmodule Chip8.Instruction.Decoder do
   end
 
   defp decode_data({0x9, x, y, 0x0}) do
-    Instruction.SNE.new(%{x: x, y: y})
+    vx = Register.v(x)
+    vy = Register.v(y)
+
+    Instruction.SNE.new({vx, vy})
   end
 
   defp decode_data({0xA, address1, address2, address3}) do

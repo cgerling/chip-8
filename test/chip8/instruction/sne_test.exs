@@ -48,7 +48,9 @@ defmodule Chip8.Instruction.SNETest do
       v_registers = runtime.v |> VRegisters.set(x, value) |> VRegisters.set(y, value)
       runtime = put_in(runtime.v, v_registers)
 
-      arguments = %{x: x, y: y}
+      vx = %Register{value: x}
+      vy = %Register{value: y}
+      arguments = {vx, vy}
       executed_runtime = SNE.execute(runtime, arguments)
 
       assert %Runtime{} = executed_runtime
@@ -64,7 +66,9 @@ defmodule Chip8.Instruction.SNETest do
       v_registers = runtime.v |> VRegisters.set(x, x_value) |> VRegisters.set(y, y_value)
       runtime = put_in(runtime.v, v_registers)
 
-      arguments = %{x: x, y: y}
+      vx = %Register{value: x}
+      vy = %Register{value: y}
+      arguments = {vx, vy}
       executed_runtime = SNE.execute(runtime, arguments)
 
       assert %Runtime{} = executed_runtime

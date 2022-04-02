@@ -14,8 +14,8 @@ defmodule Chip8.Instruction.SNE do
       else: runtime
   end
 
-  def execute(%Runtime{} = runtime, %{x: x, y: y}) do
-    if runtime.v[x] != runtime.v[y],
+  def execute(%Runtime{} = runtime, {%Register{} = x, %Register{} = y}) do
+    if runtime.v[x.value] != runtime.v[y.value],
       do: Runtime.to_next_instruction(runtime),
       else: runtime
   end
