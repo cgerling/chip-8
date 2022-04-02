@@ -389,7 +389,7 @@ defmodule Chip8.Instruction.DecoderTest do
       assert %Instruction{} = instruction
 
       assert Instruction.LD == instruction.module
-      assert %{x: 0xF, y: :memory} == instruction.arguments
+      assert {Register.v(0xF), Register.memory()} == instruction.arguments
     end
   end
 

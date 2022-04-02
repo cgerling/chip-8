@@ -56,7 +56,9 @@ defmodule Chip8.Instruction.LDTest do
       memory = Memory.write(runtime.memory, address, data)
       runtime = put_in(runtime.memory, memory)
 
-      arguments = %{x: x, y: :memory}
+      vx = %Register{value: x}
+      memory = Register.memory()
+      arguments = {vx, memory}
       executed_runtime = LD.execute(runtime, arguments)
 
       assert %Runtime{} = executed_runtime

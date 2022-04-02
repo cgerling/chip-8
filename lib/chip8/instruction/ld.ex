@@ -35,8 +35,8 @@ defmodule Chip8.Instruction.LD do
     %{runtime | memory: memory}
   end
 
-  def execute(%Runtime{} = runtime, %{x: x, y: :memory}) do
-    data = Memory.read(runtime.memory, runtime.i, x + 1)
+  def execute(%Runtime{} = runtime, {%Register{} = x, @memory}) do
+    data = Memory.read(runtime.memory, runtime.i, x.value + 1)
 
     v_registers =
       data

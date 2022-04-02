@@ -262,6 +262,9 @@ defmodule Chip8.Instruction.Decoder do
   end
 
   defp decode_data({0xF, x, 0x6, 0x5}) do
-    Instruction.LD.new(%{x: x, y: :memory})
+    vx = Register.v(x)
+    memory = Register.memory()
+
+    Instruction.LD.new({vx, memory})
   end
 end
