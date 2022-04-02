@@ -4,6 +4,7 @@ defmodule Chip8.Instruction.Decoder do
   alias Chip8.Instruction
   alias Chip8.Instruction.Argument.Address
   alias Chip8.Instruction.Argument.Byte
+  alias Chip8.Instruction.Argument.Nibble
   alias Chip8.Instruction.Argument.Register
   alias Chip8.Memory
 
@@ -185,7 +186,11 @@ defmodule Chip8.Instruction.Decoder do
   end
 
   defp decode_data({0xD, x, y, nibble}) do
-    Instruction.DRW.new(%{x: x, y: y, nibble: nibble})
+    vx = Register.v(x)
+    vy = Register.v(y)
+    nibble = Nibble.new(nibble)
+
+    Instruction.DRW.new({vx, vy, nibble})
   end
 
   defp decode_data({0xE, x, 0x9, 0xE}) do

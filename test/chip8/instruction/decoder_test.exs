@@ -4,6 +4,7 @@ defmodule Chip8.Instruction.DecoderTest do
   alias Chip8.Instruction
   alias Chip8.Instruction.Argument.Address
   alias Chip8.Instruction.Argument.Byte
+  alias Chip8.Instruction.Argument.Nibble
   alias Chip8.Instruction.Argument.Register
   alias Chip8.Instruction.Decoder
 
@@ -266,9 +267,8 @@ defmodule Chip8.Instruction.DecoderTest do
       instruction = Decoder.decode(bytes)
 
       assert %Instruction{} = instruction
-
       assert Instruction.DRW == instruction.module
-      assert %{x: 0x7, y: 0xF, nibble: 0x2} == instruction.arguments
+      assert {Register.v(0x7), Register.v(0xF), Nibble.new(0x2)} == instruction.arguments
     end
 
     test "should return a instruction struct for the `SKP Vx` instruction" do
