@@ -194,7 +194,9 @@ defmodule Chip8.Instruction.Decoder do
   end
 
   defp decode_data({0xE, x, 0x9, 0xE}) do
-    Instruction.SKP.new(%{x: x})
+    vx = Register.v(x)
+
+    Instruction.SKP.new({vx})
   end
 
   defp decode_data({0xE, x, 0xA, 0x1}) do

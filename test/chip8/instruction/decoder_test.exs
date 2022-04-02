@@ -279,7 +279,7 @@ defmodule Chip8.Instruction.DecoderTest do
       assert %Instruction{} = instruction
 
       assert Instruction.SKP == instruction.module
-      assert %{x: 0xC} == instruction.arguments
+      assert {Register.v(0xC)} == instruction.arguments
     end
 
     test "should return a instruction struct for the `SKNP Vx` instruction" do
