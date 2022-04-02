@@ -3,6 +3,7 @@ defmodule Chip8.Instruction.JP do
 
   use Chip8.Instruction
 
+  alias Chip8.Instruction.Argument.Address
   alias Chip8.Runtime
   alias Chip8.UInt
 
@@ -12,8 +13,8 @@ defmodule Chip8.Instruction.JP do
     %{runtime | pc: pc}
   end
 
-  def execute(%Runtime{} = runtime, %{address: address}) do
-    pc = UInt.to_uint12(address)
+  def execute(%Runtime{} = runtime, {%Address{} = address}) do
+    pc = UInt.to_uint12(address.value)
     %{runtime | pc: pc}
   end
 end

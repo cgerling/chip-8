@@ -45,9 +45,9 @@ defmodule Chip8.Instruction.Decoder do
   end
 
   defp decode_data({0x1, address1, address2, address3}) do
-    address = build_address(address1, address2, address3)
+    address = Address.new(address1, address2, address3)
 
-    Instruction.JP.new(%{address: address})
+    Instruction.JP.new({address})
   end
 
   defp decode_data({0x2, address1, address2, address3}) do
