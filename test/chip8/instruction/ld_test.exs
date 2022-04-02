@@ -1,6 +1,8 @@
 defmodule Chip8.Instruction.LDTest do
   use ExUnit.Case, async: true
 
+  alias Chip8.Instruction.Argument.Byte
+  alias Chip8.Instruction.Argument.Register
   alias Chip8.Instruction.LD
   alias Chip8.Memory
   alias Chip8.Runtime
@@ -154,26 +156,26 @@ defmodule Chip8.Instruction.LDTest do
     test "should return a runtime with vx set to the given byte" do
       runtime = Runtime.new()
 
-      x = :rand.uniform(0xF)
-      byte = :rand.uniform(0xFF)
-      arguments = %{x: x, byte: byte}
+      vx = %Register{value: :rand.uniform(0xF)}
+      byte = %Byte{value: :rand.uniform(0xFF)}
+      arguments = {vx, byte}
       executed_runtime = LD.execute(runtime, arguments)
 
       assert %Runtime{} = executed_runtime
-      assert byte == executed_runtime.v[x]
+      assert byte.value == executed_runtime.v[vx.value]
     end
 
     test "should return a runtime with vx set to the given byte wrapped to 8 bits" do
       runtime = Runtime.new()
 
-      x = :rand.uniform(0xF)
+      vx = %Register{value: :rand.uniform(0xF)}
       value = :rand.uniform(0xFF)
-      byte = 0xFF + value
-      arguments = %{x: x, byte: byte}
+      byte = %Byte{value: 0xFF + value}
+      arguments = {vx, byte}
       executed_runtime = LD.execute(runtime, arguments)
 
       assert %Runtime{} = executed_runtime
-      assert value - 1 == executed_runtime.v[x]
+      assert value - 1 == executed_runtime.v[vx.value]
     end
 
     test "should return a runtime with i set to the given address" do

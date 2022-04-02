@@ -3,6 +3,8 @@ defmodule Chip8.Instruction.LD do
 
   use Chip8.Instruction
 
+  alias Chip8.Instruction.Argument.Byte
+  alias Chip8.Instruction.Argument.Register
   alias Chip8.Keyboard
   alias Chip8.Memory
   alias Chip8.Runtime
@@ -71,9 +73,9 @@ defmodule Chip8.Instruction.LD do
     %{runtime | v: v_registers}
   end
 
-  def execute(%Runtime{} = runtime, %{x: x, byte: byte}) do
-    byte = UInt.to_uint8(byte)
-    v_registers = VRegisters.set(runtime.v, x, byte)
+  def execute(%Runtime{} = runtime, {%Register{} = x, %Byte{} = byte}) do
+    byte = UInt.to_uint8(byte.value)
+    v_registers = VRegisters.set(runtime.v, x.value, byte)
     %{runtime | v: v_registers}
   end
 

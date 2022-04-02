@@ -80,9 +80,10 @@ defmodule Chip8.Instruction.Decoder do
   end
 
   defp decode_data({0x6, x, byte1, byte2}) do
-    byte = build_byte(byte1, byte2)
+    vx = Register.v(x)
+    byte = Byte.new(byte1, byte2)
 
-    Instruction.LD.new(%{x: x, byte: byte})
+    Instruction.LD.new({vx, byte})
   end
 
   defp decode_data({0x7, x, byte1, byte2}) do
