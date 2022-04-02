@@ -3,6 +3,8 @@ defmodule Chip8.Instruction.ADD do
 
   use Chip8.Instruction
 
+  alias Chip8.Instruction.Argument.Byte
+  alias Chip8.Instruction.Argument.Register
   alias Chip8.Runtime
   alias Chip8.UInt
   alias Chip8.VRegisters
@@ -21,10 +23,10 @@ defmodule Chip8.Instruction.ADD do
     %{runtime | v: v_registers}
   end
 
-  def execute(%Runtime{} = runtime, %{x: x, byte: byte}) do
-    add_result = UInt.to_uint8(runtime.v[x] + byte)
+  def execute(%Runtime{} = runtime, {%Register{} = x, %Byte{} = byte}) do
+    add_result = UInt.to_uint8(runtime.v[x.value] + byte.value)
 
-    v_registers = VRegisters.set(runtime.v, x, add_result)
+    v_registers = VRegisters.set(runtime.v, x.value, add_result)
     %{runtime | v: v_registers}
   end
 end

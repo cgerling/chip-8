@@ -2,6 +2,8 @@ defmodule Chip8.Instruction.ADDTest do
   use ExUnit.Case, async: true
 
   alias Chip8.Instruction.ADD
+  alias Chip8.Instruction.Argument.Byte
+  alias Chip8.Instruction.Argument.Register
   alias Chip8.Runtime
 
   describe "execute/2" do
@@ -73,12 +75,13 @@ defmodule Chip8.Instruction.ADDTest do
       x_value = 0xF8
       runtime = put_in(runtime.v[x], x_value)
 
-      byte = 0x2B
-      arguments = %{x: x, byte: byte}
+      vx = %Register{value: x}
+      byte = %Byte{value: 0x2B}
+      arguments = {vx, byte}
       executed_runtime = ADD.execute(runtime, arguments)
 
       assert %Runtime{} = executed_runtime
-      assert 0x23 == executed_runtime.v[x]
+      assert 0x23 == executed_runtime.v[vx.value]
     end
 
     test "should return a runtime with vx set to the sum of vx and the given byte wrapped to 8 bits" do
@@ -87,12 +90,13 @@ defmodule Chip8.Instruction.ADDTest do
       x_value = 0xE9
       runtime = put_in(runtime.v[x], x_value)
 
-      byte = 0xD4
-      arguments = %{x: x, byte: byte}
+      vx = %Register{value: x}
+      byte = %Byte{value: 0xD4}
+      arguments = {vx, byte}
       executed_runtime = ADD.execute(runtime, arguments)
 
       assert %Runtime{} = executed_runtime
-      assert 0xBD == executed_runtime.v[x]
+      assert 0xBD == executed_runtime.v[vx.value]
     end
   end
 end
