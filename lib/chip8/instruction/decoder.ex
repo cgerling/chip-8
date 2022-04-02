@@ -150,7 +150,10 @@ defmodule Chip8.Instruction.Decoder do
   end
 
   defp decode_data({0x8, x, y, 0xE}) do
-    Instruction.SHL.new(%{x: x, y: y})
+    vx = Register.v(x)
+    vy = Register.v(y)
+
+    Instruction.SHL.new({vx, vy})
   end
 
   defp decode_data({0x9, x, y, 0x0}) do

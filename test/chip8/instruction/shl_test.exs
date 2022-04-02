@@ -1,6 +1,7 @@
 defmodule Chip8.Instruction.SHLTest do
   use ExUnit.Case, async: true
 
+  alias Chip8.Instruction.Argument.Register
   alias Chip8.Instruction.SHL
   alias Chip8.Runtime
 
@@ -11,8 +12,9 @@ defmodule Chip8.Instruction.SHLTest do
       y_value = 0xF7
       runtime = put_in(runtime.v[y], y_value)
 
-      x = 0x8
-      arguments = %{x: x, y: y}
+      vx = %Register{value: 0x8}
+      vy = %Register{value: y}
+      arguments = {vx, vy}
       executed_runtime = SHL.execute(runtime, arguments)
 
       assert %Runtime{} = executed_runtime
@@ -25,12 +27,13 @@ defmodule Chip8.Instruction.SHLTest do
       y_value = 0x45
       runtime = put_in(runtime.v[y], y_value)
 
-      x = 0x9
-      arguments = %{x: x, y: y}
+      vx = %Register{value: 0x9}
+      vy = %Register{value: y}
+      arguments = {vx, vy}
       executed_runtime = SHL.execute(runtime, arguments)
 
       assert %Runtime{} = executed_runtime
-      assert 0x8A == executed_runtime.v[x]
+      assert 0x8A == executed_runtime.v[vx.value]
     end
 
     test "should return a runtime with vx set to vy shifted one bit to the left wrapped to 8 bits" do
@@ -39,12 +42,13 @@ defmodule Chip8.Instruction.SHLTest do
       y_value = 0xD5
       runtime = put_in(runtime.v[y], y_value)
 
-      x = 0x9
-      arguments = %{x: x, y: y}
+      vx = %Register{value: 0x9}
+      vy = %Register{value: y}
+      arguments = {vx, vy}
       executed_runtime = SHL.execute(runtime, arguments)
 
       assert %Runtime{} = executed_runtime
-      assert 0xAA == executed_runtime.v[x]
+      assert 0xAA == executed_runtime.v[vx.value]
     end
   end
 end
