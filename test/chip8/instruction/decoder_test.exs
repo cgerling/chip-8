@@ -58,7 +58,7 @@ defmodule Chip8.Instruction.DecoderTest do
       assert %Instruction{} = instruction
 
       assert Instruction.CALL == instruction.module
-      assert %{address: 0xB06} == instruction.arguments
+      assert {Address.new(0xB06)} == instruction.arguments
     end
 
     test "should return a instruction struct for `SE Vx, byte` instruction" do
