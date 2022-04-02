@@ -12,6 +12,7 @@ defmodule Chip8.Instruction.LD do
   alias Chip8.UInt
   alias Chip8.VRegisters
 
+  @dt Register.dt()
   @i Register.i()
 
   @impl Chip8.Instruction
@@ -42,8 +43,8 @@ defmodule Chip8.Instruction.LD do
     %{runtime | v: v_registers}
   end
 
-  def execute(%Runtime{} = runtime, %{x: x, y: :dt}) do
-    v_registers = VRegisters.set(runtime.v, x, runtime.dt)
+  def execute(%Runtime{} = runtime, {%Register{} = x, @dt}) do
+    v_registers = VRegisters.set(runtime.v, x.value, runtime.dt)
     %{runtime | v: v_registers}
   end
 

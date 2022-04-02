@@ -67,12 +67,13 @@ defmodule Chip8.Instruction.LDTest do
       dt_value = :rand.uniform(0xFFF)
       runtime = put_in(runtime.dt, dt_value)
 
-      x = :rand.uniform(0xF)
-      arguments = %{x: x, y: :dt}
+      vx = %Register{value: :rand.uniform(0xF)}
+      dt = Register.dt()
+      arguments = {vx, dt}
       executed_runtime = LD.execute(runtime, arguments)
 
       assert %Runtime{} = executed_runtime
-      assert dt_value == executed_runtime.v[x]
+      assert dt_value == executed_runtime.v[vx.value]
     end
 
     test "should return a runtime with delay timer set to the vx" do
