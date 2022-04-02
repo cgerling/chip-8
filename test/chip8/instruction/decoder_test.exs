@@ -4,6 +4,7 @@ defmodule Chip8.Instruction.DecoderTest do
   alias Chip8.Instruction
   alias Chip8.Instruction.Argument.Address
   alias Chip8.Instruction.Argument.Byte
+  alias Chip8.Instruction.Argument.Register
   alias Chip8.Instruction.Decoder
 
   describe "decode/1" do
@@ -81,7 +82,7 @@ defmodule Chip8.Instruction.DecoderTest do
       assert %Instruction{} = instruction
 
       assert Instruction.SNE == instruction.module
-      assert %{x: 0x9, byte: 0x8F} == instruction.arguments
+      assert {Register.v(0x9), Byte.new(0x8F)} == instruction.arguments
     end
 
     test "should return a instruction struct for the `SE Vx, Vy` instruction" do

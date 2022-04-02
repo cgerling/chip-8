@@ -4,6 +4,7 @@ defmodule Chip8.Instruction.Decoder do
   alias Chip8.Instruction
   alias Chip8.Instruction.Argument.Address
   alias Chip8.Instruction.Argument.Byte
+  alias Chip8.Instruction.Argument.Register
   alias Chip8.Memory
 
   @hex_base 16
@@ -65,9 +66,10 @@ defmodule Chip8.Instruction.Decoder do
   end
 
   defp decode_data({0x4, x, byte1, byte2}) do
-    byte = build_byte(byte1, byte2)
+    vx = Register.v(x)
+    byte = Byte.new(byte1, byte2)
 
-    Instruction.SNE.new(%{x: x, byte: byte})
+    Instruction.SNE.new({vx, byte})
   end
 
   defp decode_data({0x5, x, y, 0x0}) do
