@@ -12,6 +12,13 @@ defmodule Chip8.Instruction.ADD do
   @i Register.i()
 
   @impl Chip8.Instruction
+  def execute(%Runtime{} = runtime, {%Register{} = x, %Byte{} = byte}) do
+    add_result = UInt.to_uint8(runtime.v[x.value] + byte.value)
+
+    v_registers = VRegisters.set(runtime.v, x.value, add_result)
+    %{runtime | v: v_registers}
+  end
+
   def execute(%Runtime{} = runtime, {@i, %Register{} = x}) do
     add_result = UInt.to_uint16(runtime.i + runtime.v[x.value])
 
@@ -20,13 +27,6 @@ defmodule Chip8.Instruction.ADD do
 
   def execute(%Runtime{} = runtime, {%Register{} = x, %Register{} = y}) do
     add_result = UInt.to_uint8(runtime.v[x.value] + runtime.v[y.value])
-
-    v_registers = VRegisters.set(runtime.v, x.value, add_result)
-    %{runtime | v: v_registers}
-  end
-
-  def execute(%Runtime{} = runtime, {%Register{} = x, %Byte{} = byte}) do
-    add_result = UInt.to_uint8(runtime.v[x.value] + byte.value)
 
     v_registers = VRegisters.set(runtime.v, x.value, add_result)
     %{runtime | v: v_registers}
