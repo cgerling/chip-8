@@ -30,14 +30,6 @@ defmodule Chip8.InstructionTest do
 
   describe "new/1" do
     test "should return a instruction struct of the given module with the given arguments" do
-      instruction = IdentityInstruction.new(%{})
-
-      assert %Instruction{} = instruction
-      assert IdentityInstruction == instruction.module
-      assert %{} == instruction.arguments
-    end
-
-    test "should return a instruction struct of the given module with the given arguments when arguments is a tuple" do
       instruction = IdentityInstruction.new({})
 
       assert %Instruction{} = instruction
