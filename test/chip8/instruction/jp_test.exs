@@ -8,6 +8,29 @@ defmodule Chip8.Instruction.JPTest do
   alias Chip8.VRegisters
 
   describe "execute/2" do
+    test "should return a runtime with pc set to the given address" do
+      runtime = Runtime.new()
+
+      address = %Address{value: :rand.uniform(0xFFF)}
+      arguments = {address}
+      executed_runtime = JP.execute(runtime, arguments)
+
+      assert %Runtime{} = executed_runtime
+      assert address.value == executed_runtime.pc
+    end
+
+    test "should return a runtime with pc set to the given address wrapped to 12 bits" do
+      runtime = Runtime.new()
+
+      value = :rand.uniform(0xFFF)
+      address = %Address{value: 0xFFF + value}
+      arguments = {address}
+      executed_runtime = JP.execute(runtime, arguments)
+
+      assert %Runtime{} = executed_runtime
+      assert value - 1 == executed_runtime.pc
+    end
+
     test "should return a runtime with pc set to the sum of v register 0 and the given address" do
       runtime = Runtime.new()
       register_value = :rand.uniform(0xFF)
@@ -36,29 +59,6 @@ defmodule Chip8.Instruction.JPTest do
 
       assert %Runtime{} = executed_runtime
       assert 0x902 == executed_runtime.pc
-    end
-
-    test "should return a runtime with pc set to the given address" do
-      runtime = Runtime.new()
-
-      address = %Address{value: :rand.uniform(0xFFF)}
-      arguments = {address}
-      executed_runtime = JP.execute(runtime, arguments)
-
-      assert %Runtime{} = executed_runtime
-      assert address.value == executed_runtime.pc
-    end
-
-    test "should return a runtime with pc set to the given address wrapped to 12 bits" do
-      runtime = Runtime.new()
-
-      value = :rand.uniform(0xFFF)
-      address = %Address{value: 0xFFF + value}
-      arguments = {address}
-      executed_runtime = JP.execute(runtime, arguments)
-
-      assert %Runtime{} = executed_runtime
-      assert value - 1 == executed_runtime.pc
     end
   end
 end
