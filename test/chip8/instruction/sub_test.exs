@@ -1,6 +1,7 @@
 defmodule Chip8.Instruction.SUBTest do
   use ExUnit.Case, async: true
 
+  alias Chip8.Instruction.Argument.Register
   alias Chip8.Instruction.SUB
   alias Chip8.Runtime
 
@@ -14,11 +15,13 @@ defmodule Chip8.Instruction.SUBTest do
       y_value = 0x29
       runtime = put_in(runtime.v[y], y_value)
 
-      arguments = %{x: x, y: y}
+      vx = %Register{value: x}
+      vy = %Register{value: y}
+      arguments = {vx, vy}
       executed_runtime = SUB.execute(runtime, arguments)
 
       assert %Runtime{} = executed_runtime
-      assert 0x0D == executed_runtime.v[x]
+      assert 0x0D == executed_runtime.v[vx.value]
     end
 
     test "should return a runtime with vx set to the difference of vx and vy wrapped to 8 bits when vx is equals to vy wrapped to 8 bits" do
@@ -29,11 +32,13 @@ defmodule Chip8.Instruction.SUBTest do
       runtime = put_in(runtime.v[x], value)
       runtime = put_in(runtime.v[y], value)
 
-      arguments = %{x: x, y: y}
+      vx = %Register{value: x}
+      vy = %Register{value: y}
+      arguments = {vx, vy}
       executed_runtime = SUB.execute(runtime, arguments)
 
       assert %Runtime{} = executed_runtime
-      assert 0x0 == executed_runtime.v[x]
+      assert 0x0 == executed_runtime.v[vx.value]
     end
 
     test "should return a runtime with vx set to the difference of vx and vy wrapped to 8 bits when vx is less than vy wrapped to 8 bits" do
@@ -45,11 +50,13 @@ defmodule Chip8.Instruction.SUBTest do
       y_value = 0xE3
       runtime = put_in(runtime.v[y], y_value)
 
-      arguments = %{x: x, y: y}
+      vx = %Register{value: x}
+      vy = %Register{value: y}
+      arguments = {vx, vy}
       executed_runtime = SUB.execute(runtime, arguments)
 
       assert %Runtime{} = executed_runtime
-      assert 0x3A == executed_runtime.v[x]
+      assert 0x3A == executed_runtime.v[vx.value]
     end
 
     test "should return a runtime with v register F set to 1 when vx is greather than vy" do
@@ -61,7 +68,9 @@ defmodule Chip8.Instruction.SUBTest do
       y_value = 0x9F
       runtime = put_in(runtime.v[y], y_value)
 
-      arguments = %{x: x, y: y}
+      vx = %Register{value: x}
+      vy = %Register{value: y}
+      arguments = {vx, vy}
       executed_runtime = SUB.execute(runtime, arguments)
 
       assert %Runtime{} = executed_runtime
@@ -76,7 +85,9 @@ defmodule Chip8.Instruction.SUBTest do
       runtime = put_in(runtime.v[x], value)
       runtime = put_in(runtime.v[y], value)
 
-      arguments = %{x: x, y: y}
+      vx = %Register{value: x}
+      vy = %Register{value: y}
+      arguments = {vx, vy}
       executed_runtime = SUB.execute(runtime, arguments)
 
       assert %Runtime{} = executed_runtime
@@ -92,7 +103,9 @@ defmodule Chip8.Instruction.SUBTest do
       y_value = 0xF4
       runtime = put_in(runtime.v[y], y_value)
 
-      arguments = %{x: x, y: y}
+      vx = %Register{value: x}
+      vy = %Register{value: y}
+      arguments = {vx, vy}
       executed_runtime = SUB.execute(runtime, arguments)
 
       assert %Runtime{} = executed_runtime

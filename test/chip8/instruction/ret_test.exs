@@ -12,7 +12,7 @@ defmodule Chip8.Instruction.RETTest do
       runtime = put_in(runtime.stack.data, [address])
       runtime = put_in(runtime.stack.size, 1)
 
-      arguments = %{}
+      arguments = {}
       executed_runtime = RET.execute(runtime, arguments)
 
       assert %Runtime{} = executed_runtime
@@ -25,7 +25,7 @@ defmodule Chip8.Instruction.RETTest do
       runtime = put_in(runtime.stack.data, [address])
       runtime = put_in(runtime.stack.size, 1)
 
-      arguments = %{}
+      arguments = {}
       executed_runtime = RET.execute(runtime, arguments)
 
       empty_stack = Stack.new()
@@ -37,7 +37,7 @@ defmodule Chip8.Instruction.RETTest do
     test "should return a runtime unchanged when stack is empty" do
       runtime = Runtime.new()
 
-      arguments = %{}
+      arguments = {}
       executed_runtime = RET.execute(runtime, arguments)
 
       assert %Runtime{} = executed_runtime

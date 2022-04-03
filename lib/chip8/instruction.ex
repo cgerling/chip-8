@@ -1,19 +1,21 @@
 defmodule Chip8.Instruction do
   @moduledoc false
 
+  alias Chip8.Instruction.Argument.Address
+  alias Chip8.Instruction.Argument.Byte
+  alias Chip8.Instruction.Argument.Nibble
+  alias Chip8.Instruction.Argument.Register
   alias Chip8.Instruction.Decoder
   alias Chip8.Runtime
 
-  @type register :: atom() | integer()
-  @type address :: 0x000..0xFFF
-  @type nibble :: 0x0..0xF
   @type arguments ::
-          %{}
-          | %{x: register()}
-          | %{x: register(), address: address()}
-          | %{x: register(), byte: byte()}
-          | %{x: register(), y: register()}
-          | %{x: register(), y: register(), nibble: nibble()}
+          {}
+          | {Address.t()}
+          | {Register.t()}
+          | {Register.t(), Address.t()}
+          | {Register.t(), Byte.t()}
+          | {Register.t(), Register.t()}
+          | {Register.t(), Register.t(), Nibble.t()}
 
   @callback new(arguments()) :: t()
   @callback execute(Runtime.t(), arguments()) :: Runtime.t()
@@ -33,7 +35,7 @@ defmodule Chip8.Instruction do
       @behaviour unquote(instruction_module)
 
       @impl unquote(instruction_module)
-      def new(arguments) when is_map(arguments),
+      def new(arguments) when is_tuple(arguments),
         do: unquote(instruction_module).new(__MODULE__, arguments)
 
       defoverridable new: 1
@@ -41,7 +43,8 @@ defmodule Chip8.Instruction do
   end
 
   @spec new(module(), arguments()) :: t()
-  def new(module, arguments) when is_atom(module) and is_map(arguments) do
+  def new(module, arguments)
+      when is_atom(module) and is_tuple(arguments) do
     %__MODULE__{
       arguments: arguments,
       module: module

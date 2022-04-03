@@ -2,6 +2,10 @@ defmodule Chip8.Instruction.DecoderTest do
   use ExUnit.Case, async: true
 
   alias Chip8.Instruction
+  alias Chip8.Instruction.Argument.Address
+  alias Chip8.Instruction.Argument.Byte
+  alias Chip8.Instruction.Argument.Nibble
+  alias Chip8.Instruction.Argument.Register
   alias Chip8.Instruction.Decoder
 
   describe "decode/1" do
@@ -13,7 +17,7 @@ defmodule Chip8.Instruction.DecoderTest do
       assert %Instruction{} = instruction
 
       assert Instruction.CLS == instruction.module
-      assert %{} == instruction.arguments
+      assert {} == instruction.arguments
     end
 
     test "should return a instruction struct for `RET` instruction" do
@@ -24,7 +28,7 @@ defmodule Chip8.Instruction.DecoderTest do
       assert %Instruction{} = instruction
 
       assert Instruction.RET == instruction.module
-      assert %{} == instruction.arguments
+      assert {} == instruction.arguments
     end
 
     test "should return a instruction struct for `SYS address` instruction" do
@@ -35,7 +39,7 @@ defmodule Chip8.Instruction.DecoderTest do
       assert %Instruction{} = instruction
 
       assert Instruction.SYS == instruction.module
-      assert %{address: 0xA4F} == instruction.arguments
+      assert {Address.new(0xA4F)} == instruction.arguments
     end
 
     test "should return a instruction struct for `JP address` instruction" do
@@ -46,7 +50,7 @@ defmodule Chip8.Instruction.DecoderTest do
       assert %Instruction{} = instruction
 
       assert Instruction.JP == instruction.module
-      assert %{address: 0x4ED} == instruction.arguments
+      assert {Address.new(0x4ED)} == instruction.arguments
     end
 
     test "should return a instruction struct for `CALL address` instruction" do
@@ -57,7 +61,7 @@ defmodule Chip8.Instruction.DecoderTest do
       assert %Instruction{} = instruction
 
       assert Instruction.CALL == instruction.module
-      assert %{address: 0xB06} == instruction.arguments
+      assert {Address.new(0xB06)} == instruction.arguments
     end
 
     test "should return a instruction struct for `SE Vx, byte` instruction" do
@@ -68,7 +72,7 @@ defmodule Chip8.Instruction.DecoderTest do
       assert %Instruction{} = instruction
 
       assert Instruction.SE == instruction.module
-      assert %{x: 0x3, byte: 0xA8} == instruction.arguments
+      assert {Register.v(0x3), Byte.new(0xA8)} == instruction.arguments
     end
 
     test "should return a instruction struct for `SNE Vx, byte` instruction" do
@@ -79,7 +83,7 @@ defmodule Chip8.Instruction.DecoderTest do
       assert %Instruction{} = instruction
 
       assert Instruction.SNE == instruction.module
-      assert %{x: 0x9, byte: 0x8F} == instruction.arguments
+      assert {Register.v(0x9), Byte.new(0x8F)} == instruction.arguments
     end
 
     test "should return a instruction struct for the `SE Vx, Vy` instruction" do
@@ -90,7 +94,7 @@ defmodule Chip8.Instruction.DecoderTest do
       assert %Instruction{} = instruction
 
       assert Instruction.SE == instruction.module
-      assert %{x: 0xE, y: 0x0} == instruction.arguments
+      assert {Register.v(0xE), Register.v(0x0)} == instruction.arguments
     end
 
     test "should return a instruction struct for the `LD Vx, byte` instruction" do
@@ -101,7 +105,7 @@ defmodule Chip8.Instruction.DecoderTest do
       assert %Instruction{} = instruction
 
       assert Instruction.LD == instruction.module
-      assert %{x: 0x6, byte: 0x29} == instruction.arguments
+      assert {Register.v(0x6), Byte.new(0x29)} == instruction.arguments
     end
 
     test "should return a instruction struct for the `ADD Vx, byte` instruction" do
@@ -112,7 +116,7 @@ defmodule Chip8.Instruction.DecoderTest do
       assert %Instruction{} = instruction
 
       assert Instruction.ADD == instruction.module
-      assert %{x: 0x5, byte: 0xDB} == instruction.arguments
+      assert {Register.v(0x5), Byte.new(0xDB)} == instruction.arguments
     end
 
     test "should return a instruction struct for the `LD Vx, Vy` instruction" do
@@ -123,7 +127,7 @@ defmodule Chip8.Instruction.DecoderTest do
       assert %Instruction{} = instruction
 
       assert Instruction.LD == instruction.module
-      assert %{x: 0x9, y: 0x7} == instruction.arguments
+      assert {Register.v(0x9), Register.v(0x7)} == instruction.arguments
     end
 
     test "should return a instruction struct for the `OR Vx, Vy` instruction" do
@@ -134,7 +138,7 @@ defmodule Chip8.Instruction.DecoderTest do
       assert %Instruction{} = instruction
 
       assert Instruction.OR == instruction.module
-      assert %{x: 0xA, y: 0x3} == instruction.arguments
+      assert {Register.v(0xA), Register.v(0x3)} == instruction.arguments
     end
 
     test "should return a instruction struct for the `AND Vx, Vy` instruction" do
@@ -145,7 +149,7 @@ defmodule Chip8.Instruction.DecoderTest do
       assert %Instruction{} = instruction
 
       assert Instruction.AND == instruction.module
-      assert %{x: 0x6, y: 0xD} == instruction.arguments
+      assert {Register.v(0x6), Register.v(0xD)} == instruction.arguments
     end
 
     test "should return a instruction struct for the `XOR Vx, Vy` instruction" do
@@ -156,7 +160,7 @@ defmodule Chip8.Instruction.DecoderTest do
       assert %Instruction{} = instruction
 
       assert Instruction.XOR == instruction.module
-      assert %{x: 0xC, y: 0x0} == instruction.arguments
+      assert {Register.v(0xC), Register.v(0x0)} == instruction.arguments
     end
 
     test "should return a instruction struct for the `ADD Vx, Vy` instruction" do
@@ -167,7 +171,7 @@ defmodule Chip8.Instruction.DecoderTest do
       assert %Instruction{} = instruction
 
       assert Instruction.ADD == instruction.module
-      assert %{x: 0xF, y: 0x7} == instruction.arguments
+      assert {Register.v(0xF), Register.v(0x7)} == instruction.arguments
     end
 
     test "should return a instruction struct for the `SUB Vx, Vy` instruction" do
@@ -178,7 +182,7 @@ defmodule Chip8.Instruction.DecoderTest do
       assert %Instruction{} = instruction
 
       assert Instruction.SUB == instruction.module
-      assert %{x: 0x5, y: 0xB} == instruction.arguments
+      assert {Register.v(0x5), Register.v(0xB)} == instruction.arguments
     end
 
     test "should return a instruction struct for the `SHR Vx, Vy` instruction" do
@@ -189,7 +193,7 @@ defmodule Chip8.Instruction.DecoderTest do
       assert %Instruction{} = instruction
 
       assert Instruction.SHR == instruction.module
-      assert %{x: 0xC, y: 0x9} == instruction.arguments
+      assert {Register.v(0xC), Register.v(0x9)} == instruction.arguments
     end
 
     test "should return a instruction struct for the `SUBN Vx, Vy` instruction" do
@@ -200,7 +204,7 @@ defmodule Chip8.Instruction.DecoderTest do
       assert %Instruction{} = instruction
 
       assert Instruction.SUBN == instruction.module
-      assert %{x: 0x3, y: 0x0} == instruction.arguments
+      assert {Register.v(0x3), Register.v(0x0)} == instruction.arguments
     end
 
     test "should return a instruction struct for the `SHL Vx, Vy` instruction" do
@@ -211,7 +215,7 @@ defmodule Chip8.Instruction.DecoderTest do
       assert %Instruction{} = instruction
 
       assert Instruction.SHL == instruction.module
-      assert %{x: 0xA, y: 0xE} == instruction.arguments
+      assert {Register.v(0xA), Register.v(0xE)} == instruction.arguments
     end
 
     test "should return a instruction struct for the `SNE Vx, Vy` instruction" do
@@ -222,7 +226,7 @@ defmodule Chip8.Instruction.DecoderTest do
       assert %Instruction{} = instruction
 
       assert Instruction.SNE == instruction.module
-      assert %{x: 0x0, y: 0xD} == instruction.arguments
+      assert {Register.v(0x0), Register.v(0xD)} == instruction.arguments
     end
 
     test "should return a instruction struct for the `LD I, address` instructino" do
@@ -232,7 +236,7 @@ defmodule Chip8.Instruction.DecoderTest do
 
       assert %Instruction{} = instruction
       assert Instruction.LD == instruction.module
-      assert %{address: 0x3FF} == instruction.arguments
+      assert {Register.i(), Address.new(0x3FF)} == instruction.arguments
     end
 
     test "should return a instruction struct for the `JP V0, address` instruction" do
@@ -243,7 +247,7 @@ defmodule Chip8.Instruction.DecoderTest do
       assert %Instruction{} = instruction
 
       assert Instruction.JP == instruction.module
-      assert %{x: 0x0, address: 0x47B} == instruction.arguments
+      assert {Register.v(0x0), Address.new(0x47B)} == instruction.arguments
     end
 
     test "should return a instruction struct for the `RND Vx, byte` instruction" do
@@ -254,7 +258,7 @@ defmodule Chip8.Instruction.DecoderTest do
       assert %Instruction{} = instruction
 
       assert Instruction.RND == instruction.module
-      assert %{x: 0x8, byte: 0x6A} == instruction.arguments
+      assert {Register.v(0x8), Byte.new(0x6A)} == instruction.arguments
     end
 
     test "should return a instruction struct for the `DRW Vx, Vy, nibble` instruction" do
@@ -263,9 +267,8 @@ defmodule Chip8.Instruction.DecoderTest do
       instruction = Decoder.decode(bytes)
 
       assert %Instruction{} = instruction
-
       assert Instruction.DRW == instruction.module
-      assert %{x: 0x7, y: 0xF, nibble: 0x2} == instruction.arguments
+      assert {Register.v(0x7), Register.v(0xF), Nibble.new(0x2)} == instruction.arguments
     end
 
     test "should return a instruction struct for the `SKP Vx` instruction" do
@@ -276,7 +279,7 @@ defmodule Chip8.Instruction.DecoderTest do
       assert %Instruction{} = instruction
 
       assert Instruction.SKP == instruction.module
-      assert %{x: 0xC} == instruction.arguments
+      assert {Register.v(0xC)} == instruction.arguments
     end
 
     test "should return a instruction struct for the `SKNP Vx` instruction" do
@@ -287,7 +290,7 @@ defmodule Chip8.Instruction.DecoderTest do
       assert %Instruction{} = instruction
 
       assert Instruction.SKNP == instruction.module
-      assert %{x: 0xD} == instruction.arguments
+      assert {Register.v(0xD)} == instruction.arguments
     end
 
     test "should return a instruction struct for the `LD Vx, DT` instruction" do
@@ -298,7 +301,7 @@ defmodule Chip8.Instruction.DecoderTest do
       assert %Instruction{} = instruction
 
       assert Instruction.LD == instruction.module
-      assert %{x: 0xA, y: :dt} == instruction.arguments
+      assert {Register.v(0xA), Register.dt()} == instruction.arguments
     end
 
     test "should return a instruction struct for the `LD Vx, K` instruction" do
@@ -309,7 +312,7 @@ defmodule Chip8.Instruction.DecoderTest do
       assert %Instruction{} = instruction
 
       assert Instruction.LD == instruction.module
-      assert %{x: 0x5, y: :keyboard} == instruction.arguments
+      assert {Register.v(0x5), Register.keyboard()} == instruction.arguments
     end
 
     test "should return a instruction struct for the `LD DT, Vy` instruction" do
@@ -320,7 +323,7 @@ defmodule Chip8.Instruction.DecoderTest do
       assert %Instruction{} = instruction
 
       assert Instruction.LD == instruction.module
-      assert %{x: :dt, y: 0x3} == instruction.arguments
+      assert {Register.dt(), Register.v(0x3)} == instruction.arguments
     end
 
     test "should return a instruction struct for the `LD ST, Vy` instruction" do
@@ -331,7 +334,7 @@ defmodule Chip8.Instruction.DecoderTest do
       assert %Instruction{} = instruction
 
       assert Instruction.LD == instruction.module
-      assert %{x: :st, y: 0xF} == instruction.arguments
+      assert {Register.st(), Register.v(0xF)} == instruction.arguments
     end
 
     test "should return a instruction struct for the `ADD I, Vx` instruction" do
@@ -342,7 +345,7 @@ defmodule Chip8.Instruction.DecoderTest do
       assert %Instruction{} = instruction
 
       assert Instruction.ADD == instruction.module
-      assert %{x: :i, y: 0x2} == instruction.arguments
+      assert {Register.i(), Register.v(0x2)} == instruction.arguments
     end
 
     test "should return a instruction struct for the `LD F, Vx` instruction" do
@@ -353,7 +356,7 @@ defmodule Chip8.Instruction.DecoderTest do
       assert %Instruction{} = instruction
 
       assert Instruction.LD == instruction.module
-      assert %{x: :font, y: 0x6} == instruction.arguments
+      assert {Register.font(), Register.v(0x6)} == instruction.arguments
     end
 
     test "should return a instruction struct for the `LD B, Vy` instruction" do
@@ -364,7 +367,7 @@ defmodule Chip8.Instruction.DecoderTest do
       assert %Instruction{} = instruction
 
       assert Instruction.LD == instruction.module
-      assert %{x: :bcd, y: 0x4} == instruction.arguments
+      assert {Register.bcd(), Register.v(0x4)} == instruction.arguments
     end
 
     test "should return a instruction struct for the `LD I, Vy` instruction" do
@@ -375,7 +378,7 @@ defmodule Chip8.Instruction.DecoderTest do
       assert %Instruction{} = instruction
 
       assert Instruction.LD == instruction.module
-      assert %{x: :memory, y: 0xD} == instruction.arguments
+      assert {Register.memory(), Register.v(0xD)} == instruction.arguments
     end
 
     test "should return a instruction struct for the `LD Vx, I` instruction" do
@@ -386,7 +389,7 @@ defmodule Chip8.Instruction.DecoderTest do
       assert %Instruction{} = instruction
 
       assert Instruction.LD == instruction.module
-      assert %{x: 0xF, y: :memory} == instruction.arguments
+      assert {Register.v(0xF), Register.memory()} == instruction.arguments
     end
   end
 

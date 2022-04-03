@@ -7,7 +7,7 @@ defmodule Chip8.Instruction.RET do
   alias Chip8.Stack
 
   @impl Chip8.Instruction
-  def execute(%Runtime{} = runtime, %{}) do
+  def execute(%Runtime{} = runtime, {}) do
     case Stack.pop(runtime.stack) do
       {nil, _stack} -> runtime
       {address, stack} -> %{runtime | pc: address, stack: stack}

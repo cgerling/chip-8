@@ -2,6 +2,10 @@ defmodule Chip8.Instruction.Decoder do
   @moduledoc false
 
   alias Chip8.Instruction
+  alias Chip8.Instruction.Argument.Address
+  alias Chip8.Instruction.Argument.Byte
+  alias Chip8.Instruction.Argument.Nibble
+  alias Chip8.Instruction.Argument.Register
   alias Chip8.Memory
 
   @hex_base 16
@@ -30,170 +34,237 @@ defmodule Chip8.Instruction.Decoder do
   defp pad_byte([_nibble1, _nibble2] = byte), do: byte
 
   defp decode_data({0x0, 0x0, 0xE, 0x0}) do
-    Instruction.CLS.new(%{})
+    Instruction.CLS.new({})
   end
 
   defp decode_data({0x0, 0x0, 0xE, 0xE}) do
-    Instruction.RET.new(%{})
+    Instruction.RET.new({})
   end
 
   defp decode_data({0x0, address1, address2, address3}) do
-    address = build_address(address1, address2, address3)
+    address = Address.new(address1, address2, address3)
 
-    Instruction.SYS.new(%{address: address})
+    Instruction.SYS.new({address})
   end
 
   defp decode_data({0x1, address1, address2, address3}) do
-    address = build_address(address1, address2, address3)
+    address = Address.new(address1, address2, address3)
 
-    Instruction.JP.new(%{address: address})
+    Instruction.JP.new({address})
   end
 
   defp decode_data({0x2, address1, address2, address3}) do
-    address = build_address(address1, address2, address3)
+    address = Address.new(address1, address2, address3)
 
-    Instruction.CALL.new(%{address: address})
+    Instruction.CALL.new({address})
   end
 
   defp decode_data({0x3, x, byte1, byte2}) do
-    byte = build_byte(byte1, byte2)
+    vx = Register.v(x)
+    byte = Byte.new(byte1, byte2)
 
-    Instruction.SE.new(%{x: x, byte: byte})
+    Instruction.SE.new({vx, byte})
   end
 
   defp decode_data({0x4, x, byte1, byte2}) do
-    byte = build_byte(byte1, byte2)
+    vx = Register.v(x)
+    byte = Byte.new(byte1, byte2)
 
-    Instruction.SNE.new(%{x: x, byte: byte})
+    Instruction.SNE.new({vx, byte})
   end
 
   defp decode_data({0x5, x, y, 0x0}) do
-    Instruction.SE.new(%{x: x, y: y})
+    vx = Register.v(x)
+    vy = Register.v(y)
+
+    Instruction.SE.new({vx, vy})
   end
 
   defp decode_data({0x6, x, byte1, byte2}) do
-    byte = build_byte(byte1, byte2)
+    vx = Register.v(x)
+    byte = Byte.new(byte1, byte2)
 
-    Instruction.LD.new(%{x: x, byte: byte})
+    Instruction.LD.new({vx, byte})
   end
 
   defp decode_data({0x7, x, byte1, byte2}) do
-    byte = build_byte(byte1, byte2)
+    vx = Register.v(x)
+    byte = Byte.new(byte1, byte2)
 
-    Instruction.ADD.new(%{x: x, byte: byte})
+    Instruction.ADD.new({vx, byte})
   end
 
   defp decode_data({0x8, x, y, 0x0}) do
-    Instruction.LD.new(%{x: x, y: y})
+    vx = Register.v(x)
+    vy = Register.v(y)
+
+    Instruction.LD.new({vx, vy})
   end
 
   defp decode_data({0x8, x, y, 0x1}) do
-    Instruction.OR.new(%{x: x, y: y})
+    vx = Register.v(x)
+    vy = Register.v(y)
+
+    Instruction.OR.new({vx, vy})
   end
 
   defp decode_data({0x8, x, y, 0x2}) do
-    Instruction.AND.new(%{x: x, y: y})
+    vx = Register.v(x)
+    vy = Register.v(y)
+
+    Instruction.AND.new({vx, vy})
   end
 
   defp decode_data({0x8, x, y, 0x3}) do
-    Instruction.XOR.new(%{x: x, y: y})
+    vx = Register.v(x)
+    vy = Register.v(y)
+
+    Instruction.XOR.new({vx, vy})
   end
 
   defp decode_data({0x8, x, y, 0x4}) do
-    Instruction.ADD.new(%{x: x, y: y})
+    vx = Register.v(x)
+    vy = Register.v(y)
+
+    Instruction.ADD.new({vx, vy})
   end
 
   defp decode_data({0x8, x, y, 0x5}) do
-    Instruction.SUB.new(%{x: x, y: y})
+    vx = Register.v(x)
+    vy = Register.v(y)
+
+    Instruction.SUB.new({vx, vy})
   end
 
   defp decode_data({0x8, x, y, 0x6}) do
-    Instruction.SHR.new(%{x: x, y: y})
+    vx = Register.v(x)
+    vy = Register.v(y)
+
+    Instruction.SHR.new({vx, vy})
   end
 
   defp decode_data({0x8, x, y, 0x7}) do
-    Instruction.SUBN.new(%{x: x, y: y})
+    vx = Register.v(x)
+    vy = Register.v(y)
+
+    Instruction.SUBN.new({vx, vy})
   end
 
   defp decode_data({0x8, x, y, 0xE}) do
-    Instruction.SHL.new(%{x: x, y: y})
+    vx = Register.v(x)
+    vy = Register.v(y)
+
+    Instruction.SHL.new({vx, vy})
   end
 
   defp decode_data({0x9, x, y, 0x0}) do
-    Instruction.SNE.new(%{x: x, y: y})
+    vx = Register.v(x)
+    vy = Register.v(y)
+
+    Instruction.SNE.new({vx, vy})
   end
 
   defp decode_data({0xA, address1, address2, address3}) do
-    address = build_address(address1, address2, address3)
+    i = Register.i()
+    address = Address.new(address1, address2, address3)
 
-    Instruction.LD.new(%{address: address})
+    Instruction.LD.new({i, address})
   end
 
   defp decode_data({0xB, address1, address2, address3}) do
-    address = build_address(address1, address2, address3)
+    v0 = Register.v(0)
+    address = Address.new(address1, address2, address3)
 
-    Instruction.JP.new(%{x: 0, address: address})
+    Instruction.JP.new({v0, address})
   end
 
   defp decode_data({0xC, x, byte1, byte2}) do
-    byte = build_byte(byte1, byte2)
+    vx = Register.v(x)
+    byte = Byte.new(byte1, byte2)
 
-    Instruction.RND.new(%{x: x, byte: byte})
+    Instruction.RND.new({vx, byte})
   end
 
   defp decode_data({0xD, x, y, nibble}) do
-    Instruction.DRW.new(%{x: x, y: y, nibble: nibble})
+    vx = Register.v(x)
+    vy = Register.v(y)
+    nibble = Nibble.new(nibble)
+
+    Instruction.DRW.new({vx, vy, nibble})
   end
 
   defp decode_data({0xE, x, 0x9, 0xE}) do
-    Instruction.SKP.new(%{x: x})
+    vx = Register.v(x)
+
+    Instruction.SKP.new({vx})
   end
 
   defp decode_data({0xE, x, 0xA, 0x1}) do
-    Instruction.SKNP.new(%{x: x})
+    vx = Register.v(x)
+
+    Instruction.SKNP.new({vx})
   end
 
   defp decode_data({0xF, x, 0x0, 0x7}) do
-    Instruction.LD.new(%{x: x, y: :dt})
+    vx = Register.v(x)
+    dt = Register.dt()
+
+    Instruction.LD.new({vx, dt})
   end
 
   defp decode_data({0xF, x, 0x0, 0xA}) do
-    Instruction.LD.new(%{x: x, y: :keyboard})
+    vx = Register.v(x)
+    keyboard = Register.keyboard()
+
+    Instruction.LD.new({vx, keyboard})
   end
 
-  defp decode_data({0xF, y, 0x1, 0x5}) do
-    Instruction.LD.new(%{x: :dt, y: y})
+  defp decode_data({0xF, x, 0x1, 0x5}) do
+    dt = Register.dt()
+    vx = Register.v(x)
+
+    Instruction.LD.new({dt, vx})
   end
 
-  defp decode_data({0xF, y, 0x1, 0x8}) do
-    Instruction.LD.new(%{x: :st, y: y})
+  defp decode_data({0xF, x, 0x1, 0x8}) do
+    st = Register.st()
+    vx = Register.v(x)
+
+    Instruction.LD.new({st, vx})
   end
 
-  defp decode_data({0xF, y, 0x1, 0xE}) do
-    Instruction.ADD.new(%{x: :i, y: y})
+  defp decode_data({0xF, x, 0x1, 0xE}) do
+    i = Register.i()
+    vx = Register.v(x)
+
+    Instruction.ADD.new({i, vx})
   end
 
-  defp decode_data({0xF, y, 0x2, 0x9}) do
-    Instruction.LD.new(%{x: :font, y: y})
+  defp decode_data({0xF, x, 0x2, 0x9}) do
+    font = Register.font()
+    vx = Register.v(x)
+
+    Instruction.LD.new({font, vx})
   end
 
-  defp decode_data({0xF, y, 0x3, 0x3}) do
-    Instruction.LD.new(%{x: :bcd, y: y})
+  defp decode_data({0xF, x, 0x3, 0x3}) do
+    bcd = Register.bcd()
+    vx = Register.v(x)
+
+    Instruction.LD.new({bcd, vx})
   end
 
-  defp decode_data({0xF, y, 0x5, 0x5}) do
-    Instruction.LD.new(%{x: :memory, y: y})
+  defp decode_data({0xF, x, 0x5, 0x5}) do
+    memory = Register.memory()
+    vx = Register.v(x)
+
+    Instruction.LD.new({memory, vx})
   end
 
   defp decode_data({0xF, x, 0x6, 0x5}) do
-    Instruction.LD.new(%{x: x, y: :memory})
-  end
+    vx = Register.v(x)
+    memory = Register.memory()
 
-  defp build_address(address1, address2, address3) do
-    Integer.undigits([address1, address2, address3], @hex_base)
-  end
-
-  defp build_byte(byte1, byte2) do
-    Integer.undigits([byte1, byte2], @hex_base)
+    Instruction.LD.new({vx, memory})
   end
 end

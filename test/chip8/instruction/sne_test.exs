@@ -1,6 +1,8 @@
 defmodule Chip8.Instruction.SNETest do
   use ExUnit.Case, async: true
 
+  alias Chip8.Instruction.Argument.Byte
+  alias Chip8.Instruction.Argument.Register
   alias Chip8.Instruction.SNE
   alias Chip8.Runtime
   alias Chip8.VRegisters
@@ -13,7 +15,9 @@ defmodule Chip8.Instruction.SNETest do
       v_registers = VRegisters.set(runtime.v, x, byte)
       runtime = put_in(runtime.v, v_registers)
 
-      arguments = %{x: x, byte: byte}
+      vx = %Register{value: x}
+      byte = %Byte{value: byte}
+      arguments = {vx, byte}
       executed_runtime = SNE.execute(runtime, arguments)
 
       assert %Runtime{} = executed_runtime
@@ -27,8 +31,9 @@ defmodule Chip8.Instruction.SNETest do
       v_registers = VRegisters.set(runtime.v, x, x_value)
       runtime = put_in(runtime.v, v_registers)
 
-      byte = 0xF2
-      arguments = %{x: x, byte: byte}
+      vx = %Register{value: x}
+      byte = %Byte{value: 0xF2}
+      arguments = {vx, byte}
       executed_runtime = SNE.execute(runtime, arguments)
 
       assert %Runtime{} = executed_runtime
@@ -43,7 +48,9 @@ defmodule Chip8.Instruction.SNETest do
       v_registers = runtime.v |> VRegisters.set(x, value) |> VRegisters.set(y, value)
       runtime = put_in(runtime.v, v_registers)
 
-      arguments = %{x: x, y: y}
+      vx = %Register{value: x}
+      vy = %Register{value: y}
+      arguments = {vx, vy}
       executed_runtime = SNE.execute(runtime, arguments)
 
       assert %Runtime{} = executed_runtime
@@ -59,7 +66,9 @@ defmodule Chip8.Instruction.SNETest do
       v_registers = runtime.v |> VRegisters.set(x, x_value) |> VRegisters.set(y, y_value)
       runtime = put_in(runtime.v, v_registers)
 
-      arguments = %{x: x, y: y}
+      vx = %Register{value: x}
+      vy = %Register{value: y}
+      arguments = {vx, vy}
       executed_runtime = SNE.execute(runtime, arguments)
 
       assert %Runtime{} = executed_runtime

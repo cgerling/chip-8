@@ -4,19 +4,21 @@ defmodule Chip8.Instruction.DRW do
   use Chip8.Instruction
 
   alias Chip8.Display
+  alias Chip8.Instruction.Argument.Nibble
+  alias Chip8.Instruction.Argument.Register
   alias Chip8.Memory
   alias Chip8.Runtime
   alias Chip8.Sprite
   alias Chip8.VRegisters
 
   @impl Chip8.Instruction
-  def execute(%Runtime{} = runtime, %{x: x, y: y, nibble: nibble}) do
+  def execute(%Runtime{} = runtime, {%Register{} = x, %Register{} = y, %Nibble{} = nibble}) do
     sprite =
       runtime.memory
-      |> Memory.read(runtime.i, nibble)
+      |> Memory.read(runtime.i, nibble.value)
       |> Sprite.new()
 
-    coordinates = Display.get_coordinates(runtime.display, runtime.v[x], runtime.v[y])
+    coordinates = Display.get_coordinates(runtime.display, runtime.v[x.value], runtime.v[y.value])
 
     drawed_display = Display.draw(runtime.display, coordinates, sprite)
 

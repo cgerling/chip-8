@@ -1,6 +1,7 @@
 defmodule Chip8.Instruction.SHRTest do
   use ExUnit.Case, async: true
 
+  alias Chip8.Instruction.Argument.Register
   alias Chip8.Instruction.SHR
   alias Chip8.Runtime
 
@@ -11,8 +12,9 @@ defmodule Chip8.Instruction.SHRTest do
       y_value = 0x85
       runtime = put_in(runtime.v[y], y_value)
 
-      x = 0xA
-      arguments = %{x: x, y: y}
+      vx = %Register{value: 0xA}
+      vy = %Register{value: y}
+      arguments = {vx, vy}
       executed_runtime = SHR.execute(runtime, arguments)
 
       assert %Runtime{} = executed_runtime
@@ -25,12 +27,13 @@ defmodule Chip8.Instruction.SHRTest do
       y_value = 0xAD
       runtime = put_in(runtime.v[y], y_value)
 
-      x = 0xC
-      arguments = %{x: x, y: y}
+      vx = %Register{value: 0xC}
+      vy = %Register{value: y}
+      arguments = {vx, vy}
       executed_runtime = SHR.execute(runtime, arguments)
 
       assert %Runtime{} = executed_runtime
-      assert 0x56 == executed_runtime.v[x]
+      assert 0x56 == executed_runtime.v[vx.value]
     end
   end
 end

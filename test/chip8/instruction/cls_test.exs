@@ -15,7 +15,7 @@ defmodule Chip8.Instruction.CLSTest do
 
       empty_display = Display.new(display_height, display_width)
 
-      arguments = %{}
+      arguments = {}
       executed_runtime = CLS.execute(runtime, arguments)
 
       assert %Runtime{} = executed_runtime

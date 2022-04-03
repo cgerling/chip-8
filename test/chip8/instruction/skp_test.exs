@@ -1,6 +1,7 @@
 defmodule Chip8.Instruction.SKPTest do
   use ExUnit.Case, async: true
 
+  alias Chip8.Instruction.Argument.Register
   alias Chip8.Instruction.SKP
   alias Chip8.Runtime
   alias Chip8.VRegisters
@@ -14,7 +15,8 @@ defmodule Chip8.Instruction.SKPTest do
       runtime = put_in(runtime.v, v_registers)
       runtime = put_in(runtime.keyboard.keys[x_value], :pressed)
 
-      arguments = %{x: x}
+      vx = %Register{value: x}
+      arguments = {vx}
       executed_runtime = SKP.execute(runtime, arguments)
 
       assert %Runtime{} = executed_runtime
@@ -28,7 +30,8 @@ defmodule Chip8.Instruction.SKPTest do
       v_registers = VRegisters.set(runtime.v, x, x_value)
       runtime = put_in(runtime.v, v_registers)
 
-      arguments = %{x: x}
+      vx = %Register{value: x}
+      arguments = {vx}
       executed_runtime = SKP.execute(runtime, arguments)
 
       assert %Runtime{} = executed_runtime

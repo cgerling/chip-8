@@ -2,6 +2,7 @@ defmodule Chip8.Instruction.ANDTest do
   use ExUnit.Case, async: true
 
   alias Chip8.Instruction.AND
+  alias Chip8.Instruction.Argument.Register
   alias Chip8.Runtime
 
   describe "execute/2" do
@@ -14,11 +15,13 @@ defmodule Chip8.Instruction.ANDTest do
       y_value = 0xC1
       runtime = put_in(runtime.v[y], y_value)
 
-      arguments = %{x: x, y: y}
+      vx = %Register{value: x}
+      vy = %Register{value: y}
+      arguments = {vx, vy}
       executed_runtime = AND.execute(runtime, arguments)
 
       assert %Runtime{} = executed_runtime
-      assert 0x41 == executed_runtime.v[x]
+      assert 0x41 == executed_runtime.v[vx.value]
     end
   end
 end
