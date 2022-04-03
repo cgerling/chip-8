@@ -1,6 +1,8 @@
 defmodule Chip8.Instruction.Argument.Byte do
   @moduledoc false
 
+  alias Chip8.Hex
+
   @enforce_keys [:value]
   defstruct @enforce_keys
 
@@ -14,7 +16,7 @@ defmodule Chip8.Instruction.Argument.Byte do
   def new(byte1, byte2)
       when is_integer(byte1) and is_integer(byte2) and byte1 in 0x0..0xF and byte2 in 0x0..0xF do
     [byte1, byte2]
-    |> Integer.undigits(16)
+    |> Hex.from_digits()
     |> new()
   end
 

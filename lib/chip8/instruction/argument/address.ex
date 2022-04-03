@@ -1,6 +1,8 @@
 defmodule Chip8.Instruction.Argument.Address do
   @moduledoc false
 
+  alias Chip8.Hex
+
   @enforce_keys [:value]
   defstruct @enforce_keys
 
@@ -15,7 +17,7 @@ defmodule Chip8.Instruction.Argument.Address do
       when is_integer(address1) and is_integer(address2) and is_integer(address3) and
              address1 in 0x0..0xF and address2 in 0x0..0xF and address3 in 0x0..0xF do
     [address1, address2, address3]
-    |> Integer.undigits(16)
+    |> Hex.from_digits()
     |> new()
   end
 

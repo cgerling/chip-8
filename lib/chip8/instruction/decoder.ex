@@ -1,6 +1,7 @@
 defmodule Chip8.Instruction.Decoder do
   @moduledoc false
 
+  alias Chip8.Hex
   alias Chip8.Instruction
   alias Chip8.Instruction.Argument.Address
   alias Chip8.Instruction.Argument.Byte
@@ -8,30 +9,20 @@ defmodule Chip8.Instruction.Decoder do
   alias Chip8.Instruction.Argument.Register
   alias Chip8.Memory
 
-  @hex_base 16
-
   @spec decode(Memory.data()) :: Instruction.t()
-  def decode([_byte1, _byte2] = data) do
+  def decode([byte1, byte2] = data)
+      when is_integer(byte1) and is_integer(byte2) and byte1 in 0x00..0xFF and byte2 in 0x00..0xFF do
     data
     |> parse_data()
     |> decode_data()
   end
 
-  defp parse_data([_byte1, _byte2] = data) do
+  defp parse_data([_, _] = data) do
     data
-    |> Enum.map(&parse_byte/1)
+    |> Enum.map(&Hex.digits(&1, size: 2))
     |> List.flatten()
     |> List.to_tuple()
   end
-
-  defp parse_byte(byte) when is_integer(byte) and byte in 0x0..0xFF do
-    byte
-    |> Integer.digits(@hex_base)
-    |> pad_byte()
-  end
-
-  defp pad_byte([nibble]), do: [0x0, nibble]
-  defp pad_byte([_nibble1, _nibble2] = byte), do: byte
 
   defp decode_data({0x0, 0x0, 0xE, 0x0}) do
     Instruction.CLS.new({})
