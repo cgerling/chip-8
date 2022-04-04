@@ -1,4 +1,4 @@
-defmodule Chip8.Sprite do
+defmodule Chip8.Display.Sprite do
   @moduledoc false
 
   @enforce_keys [:data]

@@ -1,7 +1,7 @@
 defmodule Chip8.Display do
   @moduledoc false
 
-  alias Chip8.Sprite
+  alias Chip8.Display.Sprite
 
   @enforce_keys [:height, :pixels, :width]
   defstruct @enforce_keys

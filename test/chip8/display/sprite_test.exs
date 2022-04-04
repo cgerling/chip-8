@@ -1,7 +1,7 @@
-defmodule Chip8.SpriteTest do
+defmodule Chip8.Display.SpriteTest do
   use ExUnit.Case, async: true
 
-  alias Chip8.Sprite
+  alias Chip8.Display.Sprite
 
   describe "new/1" do
     test "should return a sprite struct" do

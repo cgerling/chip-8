@@ -2,7 +2,7 @@ defmodule Chip8.DisplayTest do
   use ExUnit.Case, async: true
 
   alias Chip8.Display
-  alias Chip8.Sprite
+  alias Chip8.Display.Sprite
 
   describe "new/2" do
     test "should return a display struct with the given dimensions" do

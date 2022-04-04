@@ -2,12 +2,12 @@ defmodule Chip8.Instruction.DRWTest do
   use ExUnit.Case, async: true
 
   alias Chip8.Display
+  alias Chip8.Display.Sprite
   alias Chip8.Instruction.Argument.Nibble
   alias Chip8.Instruction.Argument.Register
   alias Chip8.Instruction.DRW
   alias Chip8.Memory
   alias Chip8.Runtime
-  alias Chip8.Sprite
 
   describe "execute/2" do
     test "should return a runtime with sprite at address I rendered in the display" do

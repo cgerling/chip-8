@@ -4,11 +4,11 @@ defmodule Chip8.Instruction.DRW do
   use Chip8.Instruction
 
   alias Chip8.Display
+  alias Chip8.Display.Sprite
   alias Chip8.Instruction.Argument.Nibble
   alias Chip8.Instruction.Argument.Register
   alias Chip8.Memory
   alias Chip8.Runtime
-  alias Chip8.Sprite
   alias Chip8.VRegisters
 
   @impl Chip8.Instruction
