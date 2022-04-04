@@ -1,14 +1,14 @@
 defmodule Chip8.Runtime do
   @moduledoc false
 
-  alias Chip8.Display
-  alias Chip8.Font
-  alias Chip8.Instruction
-  alias Chip8.Keyboard
-  alias Chip8.Memory
-  alias Chip8.Stack
+  alias Chip8.Runtime.Display
+  alias Chip8.Runtime.Font
+  alias Chip8.Runtime.Instruction
+  alias Chip8.Runtime.Keyboard
+  alias Chip8.Runtime.Memory
+  alias Chip8.Runtime.Stack
+  alias Chip8.Runtime.VRegisters
   alias Chip8.UInt
-  alias Chip8.VRegisters
 
   @enforce_keys [:display, :dt, :i, :keyboard, :memory, :pc, :st, :stack, :v]
   defstruct @enforce_keys

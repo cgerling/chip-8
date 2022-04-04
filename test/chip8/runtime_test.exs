@@ -1,10 +1,10 @@
 defmodule Chip8.RuntimeTest do
   use ExUnit.Case, async: true
 
-  alias Chip8.Font
-  alias Chip8.Instruction
-  alias Chip8.Memory
   alias Chip8.Runtime
+  alias Chip8.Runtime.Font
+  alias Chip8.Runtime.Instruction
+  alias Chip8.Runtime.Memory
 
   @instruction_size Instruction.byte_size()
 
