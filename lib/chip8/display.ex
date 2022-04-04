@@ -68,4 +68,9 @@ defmodule Chip8.Display do
     |> Enum.zip(after_pixels)
     |> Enum.any?(fn {before_pixel, after_pixel} -> before_pixel > after_pixel end)
   end
+
+  @spec create_sprite(list(byte())) :: Sprite.t()
+  def create_sprite(data) when is_list(data) do
+    Sprite.new(data)
+  end
 end

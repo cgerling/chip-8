@@ -208,4 +208,12 @@ defmodule Chip8.DisplayTest do
       refute has_collision?
     end
   end
+
+  describe "create_sprite/1" do
+    test "should return a sprite struct" do
+      sprite = Sprite.new([])
+
+      assert %Sprite{} = sprite
+    end
+  end
 end
