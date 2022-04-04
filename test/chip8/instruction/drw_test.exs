@@ -2,7 +2,6 @@ defmodule Chip8.Instruction.DRWTest do
   use ExUnit.Case, async: true
 
   alias Chip8.Display
-  alias Chip8.Display.Sprite
   alias Chip8.Instruction.Argument.Nibble
   alias Chip8.Instruction.Argument.Register
   alias Chip8.Instruction.DRW
@@ -49,7 +48,7 @@ defmodule Chip8.Instruction.DRWTest do
       sprite_data = [0x1]
       memory = Memory.write(runtime.memory, i, sprite_data)
       runtime = put_in(runtime.memory, memory)
-      sprite = Sprite.new(sprite_data)
+      sprite = Display.create_sprite(sprite_data)
       display = Display.draw(runtime.display, {0, 0}, sprite)
       runtime = put_in(runtime.display, display)
 

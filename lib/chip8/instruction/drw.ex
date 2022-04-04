@@ -4,7 +4,6 @@ defmodule Chip8.Instruction.DRW do
   use Chip8.Instruction
 
   alias Chip8.Display
-  alias Chip8.Display.Sprite
   alias Chip8.Instruction.Argument.Nibble
   alias Chip8.Instruction.Argument.Register
   alias Chip8.Memory
@@ -16,7 +15,7 @@ defmodule Chip8.Instruction.DRW do
     sprite =
       runtime.memory
       |> Memory.read(runtime.i, nibble.value)
-      |> Sprite.new()
+      |> Display.create_sprite()
 
     coordinates = Display.get_coordinates(runtime.display, runtime.v[x.value], runtime.v[y.value])
 
