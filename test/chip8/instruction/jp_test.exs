@@ -38,7 +38,7 @@ defmodule Chip8.Instruction.JPTest do
       runtime = put_in(runtime.v, v_registers)
 
       v0 = Register.v(0x0)
-      address = %Address{value: :rand.uniform(0xFFF)}
+      address = %Address{value: :rand.uniform(0xFFF) - register_value}
       arguments = {v0, address}
       executed_runtime = JP.execute(runtime, arguments)
 
