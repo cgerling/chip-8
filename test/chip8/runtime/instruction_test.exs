@@ -57,6 +57,12 @@ defmodule Chip8.Runtime.InstructionTest do
       assert is_atom(instruction.module)
       assert is_tuple(instruction.arguments)
     end
+
+    test "should return an unknown instruction when the given bytes do not match any instruction" do
+      bytes = [0xFF, 0xFF]
+
+      assert {:error, :unknown_instruction} = Instruction.decode(bytes)
+    end
   end
 
   describe "execute/2" do

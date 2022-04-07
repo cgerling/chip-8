@@ -323,6 +323,12 @@ defmodule Chip8.Runtime.Instruction.DecoderTest do
       assert Instruction.LD == instruction.module
       assert {Register.v(0xF), Register.memory()} == instruction.arguments
     end
+
+    test "should return an unknown instruction error when the given bytes are not compatible with any existing instruction" do
+      bytes = build_instruction_bytes(0xFFFF)
+
+      assert {:error, :unknown_instruction} = Decoder.decode(bytes)
+    end
   end
 
   defp build_instruction_bytes(instruction) when is_integer(instruction) and instruction > 0 do

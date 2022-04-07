@@ -129,19 +129,28 @@ defmodule Chip8.RuntimeTest do
       memory = Memory.write(runtime.memory, runtime.pc, jp_bytes)
       runtime = put_in(runtime.memory, memory)
 
-      runned_runtime = Runtime.run_cycle(runtime)
+      assert {:ok, runned_runtime = %Runtime{}} = Runtime.run_cycle(runtime)
 
-      assert %Runtime{} = runned_runtime
       assert 0xBF0 == runned_runtime.pc
     end
 
     test "should return a runtime struct with pc set to the next instruction address" do
       runtime = Runtime.new()
 
+      assert {:ok, runned_runtime = %Runtime{}} = Runtime.run_cycle(runtime)
+
+      assert runtime.pc + @instruction_size == runned_runtime.pc
+    end
+
+    test "should return an error when the current instruction is invalid" do
+      runtime = Runtime.new()
+      invalid_bytes = [0xFF, 0xFF]
+      memory = Memory.write(runtime.memory, runtime.pc, invalid_bytes)
+      runtime = put_in(runtime.memory, memory)
+
       runned_runtime = Runtime.run_cycle(runtime)
 
-      assert %Runtime{} = runned_runtime
-      assert runtime.pc + @instruction_size == runned_runtime.pc
+      assert {:error, :unknown_instruction} == runned_runtime
     end
   end
 end
