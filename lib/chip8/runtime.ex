@@ -87,8 +87,8 @@ defmodule Chip8.Runtime do
     %{runtime | memory: memory}
   end
 
-  @spec run_cycle(t()) :: {:ok, t()} | {:error, atom()}
-  def run_cycle(%__MODULE__{} = runtime) do
+  @spec cycle(t()) :: {:ok, t()} | {:error, atom()}
+  def cycle(%__MODULE__{} = runtime) do
     data = Memory.read(runtime.memory, runtime.pc, @instruction_size)
 
     with {:ok, %Instruction{} = instruction} <- Instruction.decode(data) do
