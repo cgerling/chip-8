@@ -89,7 +89,7 @@ defmodule Chip8.Runtime do
 
   @spec run_cycle(t()) :: t()
   def run_cycle(%__MODULE__{} = runtime) do
-    instruction =
+    {:ok, instruction = %Instruction{}} =
       runtime.memory
       |> Memory.read(runtime.pc, @instruction_size)
       |> Instruction.decode()

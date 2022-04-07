@@ -9,12 +9,15 @@ defmodule Chip8.Runtime.Instruction.Decoder do
   alias Chip8.Runtime.Instruction.Argument.Register
   alias Chip8.Runtime.Memory
 
-  @spec decode(Memory.data()) :: Instruction.t()
+  @spec decode(Memory.data()) :: {:ok, Instruction.t()}
   def decode([byte1, byte2] = data)
       when is_integer(byte1) and is_integer(byte2) and byte1 in 0x00..0xFF and byte2 in 0x00..0xFF do
-    data
-    |> parse_data()
-    |> decode_data()
+    instruction =
+      data
+      |> parse_data()
+      |> decode_data()
+
+    {:ok, instruction}
   end
 
   defp parse_data([_, _] = data) do
