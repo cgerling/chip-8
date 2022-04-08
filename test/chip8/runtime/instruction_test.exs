@@ -52,11 +52,16 @@ defmodule Chip8.Runtime.InstructionTest do
     test "should return a instruction struct" do
       bytes = [0x00, 0x0F]
 
-      instruction = Instruction.decode(bytes)
+      assert {:ok, instruction = %Instruction{}} = Instruction.decode(bytes)
 
-      assert %Instruction{} = instruction
       assert is_atom(instruction.module)
       assert is_tuple(instruction.arguments)
+    end
+
+    test "should return an unknown instruction when the given bytes do not match any instruction" do
+      bytes = [0xFF, 0xFF]
+
+      assert {:error, :unknown_instruction} = Instruction.decode(bytes)
     end
   end
 

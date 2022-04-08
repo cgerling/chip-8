@@ -9,12 +9,16 @@ defmodule Chip8.Runtime.Instruction.Decoder do
   alias Chip8.Runtime.Instruction.Argument.Register
   alias Chip8.Runtime.Memory
 
-  @spec decode(Memory.data()) :: Instruction.t()
+  @spec decode(Memory.data()) :: {:ok, Instruction.t()} | {:error, atom()}
   def decode([byte1, byte2] = data)
       when is_integer(byte1) and is_integer(byte2) and byte1 in 0x00..0xFF and byte2 in 0x00..0xFF do
     data
     |> parse_data()
     |> decode_data()
+    |> case do
+      instruction = %Instruction{} -> {:ok, instruction}
+      error when is_atom(error) -> {:error, error}
+    end
   end
 
   defp parse_data([_, _] = data) do
@@ -257,5 +261,9 @@ defmodule Chip8.Runtime.Instruction.Decoder do
     memory = Register.memory()
 
     Instruction.LD.new({vx, memory})
+  end
+
+  defp decode_data(_) do
+    :unknown_instruction
   end
 end
