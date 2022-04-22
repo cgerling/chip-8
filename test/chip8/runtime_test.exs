@@ -132,7 +132,7 @@ defmodule Chip8.RuntimeTest do
 
       assert {:ok, cycled_runtime = %Runtime{}} = Runtime.cycle(runtime)
 
-      assert 0xBF0 == cycled_runtime.pc
+      assert cycled_runtime.pc == 0xBF0
     end
 
     test "should return a runtime struct with pc set to the next instruction address" do
@@ -140,7 +140,7 @@ defmodule Chip8.RuntimeTest do
 
       assert {:ok, cycled_runtime = %Runtime{}} = Runtime.cycle(runtime)
 
-      assert runtime.pc + @instruction_size == cycled_runtime.pc
+      assert cycled_runtime.pc == runtime.pc + @instruction_size
     end
 
     test "should return a runtime struct with dt decremented by 1" do
@@ -207,9 +207,7 @@ defmodule Chip8.RuntimeTest do
       memory = Memory.write(runtime.memory, runtime.pc, invalid_bytes)
       runtime = put_in(runtime.memory, memory)
 
-      cycled_runtime = Runtime.cycle(runtime)
-
-      assert {:error, :unknown_instruction} == cycled_runtime
+      assert {:error, :unknown_instruction} == Runtime.cycle(runtime)
     end
   end
 end
