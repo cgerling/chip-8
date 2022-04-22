@@ -7,22 +7,21 @@ defmodule Chip8.Runtime do
   alias Chip8.Runtime.Keyboard
   alias Chip8.Runtime.Memory
   alias Chip8.Runtime.Stack
+  alias Chip8.Runtime.Timer
   alias Chip8.Runtime.VRegisters
   alias Chip8.UInt
 
   @enforce_keys [:display, :dt, :i, :keyboard, :memory, :pc, :st, :stack, :v]
   defstruct @enforce_keys
 
-  @type timer :: non_neg_integer()
-
   @type t :: %__MODULE__{
           display: Display.t(),
-          dt: timer(),
+          dt: Timer.t(),
           i: non_neg_integer(),
           keyboard: Keyboard.t(),
           memory: Memory.t(),
           pc: non_neg_integer(),
-          st: timer(),
+          st: Timer.t(),
           stack: Stack.t(),
           v: VRegisters.t()
         }
@@ -39,20 +38,22 @@ defmodule Chip8.Runtime do
   @spec new() :: t()
   def new do
     display = Display.new(@display_height, @display_width)
+    dt = Timer.new()
     keyboard = Keyboard.new()
     memory = Memory.new(@memory_size)
     pc = @initial_pc
+    st = Timer.new()
     stack = Stack.new()
     v = VRegisters.new()
 
     %__MODULE__{
       display: display,
-      dt: 0,
+      dt: dt,
       i: 0,
       keyboard: keyboard,
       memory: memory,
       pc: pc,
-      st: 0,
+      st: st,
       stack: stack,
       v: v
     }
