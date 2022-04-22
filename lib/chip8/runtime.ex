@@ -99,4 +99,12 @@ defmodule Chip8.Runtime do
       {:ok, executed_runtime}
     end
   end
+
+  @spec tick_timers(t()) :: t()
+  def tick_timers(%__MODULE__{} = runtime) do
+    dt = Timer.tick(runtime.dt)
+    st = Timer.tick(runtime.st)
+
+    %{runtime | dt: dt, st: st}
+  end
 end
