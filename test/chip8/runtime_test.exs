@@ -130,41 +130,28 @@ defmodule Chip8.RuntimeTest do
       memory = Memory.write(runtime.memory, runtime.pc, jp_bytes)
       runtime = put_in(runtime.memory, memory)
 
-      assert {:ok, runned_runtime = %Runtime{}} = Runtime.cycle(runtime)
+      assert {:ok, cycled_runtime = %Runtime{}} = Runtime.cycle(runtime)
 
-      assert 0xBF0 == runned_runtime.pc
+      assert 0xBF0 == cycled_runtime.pc
     end
 
     test "should return a runtime struct with pc set to the next instruction address" do
       runtime = Runtime.new()
 
-      assert {:ok, runned_runtime = %Runtime{}} = Runtime.cycle(runtime)
+      assert {:ok, cycled_runtime = %Runtime{}} = Runtime.cycle(runtime)
 
-      assert runtime.pc + @instruction_size == runned_runtime.pc
+      assert runtime.pc + @instruction_size == cycled_runtime.pc
     end
 
-    test "should return an error when the current instruction is invalid" do
-      runtime = Runtime.new()
-      invalid_bytes = [0xFF, 0xFF]
-      memory = Memory.write(runtime.memory, runtime.pc, invalid_bytes)
-      runtime = put_in(runtime.memory, memory)
-
-      runned_runtime = Runtime.cycle(runtime)
-
-      assert {:error, :unknown_instruction} == runned_runtime
-    end
-  end
-
-  describe "tick_timers/1" do
     test "should return a runtime struct with dt decremented by 1" do
       runtime = Runtime.new()
       dt_value = :rand.uniform(0xFFFF) + 1
       dt = Timer.new(dt_value)
       runtime = put_in(runtime.dt, dt)
 
-      ticked_runtime = Runtime.tick_timers(runtime)
+      assert {:ok, cycled_runtime = %Runtime{}} = Runtime.cycle(runtime)
 
-      assert ticked_runtime.dt == Timer.new(dt_value - 1)
+      assert cycled_runtime.dt == Timer.new(dt_value - 1)
     end
 
     test "should return a runtime struct with st decremented by 1" do
@@ -173,25 +160,25 @@ defmodule Chip8.RuntimeTest do
       st = Timer.new(st_value)
       runtime = put_in(runtime.st, st)
 
-      ticked_runtime = Runtime.tick_timers(runtime)
+      assert {:ok, cycled_runtime = %Runtime{}} = Runtime.cycle(runtime)
 
-      assert ticked_runtime.st == Timer.new(st_value - 1)
+      assert cycled_runtime.st == Timer.new(st_value - 1)
     end
 
     test "should return a runtime struct with dt unchanged when is equals to 0" do
       runtime = Runtime.new()
 
-      ticked_runtime = Runtime.tick_timers(runtime)
+      assert {:ok, cycled_runtime = %Runtime{}} = Runtime.cycle(runtime)
 
-      assert ticked_runtime.dt == runtime.dt
+      assert cycled_runtime.dt == runtime.dt
     end
 
     test "should return a runtime struct with st unchanged when is equals to 0" do
       runtime = Runtime.new()
 
-      ticked_runtime = Runtime.tick_timers(runtime)
+      assert {:ok, cycled_runtime = %Runtime{}} = Runtime.cycle(runtime)
 
-      assert ticked_runtime.st == runtime.st
+      assert cycled_runtime.st == runtime.st
     end
 
     test "should return a runtime struct with dt reseted when is less than 0" do
@@ -199,9 +186,9 @@ defmodule Chip8.RuntimeTest do
       dt = Timer.new(-1)
       runtime = put_in(runtime.dt, dt)
 
-      ticked_runtime = Runtime.tick_timers(runtime)
+      assert {:ok, cycled_runtime = %Runtime{}} = Runtime.cycle(runtime)
 
-      assert ticked_runtime.dt == Timer.new()
+      assert cycled_runtime.dt == Timer.new()
     end
 
     test "should return a runtime struct with st reseted when is less than 0" do
@@ -209,9 +196,20 @@ defmodule Chip8.RuntimeTest do
       st = Timer.new(-1)
       runtime = put_in(runtime.st, st)
 
-      ticked_runtime = Runtime.tick_timers(runtime)
+      assert {:ok, cycled_runtime = %Runtime{}} = Runtime.cycle(runtime)
 
-      assert ticked_runtime.st == Timer.new()
+      assert cycled_runtime.st == Timer.new()
+    end
+
+    test "should return an error when the current instruction is invalid" do
+      runtime = Runtime.new()
+      invalid_bytes = [0xFF, 0xFF]
+      memory = Memory.write(runtime.memory, runtime.pc, invalid_bytes)
+      runtime = put_in(runtime.memory, memory)
+
+      cycled_runtime = Runtime.cycle(runtime)
+
+      assert {:error, :unknown_instruction} == cycled_runtime
     end
   end
 end

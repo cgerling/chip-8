@@ -90,6 +90,12 @@ defmodule Chip8.Runtime do
 
   @spec cycle(t()) :: {:ok, t()} | {:error, atom()}
   def cycle(%__MODULE__{} = runtime) do
+    runtime
+    |> tick_timers()
+    |> run_instruction()
+  end
+
+  defp run_instruction(%__MODULE__{} = runtime) do
     data = Memory.read(runtime.memory, runtime.pc, @instruction_size)
 
     with {:ok, %Instruction{} = instruction} <- Instruction.decode(data) do
@@ -100,8 +106,7 @@ defmodule Chip8.Runtime do
     end
   end
 
-  @spec tick_timers(t()) :: t()
-  def tick_timers(%__MODULE__{} = runtime) do
+  defp tick_timers(%__MODULE__{} = runtime) do
     dt = Timer.tick(runtime.dt)
     st = Timer.tick(runtime.st)
 
