@@ -5,7 +5,7 @@ defmodule Chip8.Runtime.Instruction.CALL do
 
   alias Chip8.Runtime
   alias Chip8.Runtime.Instruction.Argument.Address
-  alias Chip8.Runtime.Stack
+  alias Chip8.Stack
 
   @impl Chip8.Runtime.Instruction
   def execute(%Runtime{} = runtime, {%Address{} = address}) do

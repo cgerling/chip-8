@@ -3,7 +3,7 @@ defmodule Chip8.Runtime.Instruction.RETTest do
 
   alias Chip8.Runtime
   alias Chip8.Runtime.Instruction.RET
-  alias Chip8.Runtime.Stack
+  alias Chip8.Stack
 
   describe "execute/2" do
     test "should return a runtime with pc set to the last item in the stack" do
