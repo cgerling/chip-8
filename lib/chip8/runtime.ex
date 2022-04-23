@@ -6,9 +6,9 @@ defmodule Chip8.Runtime do
   alias Chip8.Runtime.Instruction
   alias Chip8.Runtime.Keyboard
   alias Chip8.Runtime.Memory
-  alias Chip8.Runtime.Stack
   alias Chip8.Runtime.Timer
   alias Chip8.Runtime.VRegisters
+  alias Chip8.Stack
   alias Chip8.UInt
 
   @enforce_keys [:display, :dt, :i, :keyboard, :memory, :pc, :st, :stack, :v]

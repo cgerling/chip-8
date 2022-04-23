@@ -4,7 +4,7 @@ defmodule Chip8.Runtime.Instruction.RET do
   use Chip8.Runtime.Instruction
 
   alias Chip8.Runtime
-  alias Chip8.Runtime.Stack
+  alias Chip8.Stack
 
   @impl Chip8.Runtime.Instruction
   def execute(%Runtime{} = runtime, {}) do

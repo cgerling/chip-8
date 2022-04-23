@@ -1,4 +1,4 @@
-defmodule Chip8.Runtime.Stack do
+defmodule Chip8.Stack do
   @moduledoc false
 
   @enforce_keys [:data, :size]
