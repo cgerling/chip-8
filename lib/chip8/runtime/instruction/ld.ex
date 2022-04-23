@@ -1,5 +1,29 @@
 defmodule Chip8.Runtime.Instruction.LD do
-  @moduledoc false
+  @moduledoc """
+  Loads a value into memory, registers, or timers.
+
+  Most of the addressing variations simply loads the value of the second
+  operand into the first operand but some posses a special behavior and allow
+  to interact with components that are not accessible through registers or
+  that perform calculations before saving the data, see "Pseudo-registers"
+  section at `Chip8.Runtime.Instruction.Argument.Register` for more information.
+
+  ## Variants
+
+  Opcode  | Mnemonic              | Description
+  :---:   | :---                  | :---
+  `6xkk`  | `LD Vx, byte`         | Set `Vx = byte`.
+  `8xy0`  | `LD Vx, Vy`           | Set `Vx = Vy`.
+  `Annn`  | `LD I, address`       | Set `I = address`.
+  `Fx07`  | `LD Vx, DT`           | Set `Vx = DT`.
+  `Fx0A`  | `LD Vx, KEY`          | Wait for a keypress and set `Vx = KEY`.
+  `Fx15`  | `LD DT, Vx`           | Set `DT = Vx`.
+  `Fx18`  | `LD ST, Vx`           | Set `ST = Vx`.
+  `Fx29`  | `LD FONT, Vx`         | Set `I = font character addres at Vx`.
+  `Fx33`  | `LD BCD, Vx`          | Write a binary-coded decimal representation of `Vx` in memory location `I`, `I + 1`, and `I + 2`.
+  `Fx55`  | `LD I, Vx`            | Write the value of registers `V0` through `Vx` in memory, starting at location `I`.
+  `Fx65`  | `LD Vx, I`            | Write to registers `V0` through `Vx` from memory, starting at location `I`.
+  """
 
   use Chip8.Runtime.Instruction
 
