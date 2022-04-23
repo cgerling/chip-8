@@ -1,5 +1,22 @@
 defmodule Chip8.Runtime.Instruction.DRW do
-  @moduledoc false
+  @moduledoc """
+  Render sprites into the display.
+
+  The sprite bytes are XORed against the corresponding bytes in the display,
+  when a sprite is positioned in a way that part of it is located outside of
+  the display coordinates, only the part considered inside of the display is
+  rendered.
+
+  A _collision_ flag is also returned and its value depends on the previous
+  content of the display, if one or more pixels were erased during the current
+  render call the collision flag is set to 1, and 0 otherwise.
+
+  ## Variants
+
+  Opcode  | Mnemonic              | Description
+  :---:   | :---                  | :---
+  `Dxyn`  | `DRW Vx, Vy, nibble`  | Display a n-byte sprite, stored on memory starting at location `I`, in the coordinates `(Vx, Vy)` and set `VF = collision`.
+  """
 
   use Chip8.Runtime.Instruction
 
