@@ -1,5 +1,15 @@
 defmodule Chip8.Runtime.Instruction.SHL do
-  @moduledoc false
+  @moduledoc """
+  Calculates the result of an arithmetic _left bitshift_.
+
+  The result of this operation is stored in the first operand.
+
+  ## Variants
+
+  Opcode  | Mnemonic              | Description
+  :---:   | :---                  | :---
+  `8xyE`  | `SHL Vx {, Vy}`       | Set `Vx = Vx SHL 1` and `VF = Vx most-significant bit`.
+  """
 
   use Chip8.Runtime.Instruction
 
