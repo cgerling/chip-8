@@ -1,5 +1,22 @@
 defmodule Chip8.Runtime.Instruction.ADD do
-  @moduledoc false
+  @moduledoc """
+  Adds the first operand with the second operand.
+
+  This operation always returns an 8-bit number, that is stored in the first
+  operand. When an _overflow happens, the result is always wrapped to fit into
+  the specified size.
+
+  In some variants a _carry_ bit is also returned, when an _overflow_ happens
+  the carry bit will be `1`, and `0` otherwise.
+
+  ## Variants
+
+  Opcode  | Mnemonic              | Description
+  :---:   | :---                  | :---
+  `7xkk`  | `ADD Vx, byte`        | Set `Vx = Vx + byte`.
+  `8xy4`  | `ADD Vx, Vy`          | Set `Vx = Vx + Vy` and `VF = carry`.
+  `Fx1E`  | `ADD I, Vx`           | Set `I = I + Vx`.
+  """
 
   use Chip8.Runtime.Instruction
 
