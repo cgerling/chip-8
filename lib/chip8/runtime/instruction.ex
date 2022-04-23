@@ -7,6 +7,7 @@ defmodule Chip8.Runtime.Instruction do
   alias Chip8.Runtime.Instruction.Argument.Nibble
   alias Chip8.Runtime.Instruction.Argument.Register
   alias Chip8.Runtime.Instruction.Decoder
+  alias Chip8.Runtime.Memory
 
   @type arguments ::
           {}
@@ -51,7 +52,8 @@ defmodule Chip8.Runtime.Instruction do
     }
   end
 
-  defdelegate decode(data), to: Decoder
+  @spec decode(Memory.data()) :: {:ok, t()} | {:error, atom()}
+  def decode(data), do: Decoder.decode(data)
 
   @spec execute(t(), Runtime.t()) :: Runtime.t()
   def execute(%__MODULE__{} = instruction, %Runtime{} = runtime) do
