@@ -1,5 +1,13 @@
 defmodule Chip8.Runtime.Instruction.CLS do
-  @moduledoc false
+  @moduledoc """
+  Clear the display's contents.
+
+  ## Variants
+
+  Opcode  | Mnemonic              | Description
+  :---:   | :---                  | :---
+  `00E0`  | `CLS`                 | Clear the display's contents.
+  """
 
   use Chip8.Runtime.Instruction
 
