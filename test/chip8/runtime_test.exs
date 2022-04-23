@@ -5,6 +5,7 @@ defmodule Chip8.RuntimeTest do
   alias Chip8.Runtime.Font
   alias Chip8.Runtime.Instruction
   alias Chip8.Runtime.Memory
+  alias Chip8.Runtime.Timer
 
   @instruction_size Instruction.byte_size()
 
@@ -129,17 +130,75 @@ defmodule Chip8.RuntimeTest do
       memory = Memory.write(runtime.memory, runtime.pc, jp_bytes)
       runtime = put_in(runtime.memory, memory)
 
-      assert {:ok, runned_runtime = %Runtime{}} = Runtime.cycle(runtime)
+      assert {:ok, cycled_runtime = %Runtime{}} = Runtime.cycle(runtime)
 
-      assert 0xBF0 == runned_runtime.pc
+      assert cycled_runtime.pc == 0xBF0
     end
 
     test "should return a runtime struct with pc set to the next instruction address" do
       runtime = Runtime.new()
 
-      assert {:ok, runned_runtime = %Runtime{}} = Runtime.cycle(runtime)
+      assert {:ok, cycled_runtime = %Runtime{}} = Runtime.cycle(runtime)
 
-      assert runtime.pc + @instruction_size == runned_runtime.pc
+      assert cycled_runtime.pc == runtime.pc + @instruction_size
+    end
+
+    test "should return a runtime struct with dt decremented by 1" do
+      runtime = Runtime.new()
+      dt_value = :rand.uniform(0xFFFF) + 1
+      dt = Timer.new(dt_value)
+      runtime = put_in(runtime.dt, dt)
+
+      assert {:ok, cycled_runtime = %Runtime{}} = Runtime.cycle(runtime)
+
+      assert cycled_runtime.dt == Timer.new(dt_value - 1)
+    end
+
+    test "should return a runtime struct with st decremented by 1" do
+      runtime = Runtime.new()
+      st_value = :rand.uniform(0xFFFF) + 1
+      st = Timer.new(st_value)
+      runtime = put_in(runtime.st, st)
+
+      assert {:ok, cycled_runtime = %Runtime{}} = Runtime.cycle(runtime)
+
+      assert cycled_runtime.st == Timer.new(st_value - 1)
+    end
+
+    test "should return a runtime struct with dt unchanged when is equals to 0" do
+      runtime = Runtime.new()
+
+      assert {:ok, cycled_runtime = %Runtime{}} = Runtime.cycle(runtime)
+
+      assert cycled_runtime.dt == runtime.dt
+    end
+
+    test "should return a runtime struct with st unchanged when is equals to 0" do
+      runtime = Runtime.new()
+
+      assert {:ok, cycled_runtime = %Runtime{}} = Runtime.cycle(runtime)
+
+      assert cycled_runtime.st == runtime.st
+    end
+
+    test "should return a runtime struct with dt reseted when is less than 0" do
+      runtime = Runtime.new()
+      dt = Timer.new(-1)
+      runtime = put_in(runtime.dt, dt)
+
+      assert {:ok, cycled_runtime = %Runtime{}} = Runtime.cycle(runtime)
+
+      assert cycled_runtime.dt == Timer.new()
+    end
+
+    test "should return a runtime struct with st reseted when is less than 0" do
+      runtime = Runtime.new()
+      st = Timer.new(-1)
+      runtime = put_in(runtime.st, st)
+
+      assert {:ok, cycled_runtime = %Runtime{}} = Runtime.cycle(runtime)
+
+      assert cycled_runtime.st == Timer.new()
     end
 
     test "should return an error when the current instruction is invalid" do
@@ -148,9 +207,7 @@ defmodule Chip8.RuntimeTest do
       memory = Memory.write(runtime.memory, runtime.pc, invalid_bytes)
       runtime = put_in(runtime.memory, memory)
 
-      runned_runtime = Runtime.cycle(runtime)
-
-      assert {:error, :unknown_instruction} == runned_runtime
+      assert {:error, :unknown_instruction} == Runtime.cycle(runtime)
     end
   end
 end
