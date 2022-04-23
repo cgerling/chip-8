@@ -1,5 +1,14 @@
 defmodule Chip8.Runtime.Instruction.JP do
-  @moduledoc false
+  @moduledoc """
+  Jump to a memory address.
+
+  ## Variants
+
+  Opcode  | Mnemonic              | Description
+  :---:   | :---                  | :---
+  `1nnn`  | `JP address`          | Set `pc = address`.
+  `Bnnn`  | `JP V0, address`      | Set `pc = V0 + address`.
+  """
 
   use Chip8.Runtime.Instruction
 
