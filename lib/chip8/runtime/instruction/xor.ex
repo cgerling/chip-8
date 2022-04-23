@@ -1,5 +1,17 @@
 defmodule Chip8.Runtime.Instruction.XOR do
-  @moduledoc false
+  @moduledoc """
+  Calculates the _bitwise XOR_ between two operands.
+
+  The result of this operation is saved in the first operand.
+  An _exclusive OR_ compares the corresponding bits of the values, when neither of
+  the bits are the same it results in a 1, and 0 otherwise.
+
+  ## Variants
+
+  Opcode  | Mnemonic              | Description
+  :---:   | :---                  | :---
+  `8xy3`  | `XOR Vx, Vy`          | Set `Vx = Vx XOR Vy`.
+  """
 
   use Chip8.Runtime.Instruction
 
