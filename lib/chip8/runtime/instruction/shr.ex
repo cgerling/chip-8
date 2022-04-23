@@ -1,5 +1,15 @@
 defmodule Chip8.Runtime.Instruction.SHR do
-  @moduledoc false
+  @moduledoc """
+  Calculates the result of an arithmetic _right bitshift_.
+
+  The result of this operation is saved in the first operand.
+
+  ## Variants
+
+  Opcode  | Mnemonic              | Description
+  :---:   | :---                  | :---
+  `8xy6`  | `SHR Vx {, Vy}`       | Set `Vx = Vx SHR 1` and `VF = Vx least-significant bit`.
+  """
 
   use Chip8.Runtime.Instruction
 
