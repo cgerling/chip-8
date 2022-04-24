@@ -1,5 +1,7 @@
 defmodule Chip8.Runtime.Instruction.Argument.Address do
-  @moduledoc false
+  @moduledoc """
+  A 12-bit integer value representing a memory address location.
+  """
 
   alias Chip8.Hex
 

@@ -1,5 +1,19 @@
 defmodule Chip8.Runtime.Instruction.Argument.Register do
-  @moduledoc false
+  @moduledoc """
+  A 4-bit integer value representing a data register or a label for one of the _pseudo-registers_.
+
+  ## Pseudo-registers
+
+  Name        | Description
+  :---:       | :---
+  `bcd`       | binary-coded decimal, it represents a computation rather than an actual value.
+  `dt`        | delay timer, see `Chip8.Runtime` for more information.
+  `font`      | represents the built-in font.
+  `i`         | register `I` of the interpreter, see `Chip8.Runtime` for more information.
+  `keyboard`  | reads the keyboard and reports key events, see `Chip8.Runtime.Keyboard` for more information.
+  `memory`    | access to the memory space, see `Chip8.Runtime` for more information.
+  `st`        | sound timer, see `Chip8.Runtime` for more information.
+  """
 
   @enforce_keys [:value]
   defstruct @enforce_keys

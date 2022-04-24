@@ -1,5 +1,7 @@
 defmodule Chip8.Runtime.Instruction.Argument.Byte do
-  @moduledoc false
+  @moduledoc """
+  An 8-bit integer literal value.
+  """
 
   alias Chip8.Hex
 

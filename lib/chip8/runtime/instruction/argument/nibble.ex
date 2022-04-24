@@ -1,5 +1,7 @@
 defmodule Chip8.Runtime.Instruction.Argument.Nibble do
-  @moduledoc false
+  @moduledoc """
+  A 4-bit integer literal value.
+  """
 
   @enforce_keys [:value]
   defstruct @enforce_keys

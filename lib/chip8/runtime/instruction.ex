@@ -1,5 +1,42 @@
 defmodule Chip8.Runtime.Instruction do
-  @moduledoc false
+  @moduledoc """
+  Module to interact with interpreter's _opcodes_.
+
+  The interpreter's instruction set includes 36 instructions, that allow
+  programs to perform operations of arithmetic, control flow, data manipulation,
+  graphics, and logical. 
+
+  All instructions are `2 bytes` long and are stored in a **big-endian** format. 
+  In memory, the interpreter assumes that all instructions should start at an
+  even address, and needs to be taken into account when adding
+  sprite data, see `Chip8.Runtime.Display.Sprite` for more information.
+
+
+  ## Instruction Definition
+  Instructions are grouped in modules that represent their operation and
+  share the same mnemonic, making different _opcodes_ as simple variants. 
+  Inside each module, there is a table describing all variants supported
+  by the module, each variant specify its _opcode_ and the effects applied
+  into the interpreter once it is invoked.
+
+  Since each variant supports a different type of value as operands 
+  (i.e. arguments), the notation below is used to compactly describe the use
+  of each part inside the _opcode_:
+  * `nnn` or `address` - A 12-bit integer value, representing an memory address
+  * `n` or `nibble` - A 4-bit integer value, representing a literal number
+  * `kk` or `byte` - An 8-bit integer value, representing a literal number
+  * `x` or `Vx` - A 4-bit integer value, representing one of the 16 variable registers
+  * `y` or `Vy` - A 4-bit integer value, representing one of the 16 variable registers
+
+  ## Decode
+  When decoding an instruction, the given `2 bytes` list is transformed into a 
+  `t:Chip8.Runtime.Instruction.t/0`, containing the module that supports the
+  given _opcode_ as one of its variants and the arguments, that were also
+  parsed into its equivalent struct i.e. an `nnn` address is transformed into a 
+  `t:Chip8.Runtime.Instruction.Argument.Address.t/0`.
+
+  In case an unknown segment of _bytes_ is informed, an error tuple is returned.
+  """
 
   alias Chip8.Runtime
   alias Chip8.Runtime.Instruction.Argument.Address
