@@ -1,5 +1,7 @@
 defmodule Chip8.Stack do
-  @moduledoc false
+  @moduledoc """
+  A simple **Last In First Out** queue.
+  """
 
   @enforce_keys [:data, :size]
   defstruct @enforce_keys
