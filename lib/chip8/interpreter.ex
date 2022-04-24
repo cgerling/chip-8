@@ -71,6 +71,7 @@ defmodule Chip8.Interpreter do
   @character_size Font.character_byte_size()
 
   @default_cycle_rate 10
+  @default_i 0x0
 
   @spec initialize(bitstring()) :: t()
   def initialize(program) when is_bitstring(program) do
@@ -86,6 +87,7 @@ defmodule Chip8.Interpreter do
     cycle_rate = @default_cycle_rate
     display = Display.new(@display_height, @display_width)
     dt = Timer.new()
+    i = @default_i
     keyboard = Keyboard.new()
     memory = Memory.new(@memory_size)
     pc = @initial_pc
@@ -97,7 +99,7 @@ defmodule Chip8.Interpreter do
       cycle_rate: cycle_rate,
       display: display,
       dt: dt,
-      i: 0,
+      i: i,
       keyboard: keyboard,
       memory: memory,
       pc: pc,
