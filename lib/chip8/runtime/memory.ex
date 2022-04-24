@@ -1,5 +1,15 @@
 defmodule Chip8.Runtime.Memory do
-  @moduledoc false
+  @moduledoc """
+  Memory space available for programs to store and manipulate data.
+
+  The Chip-8 interpreter has a total of `4Kb` (4096 bytes) of memory space,
+  that is accessible from address `0x000` (`0`) to `0xFFF` (`4095`). 
+
+  Originally, the interpreter implementation shared the same memory space
+  of programs and occupied the sector between `0x000` (`0`) and `0x1FF` 
+  (`511`), for this reason, programs should not use the interpreter space
+  so they usually start at location `0x200` (`512`).
+  """
 
   @enforce_keys [:data, :size]
   defstruct @enforce_keys

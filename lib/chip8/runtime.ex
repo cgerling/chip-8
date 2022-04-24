@@ -1,5 +1,37 @@
 defmodule Chip8.Runtime do
-  @moduledoc false
+  @moduledoc """
+  An interpreter for the Chip-8 language.
+
+  The interpreter uses the following components to run a program:
+
+  Display             | A monochrome display used to render graphics. See `Chip8.Runtime.Display` for more information.
+  Memory              | A memory space of `4Kb` used to store programs and data. See `Chip8.Runtime.Memory` for more information.
+  Delay Timer         | A timer used to coordinate events within a program, usually referred to as _dt_. See `Chip8.Runtime.Timer` for more information.
+  Sound Timer         | A timer used to emit a monotone sound while it's active, usually referred to as _st_. See `Chip8.Runtime.Timer` for more information.
+  Stack               | A stack to store and retrieve memory addresses when calling and returning from subroutines.
+  Program Counter     | A 16-bit integer that points to the memory address of the current instruction, and is usually referred to as _pc_.
+  I                   | A 16-bit register used to point to memory locations, usually to render sprites.
+  Variable Registers  | 16 8-bit registers to store and retrieve variable data. See `Chip8.Runtime.VRegisters` for more information.
+
+  Note that some of the components above are only accessible to programs
+  through specific instructions (e.g. display and memory components) and some
+  are not accessible at all (i.e. program counter).
+
+  ## Cycle
+
+  At each cycle, the interpreter performs the same sequence of steps until the
+  the program reaches its end:
+
+  1. **Fetch** `2 bytes` of memory from the address that _pc_ is pointing at;
+  1. **Decode** the fetched bytes into an _opcode_ with its operands;
+  1. **Execute** the _opcode_ by updating the interpreter state based on
+  the _opcode_ specification.
+
+  All programs are executed through this simple routine, so to
+  prevent the interpreter to stop running they create an infinite loop
+  (either a direct or indirect one) and keep executing until the user
+  quits the application.
+  """
 
   alias Chip8.Runtime.Display
   alias Chip8.Runtime.Font

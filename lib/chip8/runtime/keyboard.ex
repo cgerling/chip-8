@@ -1,5 +1,10 @@
 defmodule Chip8.Runtime.Keyboard do
-  @moduledoc false
+  @moduledoc """
+  A keyboard input device.
+
+  Users can interact with programs through a hexadecimal keypad that was
+  present in the original Chip-8 computer.
+  """
 
   @enforce_keys [:keys]
   defstruct @enforce_keys
