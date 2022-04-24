@@ -45,10 +45,11 @@ defmodule Chip8.Interpreter do
 
   require Keyboard
 
-  @enforce_keys [:display, :dt, :i, :keyboard, :memory, :pc, :st, :stack, :v]
+  @enforce_keys [:cycle_rate, :display, :dt, :i, :keyboard, :memory, :pc, :st, :stack, :v]
   defstruct @enforce_keys
 
   @type t :: %__MODULE__{
+          cycle_rate: pos_integer(),
           display: Display.t(),
           dt: Timer.t(),
           i: non_neg_integer(),
@@ -69,6 +70,8 @@ defmodule Chip8.Interpreter do
   @font_address 0x050
   @character_size Font.character_byte_size()
 
+  @default_cycle_rate 10
+
   @spec initialize(bitstring()) :: t()
   def initialize(program) when is_bitstring(program) do
     font = Font.data()
@@ -80,6 +83,7 @@ defmodule Chip8.Interpreter do
 
   @spec new() :: t()
   def new do
+    cycle_rate = @default_cycle_rate
     display = Display.new(@display_height, @display_width)
     dt = Timer.new()
     keyboard = Keyboard.new()
@@ -90,6 +94,7 @@ defmodule Chip8.Interpreter do
     v = VRegisters.new()
 
     %__MODULE__{
+      cycle_rate: cycle_rate,
       display: display,
       dt: dt,
       i: 0,
