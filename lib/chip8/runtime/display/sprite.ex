@@ -1,5 +1,17 @@
 defmodule Chip8.Runtime.Display.Sprite do
-  @moduledoc false
+  @moduledoc """
+  Group of bytes representing the binary structure of an image.
+
+  Sprites may be up to `15 bytes`, making it possible to have a maximum
+  dimension of `8x15` pixels (8 pixels wide and 15 pixels high). 
+  When a sprite _heigth_ is an odd number, the sprite should be padded in
+  order to become an even number to not interfere with the instructions
+  location pattern, see `Chip8.Runtime.Instruction` for more information.
+
+  Sprites are also used to represent the hexadecimal characters of the
+  built-in font, in this case, the sprites will be 5 pixels wide, see
+  `Chip8.Runtime.Font` for more information.
+  """
 
   @enforce_keys [:data]
   defstruct @enforce_keys

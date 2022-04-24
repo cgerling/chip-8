@@ -1,5 +1,13 @@
 defmodule Chip8.Runtime.Display do
-  @moduledoc false
+  @moduledoc """
+  A monochrome display device.
+
+  The monochrome display has a resolution of `64x32` pixels (64 pixels wide and
+  32 pixels high), programs can render graphics on it through the use of 
+  sprites (see `Chip8.Runtime.Display.Sprite`) and coordinates.
+  The _origin_ point of the display is located at the top-left corner, with the
+  coordinates `(0, 0)`.
+  """
 
   alias Chip8.Runtime.Display.Sprite
 
