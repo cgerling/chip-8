@@ -1,5 +1,20 @@
 defmodule Chip8.Runtime.Instruction.SUB do
-  @moduledoc false
+  @moduledoc """
+  Subtracts the first operand with the second operand.
+
+  This operation always returns an 8-bit number, that is stored in the first
+  operand. When an _underflow_ happens, the result is always wrapped to fit into
+  the specified size.
+
+  In some variants a _borrow_ bit is also returned, when an _underflow_ happens
+  the borrow bit will be `1`, and `0` otherwise.
+
+  ## Variants
+
+  Opcode  | Mnemonic              | Description
+  :---:   | :---                  | :---
+  `8xy5`  | `SUB Vx, Vy`          | Set `Vx = Vx - Vy` and `VF = NOT borrow`.
+  """
 
   use Chip8.Runtime.Instruction
 

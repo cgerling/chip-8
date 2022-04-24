@@ -1,5 +1,15 @@
 defmodule Chip8.Runtime.VRegisters do
-  @moduledoc false
+  @moduledoc """
+  General purpose _variable_ registers.
+
+  Registers are numbered from `0` to `F` and have a size of 8 bits.
+  They are usually refered as V registers through the notation `Vx`, where
+  `x` is a hexadecimal number.
+
+  Some instructions use `VF` as a flag register, setting it to either `0` or
+  `1` depending of the operation, for this reason most programs tend to avoid
+  relying on this register to store data.
+  """
 
   @behaviour Access
 

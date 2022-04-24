@@ -1,5 +1,17 @@
 defmodule Chip8.Runtime.Instruction.AND do
-  @moduledoc false
+  @moduledoc """
+  Calculates the _bitwise AND_ between two operands.
+
+  The result of this operation is saved into the first operand.
+  A _bitwise AND_ compares the corresponding bits of the values, when both of
+  the bits are 1 it results in a 1, and 0 otherwise.
+
+  ## Variants
+
+  Opcode  | Mnemonic              | Description
+  :---:   | :---                  | :---
+  `8xy2`  | `ADD Vx, Vy`          | Set `Vx = Vy AND Vy`.
+  """
 
   use Chip8.Runtime.Instruction
 

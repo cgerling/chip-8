@@ -1,5 +1,15 @@
 defmodule Chip8.Runtime.Instruction.RET do
-  @moduledoc false
+  @moduledoc """
+  Return from a subroutine.
+
+  In case there is not a subroutine to return from, nothing is done.
+
+  ## Variants
+
+  Opcode  | Mnemonic              | Description
+  :---:   | :---                  | :---
+  `00EE`  | `RET`                 | Set `pc = address at the top of the stack`.
+  """
 
   use Chip8.Runtime.Instruction
 

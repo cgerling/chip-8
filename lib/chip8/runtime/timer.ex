@@ -1,5 +1,14 @@
 defmodule Chip8.Runtime.Timer do
-  @moduledoc false
+  @moduledoc """
+  A timer is an 8-bit integer that decrements at a specific rate.
+
+  While a program is running, a timer can present two different states, 
+  **active** and **inactive**.
+  A timer is considered **active** whenever its value is above `0`, while it is
+  in this state, the value is decremented on steps of `1` at a rate of `60Hz`,
+  once the timer reaches `0` it is considered **inactive** and stops
+  decrementing itself.
+  """
 
   @enforce_keys [:value]
   defstruct @enforce_keys

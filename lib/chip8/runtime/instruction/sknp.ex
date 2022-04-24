@@ -1,5 +1,13 @@
 defmodule Chip8.Runtime.Instruction.SKNP do
-  @moduledoc false
+  @moduledoc """
+  Skip the next instruction when a specific key is not pressed.
+
+  ## Variants
+
+  Opcode  | Mnemonic              | Description
+  :---:   | :---                  | :---
+  `ExA1`  | `SKNP Vx`             | Skip the next instruction if the key with the value of `Vx` is not pressed.
+  """
 
   use Chip8.Runtime.Instruction
 

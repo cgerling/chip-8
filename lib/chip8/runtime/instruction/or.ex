@@ -1,5 +1,17 @@
 defmodule Chip8.Runtime.Instruction.OR do
-  @moduledoc false
+  @moduledoc """
+  Calculates the _bitwise OR_ between two operands.
+
+  The result of this operation is stored in the first operand.
+  A _bitwise OR_ compares the corresponding bits of the values, when either of
+  the bits is 1 it results in a 1, and 0 otherwise.
+
+  ## Variants
+
+  Opcode  | Mnemonic              | Description
+  :---:   | :---                  | :---
+  `8xy1`  | `OR Vx, Vy`           | Set `Vx = Vx OR Vy`.
+  """
 
   use Chip8.Runtime.Instruction
 

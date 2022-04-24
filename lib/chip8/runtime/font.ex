@@ -1,5 +1,7 @@
 defmodule Chip8.Runtime.Font do
-  @moduledoc false
+  @moduledoc """
+  Interpreter's built-in font sprites.
+  """
 
   @char_0 [0xF0, 0x90, 0x90, 0x90, 0xF0]
   @char_1 [0x20, 0x60, 0x20, 0x20, 0x70]

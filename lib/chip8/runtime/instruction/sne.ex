@@ -1,5 +1,14 @@
 defmodule Chip8.Runtime.Instruction.SNE do
-  @moduledoc false
+  @moduledoc """
+  Skip the next instruction when values are not equal.
+
+  ## Variants
+
+  Opcode  | Mnemonic              | Description
+  :---:   | :---                  | :---
+  `4xkk`  | `SNE Vx, byte`        | Skip the next instruction if `Vx != byte`.
+  `9xy0`  | `SNE Vx, Vy`          | Skip the next instruction if `Vx != Vy`.
+  """
 
   use Chip8.Runtime.Instruction
 

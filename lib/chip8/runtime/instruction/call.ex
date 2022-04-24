@@ -1,5 +1,13 @@
 defmodule Chip8.Runtime.Instruction.CALL do
-  @moduledoc false
+  @moduledoc """
+  Call a subroutine.
+
+  ## Variants
+
+  Opcode  | Mnemonic              | Description
+  :---:   | :---                  | :---
+  `2nnn`  | `CALL address`        | Push the current `pc` to the stack and then set `pc = address`.
+  """
 
   use Chip8.Runtime.Instruction
 

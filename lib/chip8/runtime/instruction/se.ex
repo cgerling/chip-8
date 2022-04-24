@@ -1,5 +1,14 @@
 defmodule Chip8.Runtime.Instruction.SE do
-  @moduledoc false
+  @moduledoc """
+  Skip the next instruction when values are equal.
+
+  ## Variants
+
+  Opcode  | Mnemonic              | Description
+  :---:   | :---                  | :---
+  `3xkk`  | `SE Vx, byte`         | Skip next instruction if `Vx == byte`.
+  `5xy0`  | `SE Vx, Vy`           | Skip next instruction if `Vx == Vy`.
+  """
 
   use Chip8.Runtime.Instruction
 
