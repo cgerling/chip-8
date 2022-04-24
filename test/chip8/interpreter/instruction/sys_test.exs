@@ -6,7 +6,7 @@ defmodule Chip8.Interpreter.Instruction.SYSTest do
   alias Chip8.Interpreter.Instruction.SYS
 
   describe "execute/2" do
-    test "should return interpreter data unchanged" do
+    test "should return an interpreter unchanged" do
       interpreter = Interpreter.new()
 
       address = %Address{value: :rand.uniform(0xFFF)}
