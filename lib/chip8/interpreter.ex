@@ -135,12 +135,6 @@ defmodule Chip8.Interpreter do
 
   @spec cycle(t()) :: {:ok, t()} | {:error, atom()}
   def cycle(%__MODULE__{} = interpreter) do
-    interpreter
-    |> tick_timers()
-    |> run_instruction()
-  end
-
-  defp run_instruction(%__MODULE__{} = interpreter) do
     data = Memory.read(interpreter.memory, interpreter.pc, @instruction_size)
 
     with {:ok, %Instruction{} = instruction} <- Instruction.decode(data) do
@@ -151,7 +145,8 @@ defmodule Chip8.Interpreter do
     end
   end
 
-  defp tick_timers(%__MODULE__{} = interpreter) do
+  @spec tick_timers(t()) :: t()
+  def tick_timers(%__MODULE__{} = interpreter) do
     dt = Timer.tick(interpreter.dt)
     st = Timer.tick(interpreter.st)
 

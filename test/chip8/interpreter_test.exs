@@ -202,64 +202,6 @@ defmodule Chip8.InterpreterTest do
       assert cycled_interpreter.pc == interpreter.pc + @instruction_size
     end
 
-    test "should return an interpreter struct with dt decremented by 1" do
-      interpreter = Interpreter.new()
-      dt_value = :rand.uniform(0xFFFF) + 1
-      dt = Timer.new(dt_value)
-      interpreter = put_in(interpreter.dt, dt)
-
-      assert {:ok, cycled_interpreter = %Interpreter{}} = Interpreter.cycle(interpreter)
-
-      assert cycled_interpreter.dt == Timer.new(dt_value - 1)
-    end
-
-    test "should return an interpreter struct with st decremented by 1" do
-      interpreter = Interpreter.new()
-      st_value = :rand.uniform(0xFFFF) + 1
-      st = Timer.new(st_value)
-      interpreter = put_in(interpreter.st, st)
-
-      assert {:ok, cycled_interpreter = %Interpreter{}} = Interpreter.cycle(interpreter)
-
-      assert cycled_interpreter.st == Timer.new(st_value - 1)
-    end
-
-    test "should return an interpreter struct with dt unchanged when is equals to 0" do
-      interpreter = Interpreter.new()
-
-      assert {:ok, cycled_interpreter = %Interpreter{}} = Interpreter.cycle(interpreter)
-
-      assert cycled_interpreter.dt == interpreter.dt
-    end
-
-    test "should return an interpreter struct with st unchanged when is equals to 0" do
-      interpreter = Interpreter.new()
-
-      assert {:ok, cycled_interpreter = %Interpreter{}} = Interpreter.cycle(interpreter)
-
-      assert cycled_interpreter.st == interpreter.st
-    end
-
-    test "should return an interpreter struct with dt reseted when is less than 0" do
-      interpreter = Interpreter.new()
-      dt = Timer.new(-1)
-      interpreter = put_in(interpreter.dt, dt)
-
-      assert {:ok, cycled_interpreter = %Interpreter{}} = Interpreter.cycle(interpreter)
-
-      assert cycled_interpreter.dt == Timer.new()
-    end
-
-    test "should return an interpreter struct with st reseted when is less than 0" do
-      interpreter = Interpreter.new()
-      st = Timer.new(-1)
-      interpreter = put_in(interpreter.st, st)
-
-      assert {:ok, cycled_interpreter = %Interpreter{}} = Interpreter.cycle(interpreter)
-
-      assert cycled_interpreter.st == Timer.new()
-    end
-
     test "should return an error when the current instruction is invalid" do
       interpreter = Interpreter.new()
       invalid_bytes = [0xFF, 0xFF]
@@ -267,6 +209,68 @@ defmodule Chip8.InterpreterTest do
       interpreter = put_in(interpreter.memory, memory)
 
       assert {:error, :unknown_instruction} == Interpreter.cycle(interpreter)
+    end
+  end
+
+  describe "tick_timers/1" do
+    test "should return an interpreter with dt decremented by 1" do
+      interpreter = Interpreter.new()
+      dt_value = :rand.uniform(0xFFFF) + 1
+      dt = Timer.new(dt_value)
+      interpreter = put_in(interpreter.dt, dt)
+
+      assert ticked_interpreter = Interpreter.tick_timers(interpreter)
+
+      assert %Interpreter{} = ticked_interpreter
+      assert ticked_interpreter.dt == Timer.new(dt_value - 1)
+    end
+
+    test "should return an interpreter with st decremented by 1" do
+      interpreter = Interpreter.new()
+      st_value = :rand.uniform(0xFFFF) + 1
+      st = Timer.new(st_value)
+      interpreter = put_in(interpreter.st, st)
+
+      assert ticked_interpreter = Interpreter.tick_timers(interpreter)
+
+      assert %Interpreter{} = ticked_interpreter
+      assert ticked_interpreter.st == Timer.new(st_value - 1)
+    end
+
+    test "should return an interpreter with dt unchanged when is equals to 0" do
+      interpreter = Interpreter.new()
+
+      assert ticked_interpreter = Interpreter.tick_timers(interpreter)
+
+      assert ticked_interpreter.dt == interpreter.dt
+    end
+
+    test "should return an interpreter with st unchanged when is equals to 0" do
+      interpreter = Interpreter.new()
+
+      assert ticked_interpreter = Interpreter.tick_timers(interpreter)
+
+      assert ticked_interpreter.st == interpreter.st
+    end
+
+    test "should return an interpreter with dt reseted when is less than 0" do
+      interpreter = Interpreter.new()
+      dt = Timer.new(-1)
+      interpreter = put_in(interpreter.dt, dt)
+
+      assert ticked_interpreter = Interpreter.tick_timers(interpreter)
+
+      assert ticked_interpreter.dt == Timer.new()
+    end
+
+    test "should return an interpreter with st reseted when is less than 0" do
+      interpreter = Interpreter.new()
+      st = Timer.new(-1)
+      interpreter = put_in(interpreter.st, st)
+
+      assert ticked_interpreter = Interpreter.tick_timers(interpreter)
+
+      assert ticked_interpreter.st == Timer.new()
     end
   end
 
