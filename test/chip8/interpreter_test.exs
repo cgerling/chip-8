@@ -13,6 +13,48 @@ defmodule Chip8.InterpreterTest do
 
   @instruction_size Instruction.byte_size()
 
+  describe "initialize/1" do
+    @program <<0x6A, 0x95, 0x27, 0x76, 0x38, 0x78, 0x25, 0x82>>
+
+    test "should return an interpreter struct" do
+      interpreter = Interpreter.initialize(@program)
+
+      assert %Interpreter{} = interpreter
+    end
+
+    test "should return an interpreter with all components properly intialized" do
+      interpreter = Interpreter.initialize(@program)
+
+      assert %Display{} = interpreter.display
+      assert %Memory{} = interpreter.memory
+      assert interpreter.dt == Timer.new()
+      assert interpreter.keyboard == Keyboard.new()
+      assert interpreter.pc == 0x200
+      assert interpreter.st == Timer.new()
+      assert interpreter.stack == Stack.new()
+      assert interpreter.v == VRegisters.new()
+    end
+
+    test "should return an interpreter with font data loaded on memory" do
+      interpreter = Interpreter.initialize(@program)
+
+      font_address = 0x050
+      font_data = Font.data()
+      font_size = Enum.count(font_data)
+
+      assert Memory.read(interpreter.memory, font_address, font_size) == font_data
+    end
+
+    test "should return an interpreter struct with program data loaded on memory" do
+      interpreter = Interpreter.initialize(@program)
+
+      program_size = byte_size(@program)
+      program_data = :binary.bin_to_list(@program)
+
+      assert Memory.read(interpreter.memory, 0x200, program_size) == program_data
+    end
+  end
+
   describe "new/0" do
     test "should return an interpreter struct" do
       interpreter = Interpreter.new()

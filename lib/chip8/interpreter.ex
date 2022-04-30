@@ -69,6 +69,15 @@ defmodule Chip8.Interpreter do
   @font_address 0x050
   @character_size Font.character_byte_size()
 
+  @spec initialize(bitstring()) :: t()
+  def initialize(program) when is_bitstring(program) do
+    font = Font.data()
+
+    new()
+    |> load_font(font)
+    |> load_program(program)
+  end
+
   @spec new() :: t()
   def new do
     display = Display.new(@display_height, @display_width)
