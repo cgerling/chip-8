@@ -2,20 +2,35 @@ defmodule Chip8.InterpreterTest do
   use ExUnit.Case, async: true
 
   alias Chip8.Interpreter
+  alias Chip8.Interpreter.Display
   alias Chip8.Interpreter.Font
   alias Chip8.Interpreter.Instruction
   alias Chip8.Interpreter.Keyboard
   alias Chip8.Interpreter.Memory
   alias Chip8.Interpreter.Timer
+  alias Chip8.Interpreter.VRegisters
+  alias Chip8.Stack
 
   @instruction_size Instruction.byte_size()
 
   describe "new/0" do
-    test "should return an interpreter initialized" do
+    test "should return an interpreter struct" do
       interpreter = Interpreter.new()
 
       assert %Interpreter{} = interpreter
-      assert 0x200 == interpreter.pc
+    end
+
+    test "should return an interpreter with all components properly intialized" do
+      interpreter = Interpreter.new()
+
+      assert %Display{} = interpreter.display
+      assert %Memory{} = interpreter.memory
+      assert interpreter.dt == Timer.new()
+      assert interpreter.keyboard == Keyboard.new()
+      assert interpreter.pc == 0x200
+      assert interpreter.st == Timer.new()
+      assert interpreter.stack == Stack.new()
+      assert interpreter.v == VRegisters.new()
     end
   end
 
