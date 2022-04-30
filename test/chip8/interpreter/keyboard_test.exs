@@ -59,4 +59,24 @@ defmodule Chip8.Interpreter.KeyboardTest do
       assert pressed_keyboard == keyboard
     end
   end
+
+  describe "release_key/2" do
+    test "should return a keyboard with the given key not pressed" do
+      keyboard = Keyboard.new()
+      key = :rand.uniform(0xF)
+
+      released_keyboard = Keyboard.release_key(keyboard, key)
+
+      refute Keyboard.is_pressed?(released_keyboard, key)
+    end
+
+    test "should return a keyboard unchanged when the given key is already not pressed" do
+      keyboard = Keyboard.new()
+      key = :rand.uniform(0xF)
+
+      released_keyboard = Keyboard.release_key(keyboard, key)
+
+      assert released_keyboard == keyboard
+    end
+  end
 end

@@ -36,4 +36,10 @@ defmodule Chip8.Interpreter.Keyboard do
     pressed_keys = %{keys | key => :pressed}
     %__MODULE__{keys: pressed_keys}
   end
+
+  @spec release_key(t(), key()) :: t()
+  def release_key(%__MODULE__{keys: keys}, key) when is_integer(key) and key in 0x0..0xF do
+    released_keys = %{keys | key => :none}
+    %__MODULE__{keys: released_keys}
+  end
 end
