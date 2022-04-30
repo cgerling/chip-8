@@ -3,10 +3,10 @@ defmodule Chip8.Interpreter.Display do
   A monochrome display device.
 
   The monochrome display has a resolution of `64x32` pixels (64 pixels wide and
-  32 pixels high), programs can render graphics on it through the use of 
-  sprites (see `Chip8.Interpreter.Display.Sprite`) and coordinates.
-  The _origin_ point of the display is located at the top-left corner, with the
-  coordinates `(0, 0)`.
+  32 pixels high), programs can render graphics on it through the use of
+  sprites (see `Chip8.Interpreter.Display.Sprite`) and coordinates. The
+  _origin_ point of the display is at the top-left corner, with the coordinates
+  `(0, 0)`.
   """
 
   alias Chip8.Interpreter.Display.Sprite
@@ -17,6 +17,7 @@ defmodule Chip8.Interpreter.Display do
   @type dimension :: non_neg_integer()
   @type pixel :: 0 | 1
   @type coordinates :: {x :: non_neg_integer(), y :: non_neg_integer()}
+  @type pixelmap :: list(list(pixel()))
 
   @type t :: %__MODULE__{
           height: dimension(),
@@ -81,4 +82,7 @@ defmodule Chip8.Interpreter.Display do
   def create_sprite(data) when is_list(data) do
     Sprite.new(data)
   end
+
+  @spec pixelmap(t()) :: pixelmap()
+  def pixelmap(%__MODULE__{pixels: pixels, width: width}), do: Enum.chunk_every(pixels, width)
 end

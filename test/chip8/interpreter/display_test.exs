@@ -216,4 +216,23 @@ defmodule Chip8.Interpreter.DisplayTest do
       assert %Sprite{} = sprite
     end
   end
+
+  describe "pixelmap/1" do
+    test "should return a list with the pixel content of the display" do
+      display = Display.new(8, 8)
+
+      pixelmap = Display.pixelmap(display)
+
+      assert pixelmap == [
+               [0, 0, 0, 0, 0, 0, 0, 0],
+               [0, 0, 0, 0, 0, 0, 0, 0],
+               [0, 0, 0, 0, 0, 0, 0, 0],
+               [0, 0, 0, 0, 0, 0, 0, 0],
+               [0, 0, 0, 0, 0, 0, 0, 0],
+               [0, 0, 0, 0, 0, 0, 0, 0],
+               [0, 0, 0, 0, 0, 0, 0, 0],
+               [0, 0, 0, 0, 0, 0, 0, 0]
+             ]
+    end
+  end
 end
