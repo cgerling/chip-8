@@ -43,6 +43,8 @@ defmodule Chip8.Interpreter do
   alias Chip8.Stack
   alias Chip8.UInt
 
+  require Keyboard
+
   @enforce_keys [:display, :dt, :i, :keyboard, :memory, :pc, :st, :stack, :v]
   defstruct @enforce_keys
 
@@ -143,6 +145,18 @@ defmodule Chip8.Interpreter do
     st = Timer.tick(interpreter.st)
 
     %{interpreter | dt: dt, st: st}
+  end
+
+  @spec press_key(t(), Keyboard.key()) :: t()
+  def press_key(%__MODULE__{} = interpreter, key) when Keyboard.is_key(key) do
+    keyboard = Keyboard.press_key(interpreter.keyboard, key)
+    %{interpreter | keyboard: keyboard}
+  end
+
+  @spec release_key(t(), Keyboard.key()) :: t()
+  def release_key(%__MODULE__{} = interpreter, key) when Keyboard.is_key(key) do
+    keyboard = Keyboard.release_key(interpreter.keyboard, key)
+    %{interpreter | keyboard: keyboard}
   end
 
   @spec pixelmap(t()) :: Display.pixelmap()

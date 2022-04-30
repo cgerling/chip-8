@@ -4,6 +4,7 @@ defmodule Chip8.InterpreterTest do
   alias Chip8.Interpreter
   alias Chip8.Interpreter.Font
   alias Chip8.Interpreter.Instruction
+  alias Chip8.Interpreter.Keyboard
   alias Chip8.Interpreter.Memory
   alias Chip8.Interpreter.Timer
 
@@ -208,6 +209,50 @@ defmodule Chip8.InterpreterTest do
       interpreter = put_in(interpreter.memory, memory)
 
       assert {:error, :unknown_instruction} == Interpreter.cycle(interpreter)
+    end
+  end
+
+  describe "press_key/2" do
+    test "should return an interpreter with the given keyboard key as pressed" do
+      interpreter = Interpreter.new()
+      key = :rand.uniform(0xF)
+
+      interpreter_with_key_pressed = Interpreter.press_key(interpreter, key)
+
+      assert Keyboard.is_pressed?(interpreter_with_key_pressed.keyboard, key)
+    end
+
+    test "should return an interpreter unchanged when the given keyboard key is already pressed" do
+      interpreter = Interpreter.new()
+      key = :rand.uniform(0xF)
+      keyboard = Keyboard.press_key(interpreter.keyboard, key)
+      interpreter = put_in(interpreter.keyboard, keyboard)
+
+      interpreter_with_key_pressed = Interpreter.press_key(interpreter, key)
+
+      assert interpreter_with_key_pressed == interpreter
+    end
+  end
+
+  describe "release_key/2" do
+    test "should return an interpreter with the given keyboard key as not pressed" do
+      interpreter = Interpreter.new()
+      key = :rand.uniform(0xF)
+      keyboard = Keyboard.press_key(interpreter.keyboard, key)
+      interpreter = put_in(interpreter.keyboard, keyboard)
+
+      interpreter_with_key_released = Interpreter.release_key(interpreter, key)
+
+      refute Keyboard.is_pressed?(interpreter_with_key_released.keyboard, key)
+    end
+
+    test "should return an interpreter unchanged when the given keyboard key is already pressed" do
+      interpreter = Interpreter.new()
+      key = :rand.uniform(0xF)
+
+      interpreter_with_key_released = Interpreter.release_key(interpreter, key)
+
+      refute Keyboard.is_pressed?(interpreter_with_key_released.keyboard, key)
     end
   end
 
