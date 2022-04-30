@@ -30,4 +30,10 @@ defmodule Chip8.Interpreter.Keyboard do
   def is_pressed?(%__MODULE__{} = keyboard, key) when is_integer(key) and key in 0x0..0xF do
     keyboard.keys[key] == :pressed
   end
+
+  @spec press_key(t(), key()) :: t()
+  def press_key(%__MODULE__{keys: keys}, key) when is_integer(key) and key in 0x0..0xF do
+    pressed_keys = %{keys | key => :pressed}
+    %__MODULE__{keys: pressed_keys}
+  end
 end
