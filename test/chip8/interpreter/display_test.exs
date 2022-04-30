@@ -25,7 +25,20 @@ defmodule Chip8.Interpreter.DisplayTest do
       assert %Display{} = cleared_display
       assert display.height == cleared_display.height
       assert display.width == cleared_display.width
-      assert Enum.all?(cleared_display.pixels, &(&1 == 0))
+      refute Display.pixelmap(display) == Display.pixelmap(cleared_display)
+
+      assert Display.pixelmap(cleared_display) == [
+               [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+               [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+               [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+               [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+               [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+               [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+               [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+               [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+               [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+               [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+             ]
     end
   end
 
@@ -93,12 +106,9 @@ defmodule Chip8.Interpreter.DisplayTest do
 
       drawed_display = Display.draw(display, coordinates, sprite)
 
-      display_matrix = Enum.chunk_every(drawed_display.pixels, display.width)
-
       assert %Display{} = drawed_display
-      assert 16 == Enum.count(drawed_display.pixels, &(&1 == 1))
 
-      assert display_matrix == [
+      assert Display.pixelmap(drawed_display) == [
                [0, 0, 0, 0, 0, 0, 0, 0],
                [0, 0, 0, 0, 0, 0, 0, 0],
                [1, 0, 1, 0, 1, 0, 1, 0],
@@ -119,12 +129,9 @@ defmodule Chip8.Interpreter.DisplayTest do
 
       drawed_display = Display.draw(display, coordinates, sprite)
 
-      display_matrix = Enum.chunk_every(drawed_display.pixels, display.width)
-
       assert %Display{} = drawed_display
-      assert Enum.all?(drawed_display.pixels, &(&1 == 0))
 
-      assert display_matrix == [
+      assert Display.pixelmap(drawed_display) == [
                [0, 0, 0, 0, 0, 0, 0, 0],
                [0, 0, 0, 0, 0, 0, 0, 0],
                [0, 0, 0, 0, 0, 0, 0, 0],
@@ -143,12 +150,9 @@ defmodule Chip8.Interpreter.DisplayTest do
 
       drawed_display = Display.draw(display, coordinates, sprite)
 
-      display_matrix = Enum.chunk_every(drawed_display.pixels, display.width)
-
       assert %Display{} = drawed_display
-      assert 8 == Enum.count(drawed_display.pixels, &(&1 == 1))
 
-      assert display_matrix == [
+      assert Display.pixelmap(drawed_display) == [
                [0, 0, 0, 0, 1, 1, 1, 1],
                [0, 0, 0, 0, 1, 1, 1, 1],
                [0, 0, 0, 0, 0, 0, 0, 0],
@@ -167,12 +171,9 @@ defmodule Chip8.Interpreter.DisplayTest do
 
       drawed_display = Display.draw(display, coordinates, sprite)
 
-      display_matrix = Enum.chunk_every(drawed_display.pixels, display.width)
-
       assert %Display{} = drawed_display
-      assert 8 == Enum.count(drawed_display.pixels, &(&1 == 1))
 
-      assert display_matrix == [
+      assert Display.pixelmap(drawed_display) == [
                [0, 0, 0, 0, 0, 0, 0, 0],
                [0, 0, 0, 0, 0, 0, 0, 0],
                [0, 0, 0, 0, 0, 0, 0, 0],
