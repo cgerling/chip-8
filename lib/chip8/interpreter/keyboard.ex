@@ -16,6 +16,8 @@ defmodule Chip8.Interpreter.Keyboard do
           keys: %{key() => key_state()}
         }
 
+  defguard is_key(key) when is_integer(key) and key in 0x0..0xF
+
   @spec new() :: t()
   def new do
     keys = Map.new(0x0..0xF, &{&1, :none})
@@ -27,18 +29,18 @@ defmodule Chip8.Interpreter.Keyboard do
   def keys, do: Enum.to_list(0x0..0xF)
 
   @spec is_pressed?(t(), key()) :: boolean()
-  def is_pressed?(%__MODULE__{} = keyboard, key) when is_integer(key) and key in 0x0..0xF do
+  def is_pressed?(%__MODULE__{} = keyboard, key) when is_key(key) do
     keyboard.keys[key] == :pressed
   end
 
   @spec press_key(t(), key()) :: t()
-  def press_key(%__MODULE__{keys: keys}, key) when is_integer(key) and key in 0x0..0xF do
+  def press_key(%__MODULE__{keys: keys}, key) when is_key(key) do
     pressed_keys = %{keys | key => :pressed}
     %__MODULE__{keys: pressed_keys}
   end
 
   @spec release_key(t(), key()) :: t()
-  def release_key(%__MODULE__{keys: keys}, key) when is_integer(key) and key in 0x0..0xF do
+  def release_key(%__MODULE__{keys: keys}, key) when is_key(key) do
     released_keys = %{keys | key => :none}
     %__MODULE__{keys: released_keys}
   end
