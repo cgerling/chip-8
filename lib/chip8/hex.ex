@@ -25,4 +25,9 @@ defmodule Chip8.Hex do
   def to_string(number) when is_integer(number) do
     Integer.to_string(number, @base)
   end
+
+  @spec from_string(String.t()) :: integer()
+  def from_string(string) when is_binary(string) do
+    String.to_integer(string, @base)
+  end
 end
