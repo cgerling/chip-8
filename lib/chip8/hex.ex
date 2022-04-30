@@ -20,4 +20,9 @@ defmodule Chip8.Hex do
   def from_digits(digits) when is_list(digits) do
     Integer.undigits(digits, @base)
   end
+
+  @spec to_string(integer()) :: String.t()
+  def to_string(number) when is_integer(number) do
+    Integer.to_string(number, @base)
+  end
 end
