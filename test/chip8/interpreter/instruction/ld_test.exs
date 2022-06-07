@@ -7,6 +7,7 @@ defmodule Chip8.Interpreter.Instruction.LDTest do
   alias Chip8.Interpreter.Instruction.Argument.Register
   alias Chip8.Interpreter.Instruction.LD
   alias Chip8.Interpreter.Memory
+  alias Chip8.Interpreter.Timer
 
   describe "execute/2" do
     test "should return an interpreter with vx set to the given byte" do
@@ -62,7 +63,8 @@ defmodule Chip8.Interpreter.Instruction.LDTest do
     test "should return an interpreter with vx set to the delay timer" do
       interpreter = Interpreter.new()
       dt_value = :rand.uniform(0xFFF)
-      interpreter = put_in(interpreter.dt, dt_value)
+      dt_timer = Timer.new(dt_value)
+      interpreter = put_in(interpreter.dt, dt_timer)
 
       vx = %Register{value: :rand.uniform(0xF)}
       dt = Register.dt()
@@ -70,7 +72,7 @@ defmodule Chip8.Interpreter.Instruction.LDTest do
       executed_interpreter = LD.execute(interpreter, arguments)
 
       assert %Interpreter{} = executed_interpreter
-      assert dt_value == executed_interpreter.v[vx.value]
+      assert executed_interpreter.v[vx.value] == dt_value
     end
 
     test "should return an interpreter with pc set to the previous instruction when a key is not pressed" do
@@ -127,7 +129,7 @@ defmodule Chip8.Interpreter.Instruction.LDTest do
       executed_interpreter = LD.execute(interpreter, arguments)
 
       assert %Interpreter{} = executed_interpreter
-      assert x_value == executed_interpreter.dt
+      assert executed_interpreter.dt.value == x_value
     end
 
     test "should return an interpreter with sound timer set to the vx" do
@@ -142,7 +144,7 @@ defmodule Chip8.Interpreter.Instruction.LDTest do
       executed_interpreter = LD.execute(interpreter, arguments)
 
       assert %Interpreter{} = executed_interpreter
-      assert x_value == executed_interpreter.st
+      assert executed_interpreter.st.value == x_value
     end
 
     test "should return an interpreter with i set to the address of the character set in vx" do
