@@ -43,9 +43,16 @@ defmodule Chip8.Interpreter.Instruction.ADD do
   end
 
   def execute(%Interpreter{} = interpreter, {%Register{} = x, %Register{} = y}) do
-    add_result = UInt.to_uint8(interpreter.v[x.value] + interpreter.v[y.value])
+    result = interpreter.v[x.value] + interpreter.v[y.value]
+    carry = if result > 255, do: 1, else: 0
 
-    v_registers = VRegisters.set(interpreter.v, x.value, add_result)
+    add_result = UInt.to_uint8(result)
+
+    v_registers =
+      interpreter.v
+      |> VRegisters.set(x.value, add_result)
+      |> VRegisters.set(0xF, carry)
+
     %{interpreter | v: v_registers}
   end
 end

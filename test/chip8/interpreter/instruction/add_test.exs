@@ -89,6 +89,42 @@ defmodule Chip8.Interpreter.Instruction.ADDTest do
       assert 0xB0 == executed_interpreter.v[vx.value]
     end
 
+    test "should return an interpreter with vf set to 0 when the sum of vx and vy is less than or equals to 8 bits" do
+      interpreter = Interpreter.new()
+      x = 0x9
+      x_value = 0x2C
+      interpreter = put_in(interpreter.v[x], x_value)
+      y = 0xD
+      y_value = 0x84
+      interpreter = put_in(interpreter.v[y], y_value)
+
+      vx = %Register{value: x}
+      vy = %Register{value: y}
+      arguments = {vx, vy}
+      executed_interpreter = ADD.execute(interpreter, arguments)
+
+      assert %Interpreter{} = executed_interpreter
+      assert executed_interpreter.v[0xF] == 0
+    end
+
+    test "should return an interpreter with vf set to 0 when the sum of vx and vy is greather than 8 bits" do
+      interpreter = Interpreter.new()
+      x = 0x9
+      x_value = 0xAC
+      interpreter = put_in(interpreter.v[x], x_value)
+      y = 0xD
+      y_value = 0x90
+      interpreter = put_in(interpreter.v[y], y_value)
+
+      vx = %Register{value: x}
+      vy = %Register{value: y}
+      arguments = {vx, vy}
+      executed_interpreter = ADD.execute(interpreter, arguments)
+
+      assert %Interpreter{} = executed_interpreter
+      assert executed_interpreter.v[0xF] == 1
+    end
+
     test "should return an interpreter with vx set to the sum of vx and vy wrapped to 8 bits" do
       interpreter = Interpreter.new()
       x = 0x9

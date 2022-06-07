@@ -18,9 +18,9 @@ defmodule Chip8.Interpreter.Instruction.SHR do
   alias Chip8.Interpreter.VRegisters
 
   @impl Chip8.Interpreter.Instruction
-  def execute(%Interpreter{} = interpreter, {%Register{} = x, %Register{} = y}) do
-    least_significant_bit = Bitwise.band(interpreter.v[y.value], 0b00000001)
-    sr_result = Bitwise.bsr(interpreter.v[y.value], 1)
+  def execute(%Interpreter{} = interpreter, {%Register{} = x, %Register{}}) do
+    least_significant_bit = Bitwise.band(interpreter.v[x.value], 0b00000001)
+    sr_result = Bitwise.bsr(interpreter.v[x.value], 1)
 
     v_registers =
       interpreter.v

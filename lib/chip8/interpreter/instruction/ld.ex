@@ -33,6 +33,7 @@ defmodule Chip8.Interpreter.Instruction.LD do
   alias Chip8.Interpreter.Instruction.Argument.Register
   alias Chip8.Interpreter.Keyboard
   alias Chip8.Interpreter.Memory
+  alias Chip8.Interpreter.Timer
   alias Chip8.Interpreter.VRegisters
   alias Chip8.UInt
 
@@ -57,7 +58,7 @@ defmodule Chip8.Interpreter.Instruction.LD do
   end
 
   def execute(%Interpreter{} = interpreter, {%Register{} = x, @dt}) do
-    v_registers = VRegisters.set(interpreter.v, x.value, interpreter.dt)
+    v_registers = VRegisters.set(interpreter.v, x.value, interpreter.dt.value)
     %{interpreter | v: v_registers}
   end
 
@@ -73,11 +74,13 @@ defmodule Chip8.Interpreter.Instruction.LD do
   end
 
   def execute(%Interpreter{} = interpreter, {@dt, %Register{} = x}) do
-    %{interpreter | dt: interpreter.v[x.value]}
+    dt = Timer.new(interpreter.v[x.value])
+    %{interpreter | dt: dt}
   end
 
   def execute(%Interpreter{} = interpreter, {@st, %Register{} = x}) do
-    %{interpreter | st: interpreter.v[x.value]}
+    st = Timer.new(interpreter.v[x.value])
+    %{interpreter | st: st}
   end
 
   def execute(%Interpreter{} = interpreter, {@font, %Register{} = x}) do
