@@ -19,9 +19,9 @@ defmodule Chip8.Interpreter.Instruction.SHL do
   alias Chip8.UInt
 
   @impl Chip8.Interpreter.Instruction
-  def execute(%Interpreter{} = interpreter, {%Register{} = x, %Register{} = y}) do
-    most_significant_bit = interpreter.v[y.value] |> Bitwise.band(0b10000000) |> Bitwise.bsr(7)
-    sl_result = interpreter.v[y.value] |> Bitwise.bsl(1) |> UInt.to_uint8()
+  def execute(%Interpreter{} = interpreter, {%Register{} = x, %Register{}}) do
+    most_significant_bit = interpreter.v[x.value] |> Bitwise.band(0b10000000) |> Bitwise.bsr(7)
+    sl_result = interpreter.v[x.value] |> Bitwise.bsl(1) |> UInt.to_uint8()
 
     v_registers =
       interpreter.v
