@@ -1,5 +1,8 @@
 defmodule Chip8 do
-  @moduledoc false
+  @moduledoc "README.md"
+             |> File.read!()
+             |> String.split("<!-- MDOC !-->")
+             |> Enum.fetch!(1)
 
   alias Chip8.Interpreter
   alias Chip8.Interpreter.Display
@@ -9,7 +12,7 @@ defmodule Chip8 do
   Executes a single instruction cycle.
 
   A cycle is composed of 3 steps: fetch the instruction from memory, decode the
-  instruction bytes and executes it by changing the instance state.
+  instruction bytes and executes it by changing the interpreter's state.
   See the cycle section at `Chip8.Interpreter` for more information.
 
   ```elixir

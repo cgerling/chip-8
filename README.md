@@ -1,5 +1,7 @@
 # Chip-8
 
+<!-- MDOC !-->
+
 A Chip-8 interpreter.
 
 Created by Joseph Weisbecker in the mid-1970s, Chip-8 is a programming language
