@@ -130,12 +130,13 @@ defmodule Chip8.InterpreterTest do
   describe "load_program/2" do
     test "should return an interpreter struct with program data loaded on memory" do
       interpreter = Interpreter.new()
-      program = [0x6A, 0x95, 0x27, 0x76, 0x38, 0x78, 0x25, 0x82]
+      program = <<0x6A, 0x95, 0x27, 0x76, 0x38, 0x78, 0x25, 0x82>>
 
       loaded_interpreter = Interpreter.load_program(interpreter, program)
+      program_data = :binary.bin_to_list(program)
 
       assert %Interpreter{} = loaded_interpreter
-      assert Memory.read(loaded_interpreter.memory, 0x200, 8) == program
+      assert Memory.read(loaded_interpreter.memory, 0x200, 8) == program_data
     end
   end
 

@@ -116,9 +116,11 @@ defmodule Chip8.Interpreter do
     %{interpreter | memory: memory_with_font}
   end
 
-  @spec load_program(t(), Memory.data()) :: t()
-  def load_program(%__MODULE__{} = interpreter, program) when is_list(program) do
-    memory = Memory.write(interpreter.memory, @initial_pc, program)
+  @spec load_program(t(), bitstring()) :: t()
+  def load_program(%__MODULE__{} = interpreter, program) when is_bitstring(program) do
+    program_data = :binary.bin_to_list(program)
+    memory = Memory.write(interpreter.memory, @initial_pc, program_data)
+
     %{interpreter | memory: memory}
   end
 
