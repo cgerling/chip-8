@@ -7,6 +7,14 @@ defmodule Chip8.Interpreter.Display do
   sprites (see `Chip8.Interpreter.Display.Sprite`) and coordinates. The
   _origin_ point of the display is at the top-left corner, with the coordinates
   `(0, 0)`.
+
+  ## Pixelmap
+
+  In most cases, pixelmaps contain the color information of each pixel in the
+  screen but, since the COSMAC VIP wasn't able to produce colors and there is no
+  way to specify one with the [DRW](`Chip8.Interpreter.Instruction.DRW`)
+  instruction, the only information returned is the pixel "state", which can be,
+  1 when the pixel is "on" and 0 when is "off".
   """
 
   alias Chip8.Interpreter.Display.Sprite
