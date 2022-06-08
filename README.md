@@ -37,3 +37,18 @@ from user interaction to managing cycles and their relation with timers.
 
 See all `Chip8` functions for more information about each operation.
 
+<!-- MDOC !-->
+
+## Installation
+
+The package can be installed by adding `chip8` to your list of dependencies in `mix.exs`:
+
+```elixir
+def deps do
+  [
+    {:chip8, "~> 1.0"}
+  ]
+end
+```
+
+The docs can be found at [https://hexdocs.pm/chip8](https://hexdocs.pm/chip8).
