@@ -82,6 +82,7 @@ defmodule Chip8.Interpreter do
     |> load_program(program)
   end
 
+  @spec new() :: t()
   @spec new(Keyword.t()) :: t()
   def new(opts \\ []) do
     cycle_rate = Keyword.get(opts, :cycle_rate, @default_cycle_rate)
