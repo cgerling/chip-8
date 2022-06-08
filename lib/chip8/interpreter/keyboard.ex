@@ -4,6 +4,12 @@ defmodule Chip8.Interpreter.Keyboard do
 
   Users can interact with programs through a hexadecimal keypad that was
   present in the original Chip-8 computer.
+
+  Keys are represented by hexadecimal integers. When a user presses the F key,
+  the key needs to be registered as 15 instead. For this purpose, you can
+  either use the hexadecimal notation (e.g. `0xF` returns `15`) for a
+  hard-coded mapping or `String.to_integer/2`
+  (e.g. `String.to_integer("F", 16)` returns `15`) for a more dynamic approach.
   """
 
   @enforce_keys [:keys]
