@@ -1,10 +1,12 @@
 defmodule Chip8.MixProject do
   use Mix.Project
 
+  @version "0.1.0"
+
   def project do
     [
       app: :chip8,
-      version: "0.1.0",
+      version: @version,
       elixir: "~> 1.13",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
@@ -37,7 +39,7 @@ defmodule Chip8.MixProject do
     [
       main: "readme",
       extras: ["README.md"],
-      source_ref: "v0.1.0",
+      source_ref: "v#{@version}",
       groups_for_modules: [
         Interpreter: [
           Chip8.Interpreter.Display,
