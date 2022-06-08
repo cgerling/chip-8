@@ -54,6 +54,13 @@ defmodule Chip8.InterpreterTest do
 
       assert Memory.read(interpreter.memory, 0x200, program_size) == program_data
     end
+
+    test "should return an interpreter struct with the given cycle rate" do
+      cycle_rate = :rand.uniform(100)
+      interpreter = Interpreter.initialize(@program, cycle_rate: cycle_rate)
+
+      assert interpreter.cycle_rate == cycle_rate
+    end
   end
 
   describe "new/0" do

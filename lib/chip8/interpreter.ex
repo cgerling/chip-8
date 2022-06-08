@@ -74,10 +74,12 @@ defmodule Chip8.Interpreter do
   @default_i 0x0
 
   @spec initialize(bitstring()) :: t()
-  def initialize(program) when is_bitstring(program) do
+  @spec initialize(bitstring(), Keyword.t()) :: t()
+  def initialize(program, opts \\ []) when is_bitstring(program) do
     font = Font.data()
 
-    new()
+    opts
+    |> new()
     |> load_font(font)
     |> load_program(program)
   end
