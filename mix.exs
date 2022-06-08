@@ -8,9 +8,11 @@ defmodule Chip8.MixProject do
       app: :chip8,
       version: @version,
       elixir: "~> 1.13",
+      description: "Core library for a Chip-8 interpreter",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
       deps: deps(),
+      package: package(),
       docs: docs(),
       dialyzer: [
         plt_file: {:no_warn, "priv/plts/dialyzer.plt"}
@@ -30,6 +32,14 @@ defmodule Chip8.MixProject do
       {:credo, "~> 1.6", only: [:dev, :test], runtime: false},
       {:dialyxir, "~> 1.0", only: [:dev], runtime: false},
       {:ex_doc, "~> 0.27", only: [:dev], runtime: false}
+    ]
+  end
+
+  def package do
+    [
+      exclude_patterns: ["priv/plts"],
+      licenses: ["Apache-2.0"],
+      links: %{"GitHub" => "https://github.com/cgerling/chip-8"}
     ]
   end
 
