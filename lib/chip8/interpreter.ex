@@ -144,4 +144,9 @@ defmodule Chip8.Interpreter do
 
     %{interpreter | dt: dt, st: st}
   end
+
+  @spec pixelmap(t()) :: Display.pixelmap()
+  def pixelmap(%__MODULE__{display: display}) do
+    Display.pixelmap(display)
+  end
 end

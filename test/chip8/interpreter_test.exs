@@ -210,4 +210,18 @@ defmodule Chip8.InterpreterTest do
       assert {:error, :unknown_instruction} == Interpreter.cycle(interpreter)
     end
   end
+
+  describe "pixelmap/1" do
+    test "should return a list with the pixel content of the interpreter's display" do
+      interpreter = Interpreter.new()
+
+      pixelmap = Interpreter.pixelmap(interpreter)
+
+      flat_pixelmap = List.flatten(pixelmap)
+
+      assert Enum.all?(pixelmap, &is_list/1)
+      assert Enum.count(flat_pixelmap) == 2048
+      assert Enum.all?(flat_pixelmap, &(&1 == 0))
+    end
+  end
 end
