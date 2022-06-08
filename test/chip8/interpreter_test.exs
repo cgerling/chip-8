@@ -76,6 +76,13 @@ defmodule Chip8.InterpreterTest do
       assert interpreter.stack == Stack.new()
       assert interpreter.v == VRegisters.new()
     end
+
+    test "should return an interpreter with the given cycle rate" do
+      cycle_rate = :rand.uniform(100)
+      interpreter = Interpreter.new(cycle_rate: cycle_rate)
+
+      assert interpreter.cycle_rate == cycle_rate
+    end
   end
 
   describe "to_next_instruction/1" do
