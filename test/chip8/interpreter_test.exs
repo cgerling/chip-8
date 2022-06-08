@@ -2,19 +2,77 @@ defmodule Chip8.InterpreterTest do
   use ExUnit.Case, async: true
 
   alias Chip8.Interpreter
+  alias Chip8.Interpreter.Display
   alias Chip8.Interpreter.Font
   alias Chip8.Interpreter.Instruction
+  alias Chip8.Interpreter.Keyboard
   alias Chip8.Interpreter.Memory
   alias Chip8.Interpreter.Timer
+  alias Chip8.Interpreter.VRegisters
+  alias Chip8.Stack
 
   @instruction_size Instruction.byte_size()
 
+  describe "initialize/1" do
+    @program <<0x6A, 0x95, 0x27, 0x76, 0x38, 0x78, 0x25, 0x82>>
+
+    test "should return an interpreter struct" do
+      interpreter = Interpreter.initialize(@program)
+
+      assert %Interpreter{} = interpreter
+    end
+
+    test "should return an interpreter with all components properly intialized" do
+      interpreter = Interpreter.initialize(@program)
+
+      assert %Display{} = interpreter.display
+      assert %Memory{} = interpreter.memory
+      assert interpreter.dt == Timer.new()
+      assert interpreter.keyboard == Keyboard.new()
+      assert interpreter.pc == 0x200
+      assert interpreter.st == Timer.new()
+      assert interpreter.stack == Stack.new()
+      assert interpreter.v == VRegisters.new()
+    end
+
+    test "should return an interpreter with font data loaded on memory" do
+      interpreter = Interpreter.initialize(@program)
+
+      font_address = 0x050
+      font_data = Font.data()
+      font_size = Enum.count(font_data)
+
+      assert Memory.read(interpreter.memory, font_address, font_size) == font_data
+    end
+
+    test "should return an interpreter struct with program data loaded on memory" do
+      interpreter = Interpreter.initialize(@program)
+
+      program_size = byte_size(@program)
+      program_data = :binary.bin_to_list(@program)
+
+      assert Memory.read(interpreter.memory, 0x200, program_size) == program_data
+    end
+  end
+
   describe "new/0" do
-    test "should return an interpreter initialized" do
+    test "should return an interpreter struct" do
       interpreter = Interpreter.new()
 
       assert %Interpreter{} = interpreter
-      assert 0x200 == interpreter.pc
+    end
+
+    test "should return an interpreter with all components properly intialized" do
+      interpreter = Interpreter.new()
+
+      assert %Display{} = interpreter.display
+      assert %Memory{} = interpreter.memory
+      assert interpreter.dt == Timer.new()
+      assert interpreter.keyboard == Keyboard.new()
+      assert interpreter.pc == 0x200
+      assert interpreter.st == Timer.new()
+      assert interpreter.stack == Stack.new()
+      assert interpreter.v == VRegisters.new()
     end
   end
 
@@ -114,12 +172,13 @@ defmodule Chip8.InterpreterTest do
   describe "load_program/2" do
     test "should return an interpreter struct with program data loaded on memory" do
       interpreter = Interpreter.new()
-      program = [0x6A, 0x95, 0x27, 0x76, 0x38, 0x78, 0x25, 0x82]
+      program = <<0x6A, 0x95, 0x27, 0x76, 0x38, 0x78, 0x25, 0x82>>
 
       loaded_interpreter = Interpreter.load_program(interpreter, program)
+      program_data = :binary.bin_to_list(program)
 
       assert %Interpreter{} = loaded_interpreter
-      assert Memory.read(loaded_interpreter.memory, 0x200, 8) == program
+      assert Memory.read(loaded_interpreter.memory, 0x200, 8) == program_data
     end
   end
 
@@ -143,64 +202,6 @@ defmodule Chip8.InterpreterTest do
       assert cycled_interpreter.pc == interpreter.pc + @instruction_size
     end
 
-    test "should return an interpreter struct with dt decremented by 1" do
-      interpreter = Interpreter.new()
-      dt_value = :rand.uniform(0xFFFF) + 1
-      dt = Timer.new(dt_value)
-      interpreter = put_in(interpreter.dt, dt)
-
-      assert {:ok, cycled_interpreter = %Interpreter{}} = Interpreter.cycle(interpreter)
-
-      assert cycled_interpreter.dt == Timer.new(dt_value - 1)
-    end
-
-    test "should return an interpreter struct with st decremented by 1" do
-      interpreter = Interpreter.new()
-      st_value = :rand.uniform(0xFFFF) + 1
-      st = Timer.new(st_value)
-      interpreter = put_in(interpreter.st, st)
-
-      assert {:ok, cycled_interpreter = %Interpreter{}} = Interpreter.cycle(interpreter)
-
-      assert cycled_interpreter.st == Timer.new(st_value - 1)
-    end
-
-    test "should return an interpreter struct with dt unchanged when is equals to 0" do
-      interpreter = Interpreter.new()
-
-      assert {:ok, cycled_interpreter = %Interpreter{}} = Interpreter.cycle(interpreter)
-
-      assert cycled_interpreter.dt == interpreter.dt
-    end
-
-    test "should return an interpreter struct with st unchanged when is equals to 0" do
-      interpreter = Interpreter.new()
-
-      assert {:ok, cycled_interpreter = %Interpreter{}} = Interpreter.cycle(interpreter)
-
-      assert cycled_interpreter.st == interpreter.st
-    end
-
-    test "should return an interpreter struct with dt reseted when is less than 0" do
-      interpreter = Interpreter.new()
-      dt = Timer.new(-1)
-      interpreter = put_in(interpreter.dt, dt)
-
-      assert {:ok, cycled_interpreter = %Interpreter{}} = Interpreter.cycle(interpreter)
-
-      assert cycled_interpreter.dt == Timer.new()
-    end
-
-    test "should return an interpreter struct with st reseted when is less than 0" do
-      interpreter = Interpreter.new()
-      st = Timer.new(-1)
-      interpreter = put_in(interpreter.st, st)
-
-      assert {:ok, cycled_interpreter = %Interpreter{}} = Interpreter.cycle(interpreter)
-
-      assert cycled_interpreter.st == Timer.new()
-    end
-
     test "should return an error when the current instruction is invalid" do
       interpreter = Interpreter.new()
       invalid_bytes = [0xFF, 0xFF]
@@ -208,6 +209,126 @@ defmodule Chip8.InterpreterTest do
       interpreter = put_in(interpreter.memory, memory)
 
       assert {:error, :unknown_instruction} == Interpreter.cycle(interpreter)
+    end
+  end
+
+  describe "tick_timers/1" do
+    test "should return an interpreter with dt decremented by 1" do
+      interpreter = Interpreter.new()
+      dt_value = :rand.uniform(0xFFFF) + 1
+      dt = Timer.new(dt_value)
+      interpreter = put_in(interpreter.dt, dt)
+
+      assert ticked_interpreter = Interpreter.tick_timers(interpreter)
+
+      assert %Interpreter{} = ticked_interpreter
+      assert ticked_interpreter.dt == Timer.new(dt_value - 1)
+    end
+
+    test "should return an interpreter with st decremented by 1" do
+      interpreter = Interpreter.new()
+      st_value = :rand.uniform(0xFFFF) + 1
+      st = Timer.new(st_value)
+      interpreter = put_in(interpreter.st, st)
+
+      assert ticked_interpreter = Interpreter.tick_timers(interpreter)
+
+      assert %Interpreter{} = ticked_interpreter
+      assert ticked_interpreter.st == Timer.new(st_value - 1)
+    end
+
+    test "should return an interpreter with dt unchanged when is equals to 0" do
+      interpreter = Interpreter.new()
+
+      assert ticked_interpreter = Interpreter.tick_timers(interpreter)
+
+      assert ticked_interpreter.dt == interpreter.dt
+    end
+
+    test "should return an interpreter with st unchanged when is equals to 0" do
+      interpreter = Interpreter.new()
+
+      assert ticked_interpreter = Interpreter.tick_timers(interpreter)
+
+      assert ticked_interpreter.st == interpreter.st
+    end
+
+    test "should return an interpreter with dt reseted when is less than 0" do
+      interpreter = Interpreter.new()
+      dt = Timer.new(-1)
+      interpreter = put_in(interpreter.dt, dt)
+
+      assert ticked_interpreter = Interpreter.tick_timers(interpreter)
+
+      assert ticked_interpreter.dt == Timer.new()
+    end
+
+    test "should return an interpreter with st reseted when is less than 0" do
+      interpreter = Interpreter.new()
+      st = Timer.new(-1)
+      interpreter = put_in(interpreter.st, st)
+
+      assert ticked_interpreter = Interpreter.tick_timers(interpreter)
+
+      assert ticked_interpreter.st == Timer.new()
+    end
+  end
+
+  describe "press_key/2" do
+    test "should return an interpreter with the given keyboard key as pressed" do
+      interpreter = Interpreter.new()
+      key = :rand.uniform(0xF)
+
+      interpreter_with_key_pressed = Interpreter.press_key(interpreter, key)
+
+      assert Keyboard.is_pressed?(interpreter_with_key_pressed.keyboard, key)
+    end
+
+    test "should return an interpreter unchanged when the given keyboard key is already pressed" do
+      interpreter = Interpreter.new()
+      key = :rand.uniform(0xF)
+      keyboard = Keyboard.press_key(interpreter.keyboard, key)
+      interpreter = put_in(interpreter.keyboard, keyboard)
+
+      interpreter_with_key_pressed = Interpreter.press_key(interpreter, key)
+
+      assert interpreter_with_key_pressed == interpreter
+    end
+  end
+
+  describe "release_key/2" do
+    test "should return an interpreter with the given keyboard key as not pressed" do
+      interpreter = Interpreter.new()
+      key = :rand.uniform(0xF)
+      keyboard = Keyboard.press_key(interpreter.keyboard, key)
+      interpreter = put_in(interpreter.keyboard, keyboard)
+
+      interpreter_with_key_released = Interpreter.release_key(interpreter, key)
+
+      refute Keyboard.is_pressed?(interpreter_with_key_released.keyboard, key)
+    end
+
+    test "should return an interpreter unchanged when the given keyboard key is already pressed" do
+      interpreter = Interpreter.new()
+      key = :rand.uniform(0xF)
+
+      interpreter_with_key_released = Interpreter.release_key(interpreter, key)
+
+      refute Keyboard.is_pressed?(interpreter_with_key_released.keyboard, key)
+    end
+  end
+
+  describe "pixelmap/1" do
+    test "should return a list with the pixel content of the interpreter's display" do
+      interpreter = Interpreter.new()
+
+      pixelmap = Interpreter.pixelmap(interpreter)
+
+      flat_pixelmap = List.flatten(pixelmap)
+
+      assert Enum.all?(pixelmap, &is_list/1)
+      assert Enum.count(flat_pixelmap) == 2048
+      assert Enum.all?(flat_pixelmap, &(&1 == 0))
     end
   end
 end

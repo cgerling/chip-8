@@ -43,6 +43,8 @@ defmodule Chip8.Interpreter do
   alias Chip8.Stack
   alias Chip8.UInt
 
+  require Keyboard
+
   @enforce_keys [:display, :dt, :i, :keyboard, :memory, :pc, :st, :stack, :v]
   defstruct @enforce_keys
 
@@ -66,6 +68,15 @@ defmodule Chip8.Interpreter do
   @instruction_size Instruction.byte_size()
   @font_address 0x050
   @character_size Font.character_byte_size()
+
+  @spec initialize(bitstring()) :: t()
+  def initialize(program) when is_bitstring(program) do
+    font = Font.data()
+
+    new()
+    |> load_font(font)
+    |> load_program(program)
+  end
 
   @spec new() :: t()
   def new do
@@ -114,20 +125,16 @@ defmodule Chip8.Interpreter do
     %{interpreter | memory: memory_with_font}
   end
 
-  @spec load_program(t(), Memory.data()) :: t()
-  def load_program(%__MODULE__{} = interpreter, program) when is_list(program) do
-    memory = Memory.write(interpreter.memory, @initial_pc, program)
+  @spec load_program(t(), bitstring()) :: t()
+  def load_program(%__MODULE__{} = interpreter, program) when is_bitstring(program) do
+    program_data = :binary.bin_to_list(program)
+    memory = Memory.write(interpreter.memory, @initial_pc, program_data)
+
     %{interpreter | memory: memory}
   end
 
   @spec cycle(t()) :: {:ok, t()} | {:error, atom()}
   def cycle(%__MODULE__{} = interpreter) do
-    interpreter
-    |> tick_timers()
-    |> run_instruction()
-  end
-
-  defp run_instruction(%__MODULE__{} = interpreter) do
     data = Memory.read(interpreter.memory, interpreter.pc, @instruction_size)
 
     with {:ok, %Instruction{} = instruction} <- Instruction.decode(data) do
@@ -138,10 +145,28 @@ defmodule Chip8.Interpreter do
     end
   end
 
-  defp tick_timers(%__MODULE__{} = interpreter) do
+  @spec tick_timers(t()) :: t()
+  def tick_timers(%__MODULE__{} = interpreter) do
     dt = Timer.tick(interpreter.dt)
     st = Timer.tick(interpreter.st)
 
     %{interpreter | dt: dt, st: st}
+  end
+
+  @spec press_key(t(), Keyboard.key()) :: t()
+  def press_key(%__MODULE__{} = interpreter, key) when Keyboard.is_key(key) do
+    keyboard = Keyboard.press_key(interpreter.keyboard, key)
+    %{interpreter | keyboard: keyboard}
+  end
+
+  @spec release_key(t(), Keyboard.key()) :: t()
+  def release_key(%__MODULE__{} = interpreter, key) when Keyboard.is_key(key) do
+    keyboard = Keyboard.release_key(interpreter.keyboard, key)
+    %{interpreter | keyboard: keyboard}
+  end
+
+  @spec pixelmap(t()) :: Display.pixelmap()
+  def pixelmap(%__MODULE__{display: display}) do
+    Display.pixelmap(display)
   end
 end

@@ -46,4 +46,62 @@ defmodule Chip8.HexTest do
       assert number == 0xFEDCBA9876543210
     end
   end
+
+  describe "to_string/1" do
+    test "should return an string representing an hexadecimal number" do
+      numbers = [
+        {0, "0"},
+        {1, "1"},
+        {2, "2"},
+        {3, "3"},
+        {4, "4"},
+        {5, "5"},
+        {6, "6"},
+        {7, "7"},
+        {8, "8"},
+        {9, "9"},
+        {10, "A"},
+        {11, "B"},
+        {12, "C"},
+        {13, "D"},
+        {14, "E"},
+        {15, "F"}
+      ]
+
+      for {number, string} <- numbers do
+        hex_string = Hex.to_string(number)
+
+        assert hex_string == string
+      end
+    end
+  end
+
+  describe "from_string/1" do
+    test "should return an integer from a string representing an hexadecimal number" do
+      numbers = [
+        {"0", 0},
+        {"1", 1},
+        {"2", 2},
+        {"3", 3},
+        {"4", 4},
+        {"5", 5},
+        {"6", 6},
+        {"7", 7},
+        {"8", 8},
+        {"9", 9},
+        {"A", 10},
+        {"B", 11},
+        {"C", 12},
+        {"D", 13},
+        {"E", 14},
+        {"F", 15}
+      ]
+
+      for {string, number} <- numbers do
+        hex_number = Hex.from_string(string)
+
+        assert hex_number == number
+      end
+    end
+  end
 end

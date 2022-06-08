@@ -1,13 +1,14 @@
 defmodule Chip8.Interpreter.Timer do
   @moduledoc """
-  A timer is an 8-bit integer that decrements at a specific rate.
+  A timer is an 8-bit integer that decrements at a constant rate.
 
-  While a program is running, a timer can present two different states, 
-  **active** and **inactive**.
-  A timer is considered **active** whenever its value is above `0`, while it is
-  in this state, the value is decremented on steps of `1` at a rate of `60Hz`,
-  once the timer reaches `0` it is considered **inactive** and stops
-  decrementing itself.
+  Timers can have two different states, **active** and **inactive**. A timer is
+  **active** whenever its value is above 0, while in this state, the value
+  decrements whenever a ticks occurs until it reaches 0, when it becomes
+  **inactive** and stops decrementing. On each tick, the value decrements on
+  steps of 1, and they should run at a rate of `60Hz`. Such rate needs to
+  configured externally, it is common that emulators tie up this with the
+  display's refresh rate.
   """
 
   @enforce_keys [:value]
