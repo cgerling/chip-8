@@ -27,6 +27,7 @@ defmodule Chip8.InterpreterTest do
 
       assert %Display{} = interpreter.display
       assert %Memory{} = interpreter.memory
+      assert interpreter.cycle_rate == 10
       assert interpreter.dt == Timer.new()
       assert interpreter.keyboard == Keyboard.new()
       assert interpreter.pc == 0x200
@@ -67,6 +68,7 @@ defmodule Chip8.InterpreterTest do
 
       assert %Display{} = interpreter.display
       assert %Memory{} = interpreter.memory
+      assert interpreter.cycle_rate == 10
       assert interpreter.dt == Timer.new()
       assert interpreter.keyboard == Keyboard.new()
       assert interpreter.pc == 0x200
