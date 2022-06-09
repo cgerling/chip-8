@@ -24,7 +24,7 @@ defmodule Chip8 do
   defdelegate cycle(interpreter), to: Interpreter
 
   @doc """
-  Creates an interpreter instance with the given program loaded into its memory.
+  Shortcut to `Chip8.initialize/2`.
 
   ```elixir
     iex> program = File.read!(path)
@@ -34,6 +34,22 @@ defmodule Chip8 do
   """
   @spec initialize(bitstring()) :: Interpreter.t()
   defdelegate initialize(program), to: Interpreter
+
+  @doc """
+  Creates an interpreter instance with the given program loaded into its memory.
+
+  ## Options
+
+  * `cycle_rate` - amount of instructions that are going to be executed each cycle
+
+  ```elixir
+    iex> program = File.read!(path)
+    iex> Chip8.initialize(program, cycle_rate: 10)
+    %Chip8.Interpreter{}
+  ```
+  """
+  @spec initialize(bitstring(), Keyword.t()) :: Interpreter.t()
+  defdelegate initialize(program, opts), to: Interpreter
 
   @doc """
   Returns a pixelmap with the current content of the display.

@@ -45,10 +45,11 @@ defmodule Chip8.Interpreter do
 
   require Keyboard
 
-  @enforce_keys [:display, :dt, :i, :keyboard, :memory, :pc, :st, :stack, :v]
+  @enforce_keys [:cycle_rate, :display, :dt, :i, :keyboard, :memory, :pc, :st, :stack, :v]
   defstruct @enforce_keys
 
   @type t :: %__MODULE__{
+          cycle_rate: pos_integer(),
           display: Display.t(),
           dt: Timer.t(),
           i: non_neg_integer(),
@@ -69,19 +70,27 @@ defmodule Chip8.Interpreter do
   @font_address 0x050
   @character_size Font.character_byte_size()
 
+  @default_cycle_rate 10
+  @default_i 0x0
+
   @spec initialize(bitstring()) :: t()
-  def initialize(program) when is_bitstring(program) do
+  @spec initialize(bitstring(), Keyword.t()) :: t()
+  def initialize(program, opts \\ []) when is_bitstring(program) do
     font = Font.data()
 
-    new()
+    opts
+    |> new()
     |> load_font(font)
     |> load_program(program)
   end
 
   @spec new() :: t()
-  def new do
+  @spec new(Keyword.t()) :: t()
+  def new(opts \\ []) do
+    cycle_rate = Keyword.get(opts, :cycle_rate, @default_cycle_rate)
     display = Display.new(@display_height, @display_width)
     dt = Timer.new()
+    i = @default_i
     keyboard = Keyboard.new()
     memory = Memory.new(@memory_size)
     pc = @initial_pc
@@ -90,9 +99,10 @@ defmodule Chip8.Interpreter do
     v = VRegisters.new()
 
     %__MODULE__{
+      cycle_rate: cycle_rate,
       display: display,
       dt: dt,
-      i: 0,
+      i: i,
       keyboard: keyboard,
       memory: memory,
       pc: pc,
@@ -135,6 +145,17 @@ defmodule Chip8.Interpreter do
 
   @spec cycle(t()) :: {:ok, t()} | {:error, atom()}
   def cycle(%__MODULE__{} = interpreter) do
+    rate = 1..interpreter.cycle_rate
+
+    Enum.reduce_while(rate, {:ok, interpreter}, fn _, {:ok, interpreter} ->
+      case run_cycle(interpreter) do
+        {:ok, interpreter} -> {:cont, {:ok, interpreter}}
+        {:error, reason} -> {:halt, {:error, reason}}
+      end
+    end)
+  end
+
+  defp run_cycle(%__MODULE__{} = interpreter) do
     data = Memory.read(interpreter.memory, interpreter.pc, @instruction_size)
 
     with {:ok, %Instruction{} = instruction} <- Instruction.decode(data) do

@@ -27,6 +27,7 @@ defmodule Chip8.InterpreterTest do
 
       assert %Display{} = interpreter.display
       assert %Memory{} = interpreter.memory
+      assert interpreter.cycle_rate == 10
       assert interpreter.dt == Timer.new()
       assert interpreter.keyboard == Keyboard.new()
       assert interpreter.pc == 0x200
@@ -53,6 +54,13 @@ defmodule Chip8.InterpreterTest do
 
       assert Memory.read(interpreter.memory, 0x200, program_size) == program_data
     end
+
+    test "should return an interpreter struct with the given cycle rate" do
+      cycle_rate = :rand.uniform(100)
+      interpreter = Interpreter.initialize(@program, cycle_rate: cycle_rate)
+
+      assert interpreter.cycle_rate == cycle_rate
+    end
   end
 
   describe "new/0" do
@@ -67,12 +75,20 @@ defmodule Chip8.InterpreterTest do
 
       assert %Display{} = interpreter.display
       assert %Memory{} = interpreter.memory
+      assert interpreter.cycle_rate == 10
       assert interpreter.dt == Timer.new()
       assert interpreter.keyboard == Keyboard.new()
       assert interpreter.pc == 0x200
       assert interpreter.st == Timer.new()
       assert interpreter.stack == Stack.new()
       assert interpreter.v == VRegisters.new()
+    end
+
+    test "should return an interpreter with the given cycle rate" do
+      cycle_rate = :rand.uniform(100)
+      interpreter = Interpreter.new(cycle_rate: cycle_rate)
+
+      assert interpreter.cycle_rate == cycle_rate
     end
   end
 
@@ -183,28 +199,29 @@ defmodule Chip8.InterpreterTest do
   end
 
   describe "cycle/1" do
-    test "should return an interpreter struct after executing the current instruction" do
+    test "should return an interpreter struct after executing the cycle rate amount of instructions" do
       interpreter = Interpreter.new()
-      jp_bytes = [0x1B, 0xF0]
+      jp_bytes = [0x12, 0x04, 0x00, 0x00, 0x12, 0x00]
       memory = Memory.write(interpreter.memory, interpreter.pc, jp_bytes)
       interpreter = put_in(interpreter.memory, memory)
 
       assert {:ok, cycled_interpreter = %Interpreter{}} = Interpreter.cycle(interpreter)
 
-      assert cycled_interpreter.pc == 0xBF0
+      assert cycled_interpreter.pc == 0x200
     end
 
-    test "should return an interpreter struct with pc set to the next instruction address" do
-      interpreter = Interpreter.new()
-
-      assert {:ok, cycled_interpreter = %Interpreter{}} = Interpreter.cycle(interpreter)
-
-      assert cycled_interpreter.pc == interpreter.pc + @instruction_size
-    end
-
-    test "should return an error when the current instruction is invalid" do
+    test "should return an error when an instruction is invalid" do
       interpreter = Interpreter.new()
       invalid_bytes = [0xFF, 0xFF]
+      memory = Memory.write(interpreter.memory, interpreter.pc, invalid_bytes)
+      interpreter = put_in(interpreter.memory, memory)
+
+      assert {:error, :unknown_instruction} == Interpreter.cycle(interpreter)
+    end
+
+    test "should not execute the remaining instructions when an instruction at the middle is invalid" do
+      interpreter = Interpreter.new()
+      invalid_bytes = [0x12, 0x04, 0x00, 0x00, 0xFF, 0xFF, 0x60, 0x29]
       memory = Memory.write(interpreter.memory, interpreter.pc, invalid_bytes)
       interpreter = put_in(interpreter.memory, memory)
 
