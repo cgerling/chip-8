@@ -2,7 +2,10 @@
 
 <!-- MDOC !-->
 
-A Chip-8 interpreter.
+Core library for a Chip-8 interpreter.
+
+This library only handles the core logic to run Chip-8 programs and does not
+handle any I/O, which allows it to be easily embedded into a UI.
 
 Created by Joseph Weisbecker in the mid-1970s, Chip-8 is a programming language
 composed of hexadecimal instructions and are executed on the fly by a virtual
