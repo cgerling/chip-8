@@ -145,6 +145,17 @@ defmodule Chip8.Interpreter do
 
   @spec cycle(t()) :: {:ok, t()} | {:error, atom()}
   def cycle(%__MODULE__{} = interpreter) do
+    rate = 1..interpreter.cycle_rate
+
+    Enum.reduce_while(rate, {:ok, interpreter}, fn _, {:ok, interpreter} ->
+      case run_cycle(interpreter) do
+        {:ok, interpreter} -> {:cont, {:ok, interpreter}}
+        {:error, reason} -> {:halt, {:error, reason}}
+      end
+    end)
+  end
+
+  defp run_cycle(%__MODULE__{} = interpreter) do
     data = Memory.read(interpreter.memory, interpreter.pc, @instruction_size)
 
     with {:ok, %Instruction{} = instruction} <- Instruction.decode(data) do
