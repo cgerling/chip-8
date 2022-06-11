@@ -2,7 +2,10 @@
 
 <!-- MDOC !-->
 
-A Chip-8 interpreter.
+Core library for a Chip-8 interpreter.
+
+This library only handles the core logic to run Chip-8 programs and does not
+handle any I/O, which allows it to be easily embedded into a UI.
 
 Created by Joseph Weisbecker in the mid-1970s, Chip-8 is a programming language
 composed of hexadecimal instructions and are executed on the fly by a virtual
@@ -34,3 +37,18 @@ from user interaction to managing cycles and their relation with timers.
 
 See all `Chip8` functions for more information about each operation.
 
+<!-- MDOC !-->
+
+## Installation
+
+The package can be installed by adding `chip8` to your list of dependencies in `mix.exs`:
+
+```elixir
+def deps do
+  [
+    {:chip8, "~> 1.0"}
+  ]
+end
+```
+
+The docs can be found at [https://hexdocs.pm/chip8](https://hexdocs.pm/chip8).
