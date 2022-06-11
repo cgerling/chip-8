@@ -1,6 +1,9 @@
 name: ci
 
-on: push
+on:
+  push:
+    branches:
+      - '**'
 
 jobs:
   build:
@@ -8,8 +11,8 @@ jobs:
     steps:
       - uses: erlef/setup-beam@v1
         with:
-          otp-version: '24.0.2'
-          elixir-version: '1.13.1'
+          otp-version: '25.0.1'
+          elixir-version: '1.13.4'
       - uses: actions/checkout@v2
       - name: Cache Mix Artifacts
         uses: actions/cache@v2
@@ -30,8 +33,8 @@ jobs:
     steps:
       - uses: erlef/setup-beam@v1
         with:
-          otp-version: '24.0.2'
-          elixir-version: '1.13.1'
+          otp-version: '25.0.1'
+          elixir-version: '1.13.4'
       - uses: actions/checkout@v2
       - name: Cache Mix Artifacts
         uses: actions/cache@v2
@@ -60,8 +63,8 @@ jobs:
     steps:
       - uses: erlef/setup-beam@v1
         with:
-          otp-version: '24.0.2'
-          elixir-version: '1.13.1'
+          otp-version: '25.0.1'
+          elixir-version: '1.13.4'
       - uses: actions/checkout@v2
       - name: Cache Mix Artifacts
         uses: actions/cache@v2
