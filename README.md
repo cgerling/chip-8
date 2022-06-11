@@ -1,5 +1,7 @@
 # Chip-8
 
+[![ci](https://github.com/cgerling/chip-8/actions/workflows/ci.yml/badge.svg)](https://github.com/cgerling/chip-8/actions/workflows/ci.yml)
+
 <!-- MDOC !-->
 
 Core library for a Chip-8 interpreter.
