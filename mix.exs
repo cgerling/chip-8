@@ -2,6 +2,7 @@ defmodule Chip8.MixProject do
   use Mix.Project
 
   @version "0.1.0"
+  @repository_url "https://github.com/cgerling/chip-8"
 
   def project do
     [
@@ -39,7 +40,7 @@ defmodule Chip8.MixProject do
     [
       exclude_patterns: ["priv/plts"],
       licenses: ["Apache-2.0"],
-      links: %{"GitHub" => "https://github.com/cgerling/chip-8"}
+      links: %{"GitHub" => @repository_url}
     ]
   end
 
@@ -48,6 +49,7 @@ defmodule Chip8.MixProject do
       main: "readme",
       extras: ["README.md"],
       source_ref: "v#{@version}",
+      source_url: @repository_url,
       groups_for_modules: [
         Interpreter: [
           Chip8.Interpreter.Display,
