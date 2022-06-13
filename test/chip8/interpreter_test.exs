@@ -348,4 +348,14 @@ defmodule Chip8.InterpreterTest do
       assert Enum.all?(flat_pixelmap, &(&1 == 0))
     end
   end
+
+  describe "change_cycle_rate/2" do
+    test "should return an interpreter set with the given cycle rate" do
+      interpreter = Interpreter.new()
+
+      changed_interpreter = Interpreter.change_cycle_rate(interpreter, 1)
+
+      assert changed_interpreter.cycle_rate == 1
+    end
+  end
 end
