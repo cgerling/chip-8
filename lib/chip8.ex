@@ -51,7 +51,8 @@ defmodule Chip8 do
 
   ## Options
 
-  * `cycle_rate` - amount of instructions that are going to be executed each cycle
+  * `cycle_rate` - amount of instructions that are going to be executed each
+    cycle. Defaults to 10 when not specified.
 
   ```elixir
     iex> program = File.read!(path)
