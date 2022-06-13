@@ -9,6 +9,17 @@ defmodule Chip8 do
   alias Chip8.Interpreter.Keyboard
 
   @doc """
+  Changes the cycle rate of an interpreter.
+
+  ```elixir
+    iex> Chip8.change_cycle_rate(interpreter, 6)
+    %Chip8.Interpreter{}
+  ```
+  """
+  @spec change_cycle_rate(Interpreter.t(), pos_integer()) :: Interpreter.t()
+  defdelegate change_cycle_rate(interpreter, cycle_rate), to: Interpreter
+
+  @doc """
   Executes a single instruction cycle.
 
   A cycle is composed of 3 steps: fetch the instruction from memory, decode the
@@ -40,7 +51,8 @@ defmodule Chip8 do
 
   ## Options
 
-  * `cycle_rate` - amount of instructions that are going to be executed each cycle
+  * `cycle_rate` - amount of instructions that are going to be executed each
+    cycle. Defaults to 10 when not specified.
 
   ```elixir
     iex> program = File.read!(path)

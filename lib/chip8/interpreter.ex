@@ -190,4 +190,10 @@ defmodule Chip8.Interpreter do
   def pixelmap(%__MODULE__{display: display}) do
     Display.pixelmap(display)
   end
+
+  @spec change_cycle_rate(t(), pos_integer()) :: t()
+  def change_cycle_rate(%__MODULE__{} = interpreter, cycle_rate)
+      when is_integer(cycle_rate) and cycle_rate > 0 do
+    %{interpreter | cycle_rate: cycle_rate}
+  end
 end
