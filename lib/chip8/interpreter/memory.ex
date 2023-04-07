@@ -33,31 +33,39 @@ defmodule Chip8.Interpreter.Memory do
   end
 
   @spec read(t(), address(), non_neg_integer()) :: data()
-  def read(%__MODULE__{size: size}, address, _amount) when address >= size, do: []
-
   def read(%__MODULE__{} = memory, address, amount)
-      when is_integer(address) and is_integer(amount) and address >= 0 and amount >= 0 do
-    readable_data_size = min(memory.size - address, amount) - 1
-    Enum.map(0..readable_data_size, &Map.fetch!(memory.data, address + &1))
+      when is_integer(address) and is_integer(amount) do
+    address_range = build_address_range(memory, address, amount)
+
+    Enum.map(address_range, &Map.fetch!(memory.data, &1))
   end
 
   @spec write(t(), address(), data()) :: t()
-  def write(%__MODULE__{} = memory, _address, []), do: memory
-
-  def write(%__MODULE__{} = memory, address, _data) when address >= memory.size, do: memory
-
   def write(%__MODULE__{} = memory, address, data)
-      when is_integer(address) and is_list(data) and is_list(data) do
-    writtable_data_size = max(memory.size - address, 0)
+      when is_integer(address) and is_list(data) do
+    amount = Enum.count(data)
+    address_range = build_address_range(memory, address, amount)
 
     data =
-      data
-      |> Enum.slice(0, writtable_data_size)
-      |> Enum.with_index()
-      |> Enum.reduce(memory.data, fn {byte, index}, data ->
-        Map.replace(data, address + index, byte)
+      address_range
+      |> Enum.zip(data)
+      |> Enum.reduce(memory.data, fn {address, value}, data ->
+        Map.replace(data, address, value)
       end)
 
     %{memory | data: data}
+  end
+
+  defp build_address_range(%__MODULE__{}, _address, amount) when amount <= 0, do: []
+
+  defp build_address_range(%__MODULE__{}, address, _amount) when address < 0, do: []
+
+  defp build_address_range(%__MODULE__{size: size}, address, _amount) when address >= size, do: []
+
+  defp build_address_range(%__MODULE__{size: size}, address, amount) do
+    range_start = address
+    range_end = min(address + amount, size) - 1
+
+    range_start..range_end//1
   end
 end
