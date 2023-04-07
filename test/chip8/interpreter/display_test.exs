@@ -16,9 +16,11 @@ defmodule Chip8.Interpreter.DisplayTest do
 
   describe "clear/1" do
     test "should return a display struct with all pixels off" do
+      sprite = 0xFF |> List.duplicate(15) |> Sprite.new()
+      coordinates = {0, 0}
+
       display = Display.new(10, 10)
-      filled_pixels = List.duplicate(1, display.height * display.width)
-      display = %{display | pixels: filled_pixels}
+      display = Display.draw(display, coordinates, sprite)
 
       cleared_display = Display.clear(display)
 

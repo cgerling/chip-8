@@ -22,10 +22,11 @@ defmodule Chip8.Interpreter.Instruction.DRWTest do
       arguments = {vx, vy, nibble}
       executed_interpreter = DRW.execute(interpreter, arguments)
 
-      sprite_rendered_pixels = Enum.slice(executed_interpreter.display.pixels, 0, 8)
+      sprite_rendered_pixels =
+        executed_interpreter.display |> Display.pixelmap() |> List.first() |> Enum.slice(0, 8)
 
       assert %Interpreter{} = executed_interpreter
-      assert [1, 1, 0, 1, 1, 0, 0, 1] == sprite_rendered_pixels
+      assert sprite_rendered_pixels == [1, 1, 0, 1, 1, 0, 0, 1]
     end
 
     test "should return an interpreter with VF set to 0 when there was no pixel collision" do

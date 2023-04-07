@@ -29,13 +29,14 @@ defmodule Chip8.Interpreter.Display do
 
   @type t() :: %__MODULE__{
           height: dimension(),
-          pixels: [pixel(), ...],
+          pixels: %{non_neg_integer() => pixel()},
           width: dimension()
         }
 
   @spec new(dimension(), dimension()) :: t()
   def new(height, width) when is_integer(height) and is_integer(width) do
-    pixels = List.duplicate(0, height * width)
+    last_pixel = height * width - 1
+    pixels = Map.new(0..last_pixel, &{&1, 0})
 
     %__MODULE__{
       height: height,
@@ -60,10 +61,12 @@ defmodule Chip8.Interpreter.Display do
   @spec draw(t(), coordinates(), Sprite.t()) :: t()
   def draw(%__MODULE__{} = display, {x, y}, %Sprite{} = sprite) do
     visible_sprite_width = max(display.width - x, 0)
+    visible_sprite_height = max(display.height - y, 0)
 
     pixels =
       sprite
       |> Sprite.to_bitmap()
+      |> Enum.slice(0, visible_sprite_height)
       |> Enum.with_index()
       |> Enum.reduce(display.pixels, fn {byte, y_index}, pixels ->
         byte
@@ -72,7 +75,7 @@ defmodule Chip8.Interpreter.Display do
         |> Enum.reduce(pixels, fn {bit, x_index}, pixels ->
           position = display.width * (y + y_index) + (x + x_index)
 
-          List.update_at(pixels, position, &Bitwise.bxor(&1, bit))
+          Map.update!(pixels, position, &Bitwise.bxor(&1, bit))
         end)
       end)
 
@@ -92,5 +95,6 @@ defmodule Chip8.Interpreter.Display do
   end
 
   @spec pixelmap(t()) :: pixelmap()
-  def pixelmap(%__MODULE__{pixels: pixels, width: width}), do: Enum.chunk_every(pixels, width)
+  def pixelmap(%__MODULE__{height: height, pixels: pixels, width: width}),
+    do: 0..(height * width - 1) |> Enum.map(&Map.get(pixels, &1)) |> Enum.chunk_every(width)
 end
