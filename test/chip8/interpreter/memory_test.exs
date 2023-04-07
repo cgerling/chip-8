@@ -89,7 +89,7 @@ defmodule Chip8.Interpreter.MemoryTest do
       written_memory = Memory.write(memory, address, data)
 
       assert %Memory{} = written_memory
-      assert [1, 2, 3, 4, 5, 0, 0, 0, 0, 0] == written_memory.data
+      assert written_memory.data == memory_data([1, 2, 3, 4, 5, 0, 0, 0, 0, 0])
     end
 
     test "should return a memory struct with data truncated on the given address when data overflows memory" do
@@ -101,7 +101,13 @@ defmodule Chip8.Interpreter.MemoryTest do
       written_memory = Memory.write(memory, address, data)
 
       assert %Memory{} = written_memory
-      assert [0, 0, 0, 0, 0, 0, 1, 2, 3, 4] == written_memory.data
+      assert written_memory.data == memory_data([0, 0, 0, 0, 0, 0, 1, 2, 3, 4])
     end
+  end
+
+  defp memory_data(list) do
+    list
+    |> Enum.with_index()
+    |> Map.new(fn {value, index} -> {index, value} end)
   end
 end

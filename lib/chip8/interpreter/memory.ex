@@ -14,16 +14,17 @@ defmodule Chip8.Interpreter.Memory do
   @enforce_keys [:data, :size]
   defstruct @enforce_keys
 
+  @type address :: non_neg_integer()
   @type data() :: [byte()]
 
   @type t() :: %__MODULE__{
-          data: [byte(), ...],
+          data: %{address() => byte()},
           size: non_neg_integer()
         }
 
   @spec new(non_neg_integer()) :: t()
   def new(size) when is_integer(size) do
-    data = List.duplicate(0, size)
+    data = Map.new(0..(size - 1), &{&1, 0})
 
     %__MODULE__{
       data: data,
@@ -31,15 +32,16 @@ defmodule Chip8.Interpreter.Memory do
     }
   end
 
-  @spec read(t(), non_neg_integer(), non_neg_integer()) :: data()
+  @spec read(t(), address(), non_neg_integer()) :: data()
   def read(%__MODULE__{size: size}, address, _amount) when address >= size, do: []
 
-  def read(%__MODULE__{data: data}, address, amount)
+  def read(%__MODULE__{} = memory, address, amount)
       when is_integer(address) and is_integer(amount) and address >= 0 and amount >= 0 do
-    Enum.slice(data, address, amount)
+    readable_data_size = min(memory.size - address, amount) - 1
+    Enum.map(0..readable_data_size, &Map.fetch!(memory.data, address + &1))
   end
 
-  @spec write(t(), non_neg_integer(), data()) :: t()
+  @spec write(t(), address(), data()) :: t()
   def write(%__MODULE__{} = memory, _address, []), do: memory
 
   def write(%__MODULE__{} = memory, address, _data) when address >= memory.size, do: memory
@@ -53,7 +55,7 @@ defmodule Chip8.Interpreter.Memory do
       |> Enum.slice(0, writtable_data_size)
       |> Enum.with_index()
       |> Enum.reduce(memory.data, fn {byte, index}, data ->
-        List.replace_at(data, address + index, byte)
+        Map.replace(data, address + index, byte)
       end)
 
     %{memory | data: data}
