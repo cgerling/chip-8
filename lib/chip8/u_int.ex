@@ -1,17 +1,21 @@
 defmodule Chip8.UInt do
   @moduledoc false
 
-  @spec to_uint8(integer()) :: non_neg_integer()
+  @type uint8() :: 0x0..0xFF
+  @type uint12() :: 0x0..0xFFF
+  @type uint16() :: 0x0..0xFFFF
+
+  @spec to_uint8(integer()) :: uint8()
   def to_uint8(integer) when is_integer(integer) do
     to_uint(integer, 8)
   end
 
-  @spec to_uint12(integer()) :: non_neg_integer()
+  @spec to_uint12(integer()) :: uint12()
   def to_uint12(integer) when is_integer(integer) do
     to_uint(integer, 12)
   end
 
-  @spec to_uint16(integer()) :: non_neg_integer()
+  @spec to_uint16(integer()) :: uint16()
   def to_uint16(integer) when is_integer(integer) do
     to_uint(integer, 16)
   end
