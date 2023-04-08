@@ -31,7 +31,7 @@ defmodule Chip8.Interpreter.VRegisters do
     }
   end
 
-  defguardp is_register(register) when is_integer(register) and register in 0x0..0xF
+  defguard is_register(value) when is_integer(value) and value in 0x0..0xF
 
   @spec get(t(), register()) :: non_neg_integer()
   def get(%__MODULE__{data: data}, register) when is_register(register) do
