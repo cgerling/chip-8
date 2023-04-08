@@ -14,7 +14,7 @@ defmodule Chip8.Interpreter.Display.SpriteTest do
       overflow_data = List.duplicate(0xFF, 20)
       sprite = Sprite.new(overflow_data)
 
-      assert Enum.count(sprite.data) == 15
+      assert Enum.count(sprite.data) == 15 * 8
     end
   end
 

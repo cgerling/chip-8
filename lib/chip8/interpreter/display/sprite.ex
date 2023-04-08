@@ -21,7 +21,7 @@ defmodule Chip8.Interpreter.Display.Sprite do
   @type data() :: [byte(), ...]
 
   @type t() :: %__MODULE__{
-          data: data()
+          data: [bit()]
         }
 
   @width 8
@@ -29,22 +29,28 @@ defmodule Chip8.Interpreter.Display.Sprite do
 
   @spec new(data()) :: t()
   def new(data) when is_list(data) do
-    data = Enum.slice(data, 0, @max_height)
+    data =
+      data
+      |> Enum.slice(0, @max_height)
+      |> Enum.map(&to_bits/1)
+      |> List.flatten()
 
     %__MODULE__{
       data: data
     }
   end
 
+  defp to_bits(byte) do
+    bits = Integer.digits(byte, 2)
+
+    padding_amount = @width - Enum.count(bits)
+    padding = List.duplicate(0, padding_amount)
+
+    List.flatten([padding | bits])
+  end
+
   @spec to_bitmap(t()) :: bitmap()
   def to_bitmap(%__MODULE__{data: data}) do
-    Enum.map(data, fn byte ->
-      bits = Integer.digits(byte, 2)
-
-      padding_amount = @width - Enum.count(bits)
-      padding = List.duplicate(0, padding_amount)
-
-      List.flatten([padding | bits])
-    end)
+    Enum.chunk_every(data, @width)
   end
 end
