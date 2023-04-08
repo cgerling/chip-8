@@ -9,9 +9,10 @@ defmodule Chip8.Interpreter.Instruction.Decoder do
   alias Chip8.Interpreter.Instruction.Argument.Register
   alias Chip8.Interpreter.Memory
 
+  defguardp is_byte(value) when is_integer(value) and value in 0x00..0xFF
+
   @spec decode(Memory.data()) :: {:ok, Instruction.t()} | {:error, atom()}
-  def decode([byte1, byte2] = data)
-      when is_integer(byte1) and is_integer(byte2) and byte1 in 0x00..0xFF and byte2 in 0x00..0xFF do
+  def decode([byte1, byte2] = data) when is_byte(byte1) and is_byte(byte2) do
     data
     |> parse_data()
     |> decode_data()
