@@ -44,7 +44,7 @@ defmodule Chip8.Interpreter do
   alias Chip8.UInt
 
   require Chip8.Interpreter.Font
-  require Keyboard
+  require Chip8.Interpreter.Keyboard
 
   @enforce_keys [:cycle_rate, :display, :dt, :i, :keyboard, :memory, :pc, :st, :stack, :v]
   defstruct @enforce_keys
