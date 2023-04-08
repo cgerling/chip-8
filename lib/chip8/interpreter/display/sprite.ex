@@ -17,7 +17,7 @@ defmodule Chip8.Interpreter.Display.Sprite do
   defstruct @enforce_keys
 
   @type bit() :: 0 | 1
-  @type bitmap() :: list(list(bit()))
+  @type bitmap() :: [[bit(), ...], ...]
   @type data() :: [byte(), ...]
 
   @type t() :: %__MODULE__{

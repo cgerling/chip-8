@@ -31,7 +31,7 @@ defmodule Chip8.Interpreter.Keyboard do
     %__MODULE__{keys: keys}
   end
 
-  @spec keys() :: list(key())
+  @spec keys() :: [key(), ...]
   def keys, do: Enum.to_list(0x0..0xF)
 
   @spec is_pressed?(t(), key()) :: boolean()

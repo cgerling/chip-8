@@ -7,7 +7,7 @@ defmodule Chip8.Stack do
   defstruct @enforce_keys
 
   @type t() :: %__MODULE__{
-          data: list(byte()),
+          data: [byte()],
           size: non_neg_integer()
         }
 

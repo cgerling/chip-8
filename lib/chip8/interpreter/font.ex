@@ -23,7 +23,7 @@ defmodule Chip8.Interpreter.Font do
   @spec character_byte_size() :: pos_integer()
   def character_byte_size, do: 5
 
-  @spec data() :: list(byte())
+  @spec data() :: [byte(), ...]
   def data,
     do:
       List.flatten([

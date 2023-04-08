@@ -3,7 +3,7 @@ defmodule Chip8.Hex do
 
   @base 16
 
-  @spec digits(integer(), Keyword.t()) :: list(integer())
+  @spec digits(integer(), Keyword.t()) :: [integer(), ...]
   def digits(number, opts \\ []) when is_integer(number) do
     digits = Integer.digits(number, @base)
 
@@ -16,7 +16,7 @@ defmodule Chip8.Hex do
     List.flatten([padding | digits])
   end
 
-  @spec from_digits(list(integer())) :: integer()
+  @spec from_digits([integer()]) :: integer()
   def from_digits(digits) when is_list(digits) do
     Integer.undigits(digits, @base)
   end

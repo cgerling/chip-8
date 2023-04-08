@@ -14,10 +14,10 @@ defmodule Chip8.Interpreter.Memory do
   @enforce_keys [:data, :size]
   defstruct @enforce_keys
 
-  @type data() :: list(byte())
+  @type data() :: [byte()]
 
   @type t() :: %__MODULE__{
-          data: data,
+          data: [byte(), ...],
           size: non_neg_integer()
         }
 

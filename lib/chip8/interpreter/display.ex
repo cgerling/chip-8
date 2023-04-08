@@ -25,11 +25,11 @@ defmodule Chip8.Interpreter.Display do
   @type dimension() :: non_neg_integer()
   @type pixel() :: 0 | 1
   @type coordinates() :: {x :: non_neg_integer(), y :: non_neg_integer()}
-  @type pixelmap() :: list(list(pixel()))
+  @type pixelmap() :: [[pixel(), ...], ...]
 
   @type t() :: %__MODULE__{
           height: dimension(),
-          pixels: list(pixel()),
+          pixels: [pixel(), ...],
           width: dimension()
         }
 
