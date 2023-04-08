@@ -38,6 +38,8 @@ defmodule Chip8.Interpreter.Font do
                [0xF0, 0x80, 0xF0, 0x80, 0x80]
              ])
 
+  @type character() :: 0x0..0xF
+
   @spec character_byte_size() :: pos_integer()
   def character_byte_size, do: 5
 

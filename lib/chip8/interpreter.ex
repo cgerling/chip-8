@@ -124,7 +124,7 @@ defmodule Chip8.Interpreter do
     %{interpreter | pc: previous_instruction_address}
   end
 
-  @spec get_font_character_address(0x0..0xF) :: non_neg_integer()
+  @spec get_font_character_address(Font.character()) :: non_neg_integer()
   def get_font_character_address(character) when is_integer(character) and character in 0x0..0xF,
     do: @font_address + @character_size * character
 
