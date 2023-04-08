@@ -3,7 +3,10 @@ defmodule Chip8.Interpreter.Instruction.Argument.Byte do
   An 8-bit integer literal value.
   """
 
+  import Chip8.Interpreter.Instruction.Argument
+
   alias Chip8.Hex
+  alias Chip8.Interpreter.Instruction.Argument
 
   @enforce_keys [:value]
   defstruct @enforce_keys
@@ -14,9 +17,8 @@ defmodule Chip8.Interpreter.Instruction.Argument.Byte do
           value: value()
         }
 
-  @spec new(0x0..0xF, 0x0..0xF) :: t()
-  def new(byte1, byte2)
-      when is_integer(byte1) and is_integer(byte2) and byte1 in 0x0..0xF and byte2 in 0x0..0xF do
+  @spec new(Argument.nibble(), Argument.nibble()) :: t()
+  def new(byte1, byte2) when is_nibble(byte1) and is_nibble(byte2) do
     [byte1, byte2]
     |> Hex.from_digits()
     |> new()

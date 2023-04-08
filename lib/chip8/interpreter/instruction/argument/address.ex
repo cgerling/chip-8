@@ -3,7 +3,10 @@ defmodule Chip8.Interpreter.Instruction.Argument.Address do
   A 12-bit integer value representing a memory address location.
   """
 
+  import Chip8.Interpreter.Instruction.Argument
+
   alias Chip8.Hex
+  alias Chip8.Interpreter.Instruction.Argument
 
   @enforce_keys [:value]
   defstruct @enforce_keys
@@ -14,10 +17,9 @@ defmodule Chip8.Interpreter.Instruction.Argument.Address do
           value: value()
         }
 
-  @spec new(0x0..0xF, 0x0..0xF, 0x0..0xF) :: t()
+  @spec new(Argument.nibble(), Argument.nibble(), Argument.nibble()) :: t()
   def new(address1, address2, address3)
-      when is_integer(address1) and is_integer(address2) and is_integer(address3) and
-             address1 in 0x0..0xF and address2 in 0x0..0xF and address3 in 0x0..0xF do
+      when is_nibble(address1) and is_nibble(address2) and is_nibble(address3) do
     [address1, address2, address3]
     |> Hex.from_digits()
     |> new()
