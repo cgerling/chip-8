@@ -15,14 +15,16 @@ defmodule Chip8.Interpreter.Instruction.Argument.Register do
   `st`        | sound timer, see `Chip8.Interpreter` for more information.
   """
 
+  alias Chip8.Interpreter.VRegisters
+
   @enforce_keys [:value]
   defstruct @enforce_keys
 
   @type t() :: %__MODULE__{
-          value: 0x0..0xF | :bcd | :dt | :font | :i | :keyboard | :memory | :st
+          value: VRegisters.register() | :bcd | :dt | :font | :i | :keyboard | :memory | :st
         }
 
-  @spec v(0x0..0xF) :: t()
+  @spec v(VRegisters.register()) :: t()
   def v(index) when is_integer(index) and index in 0x0..0xF do
     %__MODULE__{
       value: index

@@ -8,10 +8,10 @@ defmodule Chip8.Interpreter.Instruction.Argument.Address do
   @enforce_keys [:value]
   defstruct @enforce_keys
 
-  @type value_range() :: 0x000..0xFFF
+  @type value() :: 0x000..0xFFF
 
   @type t() :: %__MODULE__{
-          value: value_range()
+          value: value()
         }
 
   @spec new(0x0..0xF, 0x0..0xF, 0x0..0xF) :: t()
@@ -23,7 +23,7 @@ defmodule Chip8.Interpreter.Instruction.Argument.Address do
     |> new()
   end
 
-  @spec new(value_range()) :: t()
+  @spec new(value()) :: t()
   def new(value) when is_integer(value) and value in 0x000..0xFFF do
     %__MODULE__{
       value: value
