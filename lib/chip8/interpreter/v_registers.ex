@@ -22,6 +22,8 @@ defmodule Chip8.Interpreter.VRegisters do
           data: %{register() => byte()}
         }
 
+  defguard is_register(value) when is_integer(value) and value in 0x0..0xF
+
   @spec new() :: t()
   def new do
     data = Map.new(0x0..0xF, &{&1, 0})
@@ -30,8 +32,6 @@ defmodule Chip8.Interpreter.VRegisters do
       data: data
     }
   end
-
-  defguard is_register(value) when is_integer(value) and value in 0x0..0xF
 
   @spec get(t(), register()) :: non_neg_integer()
   def get(%__MODULE__{data: data}, register) when is_register(register) do
