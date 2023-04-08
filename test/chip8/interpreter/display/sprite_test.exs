@@ -9,6 +9,13 @@ defmodule Chip8.Interpreter.Display.SpriteTest do
 
       assert %Sprite{} = sprite
     end
+
+    test "should return a sprite struct with data trimmed when data is bigger than the a sprite limit" do
+      overflow_data = List.duplicate(0xFF, 20)
+      sprite = Sprite.new(overflow_data)
+
+      assert Enum.count(sprite.data) == 15
+    end
   end
 
   describe "to_bitmap/1" do

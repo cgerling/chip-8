@@ -25,9 +25,12 @@ defmodule Chip8.Interpreter.Display.Sprite do
         }
 
   @width 8
+  @max_height 15
 
   @spec new(data()) :: t()
   def new(data) when is_list(data) do
+    data = Enum.slice(data, 0, @max_height)
+
     %__MODULE__{
       data: data
     }
