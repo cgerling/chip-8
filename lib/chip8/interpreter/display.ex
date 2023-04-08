@@ -17,6 +17,7 @@ defmodule Chip8.Interpreter.Display do
   1 when the pixel is "on" and 0 when is "off".
   """
 
+  alias Chip8.Interpreter.Display.Coordinates
   alias Chip8.Interpreter.Display.Sprite
 
   @enforce_keys [:height, :pixels, :width]
@@ -24,19 +25,18 @@ defmodule Chip8.Interpreter.Display do
 
   @type dimension() :: non_neg_integer()
   @type pixel() :: 0 | 1
-  @type coordinates() :: {x :: non_neg_integer(), y :: non_neg_integer()}
   @type pixelmap() :: [[pixel(), ...], ...]
 
   @type t() :: %__MODULE__{
           height: dimension(),
-          pixels: %{non_neg_integer() => pixel()},
+          pixels: %{Coordinates.t() => pixel()},
           width: dimension()
         }
 
   @spec new(dimension(), dimension()) :: t()
   def new(height, width) when is_integer(height) and is_integer(width) do
     last_pixel = height * width - 1
-    pixels = Map.new(0..last_pixel, &{&1, 0})
+    pixels = Map.new(0..last_pixel, &{Coordinates.from_ordinal(&1, width), 0})
 
     %__MODULE__{
       height: height,
@@ -50,33 +50,28 @@ defmodule Chip8.Interpreter.Display do
     new(height, width)
   end
 
-  @spec get_coordinates(t(), non_neg_integer(), non_neg_integer()) :: coordinates()
+  @spec get_coordinates(t(), non_neg_integer(), non_neg_integer()) :: Coordinates.t()
   def get_coordinates(%__MODULE__{} = display, x, y) when is_integer(x) and is_integer(y) do
-    coordinate_x = rem(x, display.width)
-    coordinate_y = rem(y, display.height)
+    x = rem(x, display.width)
+    y = rem(y, display.height)
 
-    {coordinate_x, coordinate_y}
+    Coordinates.new(x, y)
   end
 
-  @spec draw(t(), coordinates(), Sprite.t()) :: t()
-  def draw(%__MODULE__{} = display, {x, y}, %Sprite{} = sprite) do
-    visible_sprite_width = max(display.width - x, 0)
-    visible_sprite_height = max(display.height - y, 0)
+  @spec draw(t(), Coordinates.t(), Sprite.t()) :: t()
+  def draw(%__MODULE__{} = display, %Coordinates{} = coordinates, %Sprite{} = sprite) do
+    visible_width = max(display.width - coordinates.x, 0)
+    visible_height = max(display.height - coordinates.y, 0)
 
     pixels =
       sprite
       |> Sprite.to_bitmap()
-      |> Enum.slice(0, visible_sprite_height)
-      |> Enum.with_index()
-      |> Enum.reduce(display.pixels, fn {byte, y_index}, pixels ->
-        byte
-        |> Enum.slice(0, visible_sprite_width)
-        |> Enum.with_index()
-        |> Enum.reduce(pixels, fn {bit, x_index}, pixels ->
-          position = display.width * (y + y_index) + (x + x_index)
-
-          Map.update!(pixels, position, &Bitwise.bxor(&1, bit))
-        end)
+      |> Enum.filter(fn {coordinates, _} ->
+        coordinates.x < visible_width and coordinates.y < visible_height
+      end)
+      |> Enum.reduce(display.pixels, fn {bit_coordinates, bit}, pixels ->
+        pixel_coordinates = Coordinates.add(coordinates, bit_coordinates)
+        Map.update!(pixels, pixel_coordinates, &Bitwise.bxor(&1, bit))
       end)
 
     %{display | pixels: pixels}
@@ -95,6 +90,12 @@ defmodule Chip8.Interpreter.Display do
   end
 
   @spec pixelmap(t()) :: pixelmap()
-  def pixelmap(%__MODULE__{height: height, pixels: pixels, width: width}),
-    do: 0..(height * width - 1) |> Enum.map(&Map.get(pixels, &1)) |> Enum.chunk_every(width)
+  def pixelmap(%__MODULE__{height: height, pixels: pixels, width: width}) do
+    for y <- 0..(height - 1) do
+      for x <- 0..(width - 1) do
+        coordinates = Coordinates.new(x, y)
+        Map.fetch!(pixels, coordinates)
+      end
+    end
+  end
 end

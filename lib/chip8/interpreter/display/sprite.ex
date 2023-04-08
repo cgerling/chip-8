@@ -13,11 +13,13 @@ defmodule Chip8.Interpreter.Display.Sprite do
   `Chip8.Interpreter.Font` for more information.
   """
 
+  alias Chip8.Interpreter.Display.Coordinates
+
   @enforce_keys [:data]
   defstruct @enforce_keys
 
   @type bit() :: 0 | 1
-  @type bitmap() :: [[bit(), ...], ...]
+  @type bitmap() :: [{Coordinates.t(), bit()}]
   @type data() :: [byte(), ...]
 
   @type t() :: %__MODULE__{
@@ -51,6 +53,10 @@ defmodule Chip8.Interpreter.Display.Sprite do
 
   @spec to_bitmap(t()) :: bitmap()
   def to_bitmap(%__MODULE__{data: data}) do
-    Enum.chunk_every(data, @width)
+    data
+    |> Enum.with_index()
+    |> Enum.map(fn {bit, index} ->
+      {Coordinates.from_ordinal(index, @width), bit}
+    end)
   end
 end
