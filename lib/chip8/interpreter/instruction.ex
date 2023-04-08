@@ -48,7 +48,7 @@ defmodule Chip8.Interpreter.Instruction do
   alias Chip8.Interpreter.Instruction.Decoder
   alias Chip8.Interpreter.Memory
 
-  @type arguments ::
+  @type arguments() ::
           {}
           | {Address.t()}
           | {Register.t()}
@@ -63,7 +63,7 @@ defmodule Chip8.Interpreter.Instruction do
   @enforce_keys [:arguments, :module]
   defstruct @enforce_keys
 
-  @type t :: %__MODULE__{
+  @type t() :: %__MODULE__{
           arguments: arguments(),
           module: module()
         }

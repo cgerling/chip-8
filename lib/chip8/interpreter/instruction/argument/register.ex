@@ -18,7 +18,7 @@ defmodule Chip8.Interpreter.Instruction.Argument.Register do
   @enforce_keys [:value]
   defstruct @enforce_keys
 
-  @type t :: %__MODULE__{
+  @type t() :: %__MODULE__{
           value: 0x0..0xF | :bcd | :dt | :font | :i | :keyboard | :memory | :st
         }
 

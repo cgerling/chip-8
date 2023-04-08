@@ -16,9 +16,9 @@ defmodule Chip8.Interpreter.VRegisters do
   @enforce_keys [:data]
   defstruct @enforce_keys
 
-  @type register :: 0x0..0xF
+  @type register() :: 0x0..0xF
 
-  @type t :: %__MODULE__{
+  @type t() :: %__MODULE__{
           data: %{register() => byte()}
         }
 

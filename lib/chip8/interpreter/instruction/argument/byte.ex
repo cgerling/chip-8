@@ -8,9 +8,9 @@ defmodule Chip8.Interpreter.Instruction.Argument.Byte do
   @enforce_keys [:value]
   defstruct @enforce_keys
 
-  @type value_range :: 0x00..0xFF
+  @type value_range() :: 0x00..0xFF
 
-  @type t :: %__MODULE__{
+  @type t() :: %__MODULE__{
           value: value_range()
         }
 

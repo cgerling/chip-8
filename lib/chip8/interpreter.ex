@@ -48,7 +48,7 @@ defmodule Chip8.Interpreter do
   @enforce_keys [:cycle_rate, :display, :dt, :i, :keyboard, :memory, :pc, :st, :stack, :v]
   defstruct @enforce_keys
 
-  @type t :: %__MODULE__{
+  @type t() :: %__MODULE__{
           cycle_rate: pos_integer(),
           display: Display.t(),
           dt: Timer.t(),

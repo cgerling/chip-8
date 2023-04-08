@@ -14,7 +14,7 @@ defmodule Chip8.Interpreter.Timer do
   @enforce_keys [:value]
   defstruct @enforce_keys
 
-  @type t :: %__MODULE__{
+  @type t() :: %__MODULE__{
           value: non_neg_integer()
         }
 

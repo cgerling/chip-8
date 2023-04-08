@@ -15,10 +15,10 @@ defmodule Chip8.Interpreter.Keyboard do
   @enforce_keys [:keys]
   defstruct @enforce_keys
 
-  @type key :: 0x0..0xF
-  @type key_state :: :none | :pressed
+  @type key() :: 0x0..0xF
+  @type key_state() :: :none | :pressed
 
-  @type t :: %__MODULE__{
+  @type t() :: %__MODULE__{
           keys: %{key() => key_state()}
         }
 

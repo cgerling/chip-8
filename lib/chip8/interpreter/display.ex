@@ -22,14 +22,14 @@ defmodule Chip8.Interpreter.Display do
   @enforce_keys [:height, :pixels, :width]
   defstruct @enforce_keys
 
-  @type dimension :: non_neg_integer()
-  @type pixel :: 0 | 1
-  @type coordinates :: {x :: non_neg_integer(), y :: non_neg_integer()}
-  @type pixelmap :: list(list(pixel()))
+  @type dimension() :: non_neg_integer()
+  @type pixel() :: 0 | 1
+  @type coordinates() :: {x :: non_neg_integer(), y :: non_neg_integer()}
+  @type pixelmap() :: list(list(pixel()))
 
-  @type t :: %__MODULE__{
+  @type t() :: %__MODULE__{
           height: dimension(),
-          pixels: list(pixel),
+          pixels: list(pixel()),
           width: dimension()
         }
 
