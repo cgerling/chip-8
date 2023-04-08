@@ -18,14 +18,15 @@ defmodule Chip8.Interpreter.Display.Sprite do
 
   @type bit :: 0 | 1
   @type bitmap :: list(list(bit()))
+  @type data() :: [byte(), ...]
 
   @type t :: %__MODULE__{
-          data: list(byte())
+          data: data()
         }
 
   @width 8
 
-  @spec new(list()) :: t()
+  @spec new(data()) :: t()
   def new(data) when is_list(data) do
     %__MODULE__{
       data: data
