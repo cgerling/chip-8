@@ -17,6 +17,8 @@ defmodule Chip8.Interpreter.Instruction.Argument.Register do
 
   alias Chip8.Interpreter.VRegisters
 
+  require Chip8.Interpreter.VRegisters
+
   @enforce_keys [:value]
   defstruct @enforce_keys
 
@@ -25,9 +27,9 @@ defmodule Chip8.Interpreter.Instruction.Argument.Register do
         }
 
   @spec v(VRegisters.register()) :: t()
-  def v(index) when is_integer(index) and index in 0x0..0xF do
+  def v(register) when VRegisters.is_register(register) do
     %__MODULE__{
-      value: index
+      value: register
     }
   end
 
