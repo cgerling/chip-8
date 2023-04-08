@@ -43,6 +43,7 @@ defmodule Chip8.Interpreter do
   alias Chip8.Stack
   alias Chip8.UInt
 
+  require Chip8.Interpreter.Font
   require Keyboard
 
   @enforce_keys [:cycle_rate, :display, :dt, :i, :keyboard, :memory, :pc, :st, :stack, :v]
@@ -125,7 +126,7 @@ defmodule Chip8.Interpreter do
   end
 
   @spec get_font_character_address(Font.character()) :: non_neg_integer()
-  def get_font_character_address(character) when is_integer(character) and character in 0x0..0xF,
+  def get_font_character_address(character) when Font.is_character(character),
     do: @font_address + @character_size * character
 
   @spec load_font(t(), Memory.data()) :: t()
