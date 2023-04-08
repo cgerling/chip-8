@@ -3,6 +3,34 @@ defmodule Chip8.Interpreter.VRegistersTest do
 
   alias Chip8.Interpreter.VRegisters
 
+  require Chip8.Interpreter.VRegisters
+
+  describe "is_register/1" do
+    test "should return true when value is integer and between 0x0 and 0xF" do
+      value = :rand.uniform(0xF)
+
+      assert VRegisters.is_register(value)
+    end
+
+    test "should return false when value is not an integer" do
+      for invalid_value <- [0.0, %{}, {}, [], ""] do
+        refute VRegisters.is_register(invalid_value)
+      end
+    end
+
+    test "should return false when value is negative" do
+      negative_number = -:rand.uniform(0xF)
+
+      refute VRegisters.is_register(negative_number)
+    end
+
+    test "should return false when value is larger then 0xF" do
+      large_integer = :rand.uniform(0xF) + 0x10
+
+      refute VRegisters.is_register(large_integer)
+    end
+  end
+
   describe "new/0" do
     test "should return a v registers struct" do
       v_registers = VRegisters.new()

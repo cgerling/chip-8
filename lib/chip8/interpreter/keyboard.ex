@@ -15,10 +15,10 @@ defmodule Chip8.Interpreter.Keyboard do
   @enforce_keys [:keys]
   defstruct @enforce_keys
 
-  @type key :: 0x0..0xF
-  @type key_state :: :none | :pressed
+  @type key() :: 0x0..0xF
+  @type key_state() :: :none | :pressed
 
-  @type t :: %__MODULE__{
+  @type t() :: %__MODULE__{
           keys: %{key() => key_state()}
         }
 
@@ -31,7 +31,7 @@ defmodule Chip8.Interpreter.Keyboard do
     %__MODULE__{keys: keys}
   end
 
-  @spec keys() :: list(key())
+  @spec keys() :: [key(), ...]
   def keys, do: Enum.to_list(0x0..0xF)
 
   @spec is_pressed?(t(), key()) :: boolean()

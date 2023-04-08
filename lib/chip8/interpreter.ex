@@ -43,12 +43,13 @@ defmodule Chip8.Interpreter do
   alias Chip8.Stack
   alias Chip8.UInt
 
-  require Keyboard
+  require Chip8.Interpreter.Font
+  require Chip8.Interpreter.Keyboard
 
   @enforce_keys [:cycle_rate, :display, :dt, :i, :keyboard, :memory, :pc, :st, :stack, :v]
   defstruct @enforce_keys
 
-  @type t :: %__MODULE__{
+  @type t() :: %__MODULE__{
           cycle_rate: pos_integer(),
           display: Display.t(),
           dt: Timer.t(),
@@ -124,8 +125,8 @@ defmodule Chip8.Interpreter do
     %{interpreter | pc: previous_instruction_address}
   end
 
-  @spec get_font_character_address(0x0..0xF) :: non_neg_integer()
-  def get_font_character_address(character) when is_integer(character) and character in 0x0..0xF,
+  @spec get_font_character_address(Font.character()) :: non_neg_integer()
+  def get_font_character_address(character) when Font.is_character(character),
     do: @font_address + @character_size * character
 
   @spec load_font(t(), Memory.data()) :: t()

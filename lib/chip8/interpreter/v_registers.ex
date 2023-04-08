@@ -16,11 +16,13 @@ defmodule Chip8.Interpreter.VRegisters do
   @enforce_keys [:data]
   defstruct @enforce_keys
 
-  @type register :: 0x0..0xF
+  @type register() :: 0x0..0xF
 
-  @type t :: %__MODULE__{
+  @type t() :: %__MODULE__{
           data: %{register() => byte()}
         }
+
+  defguard is_register(value) when is_integer(value) and value in 0x0..0xF
 
   @spec new() :: t()
   def new do
@@ -30,8 +32,6 @@ defmodule Chip8.Interpreter.VRegisters do
       data: data
     }
   end
-
-  defguardp is_register(register) when is_integer(register) and register in 0x0..0xF
 
   @spec get(t(), register()) :: non_neg_integer()
   def get(%__MODULE__{data: data}, register) when is_register(register) do

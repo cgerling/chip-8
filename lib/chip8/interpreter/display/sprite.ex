@@ -16,16 +16,17 @@ defmodule Chip8.Interpreter.Display.Sprite do
   @enforce_keys [:data]
   defstruct @enforce_keys
 
-  @type bit :: 0 | 1
-  @type bitmap :: list(list(bit()))
+  @type bit() :: 0 | 1
+  @type bitmap() :: [[bit(), ...], ...]
+  @type data() :: [byte(), ...]
 
-  @type t :: %__MODULE__{
-          data: list(byte())
+  @type t() :: %__MODULE__{
+          data: data()
         }
 
   @width 8
 
-  @spec new(list()) :: t()
+  @spec new(data()) :: t()
   def new(data) when is_list(data) do
     %__MODULE__{
       data: data

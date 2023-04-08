@@ -22,14 +22,14 @@ defmodule Chip8.Interpreter.Display do
   @enforce_keys [:height, :pixels, :width]
   defstruct @enforce_keys
 
-  @type dimension :: non_neg_integer()
-  @type pixel :: 0 | 1
-  @type coordinates :: {x :: non_neg_integer(), y :: non_neg_integer()}
-  @type pixelmap :: list(list(pixel()))
+  @type dimension() :: non_neg_integer()
+  @type pixel() :: 0 | 1
+  @type coordinates() :: {x :: non_neg_integer(), y :: non_neg_integer()}
+  @type pixelmap() :: [[pixel(), ...], ...]
 
-  @type t :: %__MODULE__{
+  @type t() :: %__MODULE__{
           height: dimension(),
-          pixels: list(pixel),
+          pixels: [pixel(), ...],
           width: dimension()
         }
 
@@ -86,7 +86,7 @@ defmodule Chip8.Interpreter.Display do
     |> Enum.any?(fn {before_pixel, after_pixel} -> before_pixel > after_pixel end)
   end
 
-  @spec create_sprite(list(byte())) :: Sprite.t()
+  @spec create_sprite(Sprite.data()) :: Sprite.t()
   def create_sprite(data) when is_list(data) do
     Sprite.new(data)
   end
