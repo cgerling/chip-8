@@ -14,16 +14,17 @@ defmodule Chip8.Interpreter.Memory do
   @enforce_keys [:data, :size]
   defstruct @enforce_keys
 
+  @type address :: non_neg_integer()
   @type data() :: [byte()]
 
   @type t() :: %__MODULE__{
-          data: [byte(), ...],
+          data: %{address() => byte()},
           size: non_neg_integer()
         }
 
   @spec new(non_neg_integer()) :: t()
   def new(size) when is_integer(size) do
-    data = List.duplicate(0, size)
+    data = Map.new(0..(size - 1), &{&1, 0})
 
     %__MODULE__{
       data: data,
@@ -31,31 +32,40 @@ defmodule Chip8.Interpreter.Memory do
     }
   end
 
-  @spec read(t(), non_neg_integer(), non_neg_integer()) :: data()
-  def read(%__MODULE__{size: size}, address, _amount) when address >= size, do: []
+  @spec read(t(), address(), non_neg_integer()) :: data()
+  def read(%__MODULE__{} = memory, address, amount)
+      when is_integer(address) and is_integer(amount) do
+    address_range = build_address_range(memory, address, amount)
 
-  def read(%__MODULE__{data: data}, address, amount)
-      when is_integer(address) and is_integer(amount) and address >= 0 and amount >= 0 do
-    Enum.slice(data, address, amount)
+    Enum.map(address_range, &Map.fetch!(memory.data, &1))
   end
 
-  @spec write(t(), non_neg_integer(), data()) :: t()
-  def write(%__MODULE__{} = memory, _address, []), do: memory
-
-  def write(%__MODULE__{} = memory, address, _data) when address >= memory.size, do: memory
-
+  @spec write(t(), address(), data()) :: t()
   def write(%__MODULE__{} = memory, address, data)
-      when is_integer(address) and is_list(data) and is_list(data) do
-    writtable_data_size = max(memory.size - address, 0)
+      when is_integer(address) and is_list(data) do
+    amount = Enum.count(data)
+    address_range = build_address_range(memory, address, amount)
 
     data =
-      data
-      |> Enum.slice(0, writtable_data_size)
-      |> Enum.with_index()
-      |> Enum.reduce(memory.data, fn {byte, index}, data ->
-        List.replace_at(data, address + index, byte)
+      address_range
+      |> Enum.zip(data)
+      |> Enum.reduce(memory.data, fn {address, value}, data ->
+        Map.replace(data, address, value)
       end)
 
     %{memory | data: data}
+  end
+
+  defp build_address_range(%__MODULE__{}, _address, amount) when amount <= 0, do: []
+
+  defp build_address_range(%__MODULE__{}, address, _amount) when address < 0, do: []
+
+  defp build_address_range(%__MODULE__{size: size}, address, _amount) when address >= size, do: []
+
+  defp build_address_range(%__MODULE__{size: size}, address, amount) do
+    range_start = address
+    range_end = min(address + amount, size) - 1
+
+    range_start..range_end//1
   end
 end

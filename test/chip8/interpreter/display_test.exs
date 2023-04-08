@@ -2,6 +2,7 @@ defmodule Chip8.Interpreter.DisplayTest do
   use ExUnit.Case, async: true
 
   alias Chip8.Interpreter.Display
+  alias Chip8.Interpreter.Display.Coordinates
   alias Chip8.Interpreter.Display.Sprite
 
   describe "new/2" do
@@ -16,9 +17,11 @@ defmodule Chip8.Interpreter.DisplayTest do
 
   describe "clear/1" do
     test "should return a display struct with all pixels off" do
+      sprite = 0xFF |> List.duplicate(15) |> Sprite.new()
+      coordinates = Coordinates.new(0, 0)
+
       display = Display.new(10, 10)
-      filled_pixels = List.duplicate(1, display.height * display.width)
-      display = %{display | pixels: filled_pixels}
+      display = Display.draw(display, coordinates, sprite)
 
       cleared_display = Display.clear(display)
 
@@ -50,7 +53,7 @@ defmodule Chip8.Interpreter.DisplayTest do
 
       coordinates = Display.get_coordinates(display, x, y)
 
-      assert {x, y} == coordinates
+      assert Coordinates.new(x, y) == coordinates
     end
 
     test "should return a coordinates tuple wrapped when x is equals to display's width" do
@@ -60,7 +63,7 @@ defmodule Chip8.Interpreter.DisplayTest do
 
       coordinates = Display.get_coordinates(display, x, y)
 
-      assert {0, y} == coordinates
+      assert Coordinates.new(0, y) == coordinates
     end
 
     test "should return a coordinates tuple wrapped when x is greather than display's width" do
@@ -72,7 +75,7 @@ defmodule Chip8.Interpreter.DisplayTest do
 
       coordinates = Display.get_coordinates(display, overflow_x, y)
 
-      assert {x, y} == coordinates
+      assert Coordinates.new(x, y) == coordinates
     end
 
     test "should return a coordinates tuple wrapped when y is equals to display's height" do
@@ -82,7 +85,7 @@ defmodule Chip8.Interpreter.DisplayTest do
 
       coordinates = Display.get_coordinates(display, x, y)
 
-      assert {x, 0} == coordinates
+      assert Coordinates.new(x, 0) == coordinates
     end
 
     test "should return a coordinates tuple wrapped when y is greather than display's height" do
@@ -94,7 +97,7 @@ defmodule Chip8.Interpreter.DisplayTest do
 
       coordinates = Display.get_coordinates(display, x, overflow_y)
 
-      assert {x, y} == coordinates
+      assert Coordinates.new(x, y) == coordinates
     end
   end
 
@@ -102,7 +105,7 @@ defmodule Chip8.Interpreter.DisplayTest do
     test "should return a display struct with sprite rendered into the given coordinates" do
       display = Display.new(8, 8)
       sprite = Sprite.new([0xAA, 0x55, 0xAA, 0x55])
-      coordinates = {0, 2}
+      coordinates = Coordinates.new(0, 2)
 
       drawed_display = Display.draw(display, coordinates, sprite)
 
@@ -123,7 +126,7 @@ defmodule Chip8.Interpreter.DisplayTest do
     test "should return a display struct with the sprite erased when rendered twice into the same coordinates" do
       display = Display.new(8, 8)
       sprite = Sprite.new([0xAA, 0x55, 0xAA, 0x55])
-      coordinates = {0, 2}
+      coordinates = Coordinates.new(0, 2)
 
       display = Display.draw(display, coordinates, sprite)
 
@@ -146,7 +149,7 @@ defmodule Chip8.Interpreter.DisplayTest do
     test "should return a display struct with the sprite cropped horizontally when it overflows the display's width" do
       display = Display.new(8, 8)
       sprite = Sprite.new([0xFF, 0xFF])
-      coordinates = {4, 0}
+      coordinates = Coordinates.new(4, 0)
 
       drawed_display = Display.draw(display, coordinates, sprite)
 
@@ -167,7 +170,7 @@ defmodule Chip8.Interpreter.DisplayTest do
     test "should return a display struct with the sprite cropped vertically when it overflows the display's height" do
       display = Display.new(8, 8)
       sprite = Sprite.new([0x0F, 0x0F, 0x0F, 0x0F])
-      coordinates = {0, 6}
+      coordinates = Coordinates.new(0, 6)
 
       drawed_display = Display.draw(display, coordinates, sprite)
 
@@ -189,7 +192,7 @@ defmodule Chip8.Interpreter.DisplayTest do
   describe "has_collision?/2" do
     test "should return true when any of the pixels on in the before display are off in the after display" do
       display = Display.new(8, 8)
-      coordinates = {0, 0}
+      coordinates = Coordinates.new(0, 0)
       sprite = Sprite.new([0x1])
 
       before_display = Display.draw(display, coordinates, sprite)
