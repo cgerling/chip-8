@@ -28,6 +28,7 @@ defmodule Chip8.Interpreter.Display do
   @type dimension() :: non_neg_integer()
   @type pixel() :: 0 | 1
   @type pixelmap() :: [[pixel(), ...], ...]
+  @type diff() :: [{Coordinates.t(), pixel()}]
 
   @type t() :: %__MODULE__{
           height: dimension(),
@@ -100,5 +101,15 @@ defmodule Chip8.Interpreter.Display do
         Map.fetch!(pixels, coordinates)
       end
     end
+  end
+
+  @spec diff(t(), t()) :: diff()
+  def diff(%__MODULE__{} = before_display, %__MODULE__{} = after_display) do
+    before_pixels = before_display.pixels
+    after_pixels = after_display.pixels
+
+    after_pixels
+    |> Map.reject(fn {coordinates, pixel} -> pixel == before_pixels[coordinates] end)
+    |> Enum.to_list()
   end
 end

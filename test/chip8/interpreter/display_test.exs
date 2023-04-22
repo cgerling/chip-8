@@ -232,4 +232,23 @@ defmodule Chip8.Interpreter.DisplayTest do
              ]
     end
   end
+
+  describe "diff/2" do
+    test "should return a list with coordinates and the state of all pixels on the second display that has a different state from their equivalent ones on the first display" do
+      display = Display.new(8, 8)
+      sprite = Sprite.new([0x05, 0x05])
+      coordinates = Coordinates.new(0, 0)
+
+      {drawed_display, _} = Display.draw(display, coordinates, sprite)
+
+      diff_pixels = Display.diff(display, drawed_display)
+      assert Enum.sort(diff_pixels) == [{{5, 0}, 1}, {{5, 1}, 1}, {{7, 0}, 1}, {{7, 1}, 1}]
+    end
+
+    test "should return an empty list when there is no difference between the pixel's state between the first display and the second display" do
+      display = Display.new(8, 8)
+
+      assert Display.diff(display, display) == []
+    end
+  end
 end
