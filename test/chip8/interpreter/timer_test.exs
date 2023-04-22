@@ -47,4 +47,19 @@ defmodule Chip8.Interpreter.TimerTest do
       assert ticked_timer == Timer.new()
     end
   end
+
+  describe "active?/1" do
+    test "should return true when timer value is greater than 0" do
+      value = :rand.uniform(0xFFFF) + 1
+      timer = Timer.new(value)
+
+      assert Timer.active?(timer)
+    end
+
+    test "should return false when timer value is equals to 0" do
+      timer = Timer.new(0)
+
+      refute Timer.active?(timer)
+    end
+  end
 end

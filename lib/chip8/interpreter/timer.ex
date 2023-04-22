@@ -36,4 +36,9 @@ defmodule Chip8.Interpreter.Timer do
 
     %{timer | value: value}
   end
+
+  @spec active?(t()) :: boolean()
+  def active?(%__MODULE__{} = timer) do
+    timer.value > 0
+  end
 end
