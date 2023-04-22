@@ -207,4 +207,9 @@ defmodule Chip8.Interpreter do
   def is_timer_active?(%__MODULE__{} = interpreter, :st) do
     Timer.active?(interpreter.st)
   end
+
+  @spec display_changes(t(), t()) :: Display.diff()
+  def display_changes(%__MODULE__{} = interpreter_a, %__MODULE__{} = interpreter_b) do
+    Display.diff(interpreter_a.display, interpreter_b.display)
+  end
 end

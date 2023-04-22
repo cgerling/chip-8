@@ -390,4 +390,26 @@ defmodule Chip8.InterpreterTest do
       refute Interpreter.is_timer_active?(interpreter, :st)
     end
   end
+
+  describe "display_diff/2" do
+    test "should return a list with coordinates and the state of all pixels on the second interpreter's display that has a different state from their equivalent ones on the first interpreter's display" do
+      interpreter = Interpreter.new()
+
+      display = Display.new(8, 8)
+      sprite = Display.Sprite.new([0x05, 0x05])
+      coordinates = Display.Coordinates.new(0, 0)
+      {drawed_display, _} = Display.draw(display, coordinates, sprite)
+
+      drawed_interpreter = put_in(interpreter.display, drawed_display)
+
+      pixels_diff = Interpreter.display_changes(interpreter, drawed_interpreter)
+      assert Enum.sort(pixels_diff) == [{{5, 0}, 1}, {{5, 1}, 1}, {{7, 0}, 1}, {{7, 1}, 1}]
+    end
+
+    test "should return an empty list when there is no difference between the pixel's state between the first interpreter's display and the second interpreter's display" do
+      interpreter = Interpreter.new()
+
+      assert Interpreter.display_changes(interpreter, interpreter) == []
+    end
+  end
 end
