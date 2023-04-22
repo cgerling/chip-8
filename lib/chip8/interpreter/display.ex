@@ -60,7 +60,7 @@ defmodule Chip8.Interpreter.Display do
     Coordinates.new(x, y)
   end
 
-  @spec draw(t(), Coordinates.t(), Sprite.t()) :: t()
+  @spec draw(t(), Coordinates.t(), Sprite.t()) :: {t(), boolean()}
   def draw(%__MODULE__{} = display, {x, y} = coordinates, %Sprite{} = sprite)
       when Coordinates.is_coordinates(coordinates) do
     visible_width = max(display.width - x, 0)
@@ -75,7 +75,9 @@ defmodule Chip8.Interpreter.Display do
         Map.update!(pixels, pixel_coordinates, &Bitwise.bxor(&1, bit))
       end)
 
-    %{display | pixels: pixels}
+    new_display = %{display | pixels: pixels}
+    collision? = has_collision?(display, new_display)
+    {new_display, collision?}
   end
 
   @spec has_collision?(t(), t()) :: boolean()

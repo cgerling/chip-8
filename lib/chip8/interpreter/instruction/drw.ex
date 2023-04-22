@@ -40,9 +40,9 @@ defmodule Chip8.Interpreter.Instruction.DRW do
     coordinates =
       Display.get_coordinates(interpreter.display, interpreter.v[x.value], interpreter.v[y.value])
 
-    drawed_display = Display.draw(interpreter.display, coordinates, sprite)
+    {drawed_display, collision?} = Display.draw(interpreter.display, coordinates, sprite)
 
-    collision = if Display.has_collision?(interpreter.display, drawed_display), do: 1, else: 0
+    collision = if collision?, do: 1, else: 0
     v_registers = VRegisters.set(interpreter.v, 0xF, collision)
     %{interpreter | display: drawed_display, v: v_registers}
   end

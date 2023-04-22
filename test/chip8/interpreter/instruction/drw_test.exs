@@ -52,7 +52,7 @@ defmodule Chip8.Interpreter.Instruction.DRWTest do
       interpreter = put_in(interpreter.memory, memory)
       sprite = Display.create_sprite(sprite_data)
       coordinates = Coordinates.new(0, 0)
-      display = Display.draw(interpreter.display, coordinates, sprite)
+      {display, _} = Display.draw(interpreter.display, coordinates, sprite)
       interpreter = put_in(interpreter.display, display)
 
       vx = %Register{value: 0}
