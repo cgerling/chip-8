@@ -66,31 +66,25 @@ defmodule Chip8.Interpreter.Display do
     visible_width = max(display.width - x, 0)
     visible_height = max(display.height - y, 0)
 
-    pixels =
+    {pixels, collision?} =
       sprite
       |> Sprite.to_bitmap()
       |> Enum.filter(fn {{x, y}, _} -> x < visible_width and y < visible_height end)
-      |> Enum.reduce(display.pixels, fn {bit_coordinates, bit}, pixels ->
+      |> Enum.reduce({display.pixels, false}, fn {bit_coordinates, bit}, {pixels, collision?} ->
         pixel_coordinates = Coordinates.add(coordinates, bit_coordinates)
-        Map.update!(pixels, pixel_coordinates, &Bitwise.bxor(&1, bit))
+
+        pixel = Map.get(pixels, pixel_coordinates)
+        new_pixel = Bitwise.bxor(pixel, bit)
+
+        collision? = if collision?, do: collision?, else: pixel > new_pixel
+        pixels = Map.replace(pixels, pixel_coordinates, new_pixel)
+
+        {pixels, collision?}
       end)
 
     new_display = %{display | pixels: pixels}
-    collision? = has_collision?(display, new_display)
+
     {new_display, collision?}
-  end
-
-  @spec has_collision?(t(), t()) :: boolean()
-  def has_collision?(%__MODULE__{} = before_display, %__MODULE__{} = after_display) do
-    last_pixel = before_display.height * before_display.width - 1
-
-    Enum.reduce_while(0..last_pixel, false, fn pixel_index, _ ->
-      coordinates = Coordinates.from_ordinal(pixel_index, before_display.width)
-      before_pixel = before_display.pixels[coordinates]
-      after_pixel = after_display.pixels[coordinates]
-
-      if before_pixel > after_pixel, do: {:halt, true}, else: {:cont, false}
-    end)
   end
 
   @spec create_sprite(Sprite.data()) :: Sprite.t()
