@@ -78,10 +78,16 @@ defmodule Chip8.Interpreter.Display do
   end
 
   @spec has_collision?(t(), t()) :: boolean()
-  def has_collision?(%__MODULE__{pixels: before_pixels}, %__MODULE__{pixels: after_pixels}) do
-    before_pixels
-    |> Enum.zip(after_pixels)
-    |> Enum.any?(fn {before_pixel, after_pixel} -> before_pixel > after_pixel end)
+  def has_collision?(%__MODULE__{} = before_display, %__MODULE__{} = after_display) do
+    last_pixel = before_display.height * before_display.width - 1
+
+    Enum.reduce_while(0..last_pixel, false, fn pixel_index, _ ->
+      coordinates = Coordinates.from_ordinal(pixel_index, before_display.width)
+      before_pixel = before_display.pixels[coordinates]
+      after_pixel = after_display.pixels[coordinates]
+
+      if before_pixel > after_pixel, do: {:halt, true}, else: {:cont, false}
+    end)
   end
 
   @spec create_sprite(Sprite.data()) :: Sprite.t()
