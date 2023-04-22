@@ -1,5 +1,7 @@
 defmodule Chip8.Interpreter.Instruction.Argument do
-  @moduledoc false
+  @moduledoc """
+  Helper module to handle and parse instruction argument values
+  """
 
   @type nibble() :: 0x0..0xF
 

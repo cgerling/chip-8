@@ -57,6 +57,7 @@ defmodule Chip8.MixProject do
           Chip8.Interpreter.Display.Sprite,
           Chip8.Interpreter.Font,
           Chip8.Interpreter.Instruction,
+          Chip8.Interpreter.Instruction.Argument,
           Chip8.Interpreter.Instruction.Argument.Address,
           Chip8.Interpreter.Instruction.Argument.Byte,
           Chip8.Interpreter.Instruction.Argument.Nibble,
