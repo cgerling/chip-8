@@ -117,4 +117,22 @@ defmodule Chip8 do
   """
   @spec tick_timers(Interpreter.t()) :: Interpreter.t()
   defdelegate tick_timers(interpreter), to: Interpreter
+
+  @doc """
+  Returns a `boolean()` representing the current state of the given timer.
+  This is usefull to run custom logic based on a timer state, for example
+  emitting sound when the sound timer is active.
+
+  See `Chip8.Interpreter.Timer` for more information on timers.
+
+  ```elixir
+    iex> Chip8.is_timer_active?(interpreter, :dt)
+    false
+
+    iex> Chip8.is_timer_active?(interpreter, :st)
+    true
+  ```
+  """
+  @spec is_timer_active?(Interpreter.t(), Interpreter.timers()) :: boolean()
+  defdelegate is_timer_active?(interpreter, timer), to: Interpreter
 end
