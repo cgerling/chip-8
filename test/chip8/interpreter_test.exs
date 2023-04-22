@@ -358,4 +358,36 @@ defmodule Chip8.InterpreterTest do
       assert changed_interpreter.cycle_rate == 1
     end
   end
+
+  describe "is_timer_active?/2" do
+    test "should return true when the display timer has a value greater than 0" do
+      value = :rand.uniform(0xFFFF) + 1
+      interpreter = Interpreter.new()
+      interpreter = put_in(interpreter.dt, Timer.new(value))
+
+      assert Interpreter.is_timer_active?(interpreter, :dt)
+    end
+
+    test "should return true when the display timer has a value equals to 0" do
+      interpreter = Interpreter.new()
+      interpreter = put_in(interpreter.dt, Timer.new(0))
+
+      refute Interpreter.is_timer_active?(interpreter, :dt)
+    end
+
+    test "should return true when the sound timer has a value greater than 0" do
+      value = :rand.uniform(0xFFFF) + 1
+      interpreter = Interpreter.new()
+      interpreter = put_in(interpreter.st, Timer.new(value))
+
+      assert Interpreter.is_timer_active?(interpreter, :st)
+    end
+
+    test "should return true when the sound timer has a value equals to 0" do
+      interpreter = Interpreter.new()
+      interpreter = put_in(interpreter.st, Timer.new(0))
+
+      refute Interpreter.is_timer_active?(interpreter, :st)
+    end
+  end
 end
