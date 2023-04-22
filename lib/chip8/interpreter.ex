@@ -212,4 +212,17 @@ defmodule Chip8.Interpreter do
   def display_changes(%__MODULE__{} = interpreter_a, %__MODULE__{} = interpreter_b) do
     Display.diff(interpreter_a.display, interpreter_b.display)
   end
+
+  @spec info() :: %{atom() => map()}
+  def info do
+    %{
+      display: %{
+        height: @display_height,
+        width: @display_width
+      },
+      keyboard: %{
+        keys: Keyboard.keys()
+      }
+    }
+  end
 end

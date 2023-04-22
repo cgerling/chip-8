@@ -412,4 +412,18 @@ defmodule Chip8.InterpreterTest do
       assert Interpreter.display_changes(interpreter, interpreter) == []
     end
   end
+
+  describe "info/0" do
+    test "should return a map with general information about an interpreter" do
+      assert Interpreter.info() == %{
+               display: %{
+                 height: 32,
+                 width: 64
+               },
+               keyboard: %{
+                 keys: Keyboard.keys()
+               }
+             }
+    end
+  end
 end
