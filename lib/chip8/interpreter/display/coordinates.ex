@@ -1,5 +1,12 @@
 defmodule Chip8.Interpreter.Display.Coordinates do
-  @moduledoc false
+  @moduledoc """
+  Internal module used by `Chip8.Interpreter.Display` to make easier to
+  manipulate the tuples representing the pixel coordinates.
+
+  The Coordinates value is a tuple containing two integer values. The first is
+  the value of the x-axis (horizontal) and the second is the value of the
+  y-axis (vertical).
+  """
 
   @enforce_keys [:x, :y]
   defstruct @enforce_keys
