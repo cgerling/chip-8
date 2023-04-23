@@ -49,6 +49,7 @@ defmodule Chip8.Interpreter do
   @enforce_keys [:cycle_rate, :display, :dt, :i, :keyboard, :memory, :pc, :st, :stack, :v]
   defstruct @enforce_keys
 
+  @type timers() :: :dt | :st
   @type t() :: %__MODULE__{
           cycle_rate: pos_integer(),
           display: Display.t(),
@@ -196,5 +197,14 @@ defmodule Chip8.Interpreter do
   def change_cycle_rate(%__MODULE__{} = interpreter, cycle_rate)
       when is_integer(cycle_rate) and cycle_rate > 0 do
     %{interpreter | cycle_rate: cycle_rate}
+  end
+
+  @spec is_timer_active?(t(), timers()) :: boolean()
+  def is_timer_active?(%__MODULE__{} = interpreter, :dt) do
+    Timer.active?(interpreter.dt)
+  end
+
+  def is_timer_active?(%__MODULE__{} = interpreter, :st) do
+    Timer.active?(interpreter.st)
   end
 end
