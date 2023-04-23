@@ -157,4 +157,14 @@ defmodule Chip8 do
   """
   @spec display_changes(Interpreter.t(), Interpreter.t()) :: Display.diff()
   defdelegate display_changes(interpreter_a, interpreter_b), to: Interpreter
+
+  @doc """
+  Returns a map with information about components of the interpreter.
+
+  ```elixir
+    iex> Chip8.info()
+    %{display: %{height: 32, width: 64}, keyboard: %{keys: Enum.to_list(0x0..0xF)}}
+  ```
+  """
+  defdelegate info(), to: Interpreter
 end
