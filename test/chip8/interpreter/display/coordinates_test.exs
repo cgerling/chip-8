@@ -7,11 +7,8 @@ defmodule Chip8.Interpreter.Display.CoordinatesTest do
     test "should return a coordinates struct" do
       x = :rand.uniform(1000)
       y = :rand.uniform(1000)
-      coordinates = Coordinates.new(x, y)
 
-      assert %Coordinates{} = coordinates
-      assert coordinates.x == x
-      assert coordinates.y == y
+      assert {^x, ^y} = Coordinates.new(x, y)
     end
   end
 
@@ -25,10 +22,9 @@ defmodule Chip8.Interpreter.Display.CoordinatesTest do
       y_b = :rand.uniform(1000)
       coordinates_b = Coordinates.new(x_b, y_b)
 
-      coordinates = Coordinates.add(coordinates_a, coordinates_b)
-      assert %Coordinates{} = coordinates
-      assert coordinates.x == x_a + x_b
-      assert coordinates.y == y_a + y_b
+      assert {x, y} = Coordinates.add(coordinates_a, coordinates_b)
+      assert x == x_a + x_b
+      assert y == y_a + y_b
     end
   end
 

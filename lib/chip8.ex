@@ -135,4 +135,26 @@ defmodule Chip8 do
   """
   @spec is_timer_active?(Interpreter.t(), Interpreter.timers()) :: boolean()
   defdelegate is_timer_active?(interpreter, timer), to: Interpreter
+
+  @doc """
+  Returns a list containing all the pixels from the second interpreter that has
+  a different state from their equivalent pixels on the first interpreter. The
+  list is composed of tuples, each tuple has its first element being the
+  pixel's coordinates (`t:Display.Coordinates.t/0`) and the second element is
+  the state they have in the second interpreter.
+
+  This is useful when rendering only the pixels that changed during a cycle.
+
+  ```elixir
+    iex> interpreter = Chip8.initialize()
+    iex> Chip8.display_changes(interpreter, interpreter)
+    []
+
+    iex> cycled_interpreter = Chip8.cycle(interpreter)
+    iex> Chip8.display_changes(interpreter, cycled_interpreter)
+    [...]
+  ```
+  """
+  @spec display_changes(Interpreter.t(), Interpreter.t()) :: Display.diff()
+  defdelegate display_changes(interpreter_a, interpreter_b), to: Interpreter
 end

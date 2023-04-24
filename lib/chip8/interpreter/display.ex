@@ -20,12 +20,15 @@ defmodule Chip8.Interpreter.Display do
   alias Chip8.Interpreter.Display.Coordinates
   alias Chip8.Interpreter.Display.Sprite
 
+  require Coordinates
+
   @enforce_keys [:height, :pixels, :width]
   defstruct @enforce_keys
 
   @type dimension() :: non_neg_integer()
   @type pixel() :: 0 | 1
   @type pixelmap() :: [[pixel(), ...], ...]
+  @type diff() :: [{Coordinates.t(), pixel()}]
 
   @type t() :: %__MODULE__{
           height: dimension(),
@@ -58,30 +61,31 @@ defmodule Chip8.Interpreter.Display do
     Coordinates.new(x, y)
   end
 
-  @spec draw(t(), Coordinates.t(), Sprite.t()) :: t()
-  def draw(%__MODULE__{} = display, %Coordinates{} = coordinates, %Sprite{} = sprite) do
-    visible_width = max(display.width - coordinates.x, 0)
-    visible_height = max(display.height - coordinates.y, 0)
+  @spec draw(t(), Coordinates.t(), Sprite.t()) :: {t(), boolean()}
+  def draw(%__MODULE__{} = display, {x, y} = coordinates, %Sprite{} = sprite)
+      when Coordinates.is_coordinates(coordinates) do
+    visible_width = max(display.width - x, 0)
+    visible_height = max(display.height - y, 0)
 
-    pixels =
+    {pixels, collision?} =
       sprite
       |> Sprite.to_bitmap()
-      |> Enum.filter(fn {coordinates, _} ->
-        coordinates.x < visible_width and coordinates.y < visible_height
-      end)
-      |> Enum.reduce(display.pixels, fn {bit_coordinates, bit}, pixels ->
+      |> Enum.filter(fn {{x, y}, _} -> x < visible_width and y < visible_height end)
+      |> Enum.reduce({display.pixels, false}, fn {bit_coordinates, bit}, {pixels, collision?} ->
         pixel_coordinates = Coordinates.add(coordinates, bit_coordinates)
-        Map.update!(pixels, pixel_coordinates, &Bitwise.bxor(&1, bit))
+
+        pixel = Map.get(pixels, pixel_coordinates)
+        new_pixel = Bitwise.bxor(pixel, bit)
+
+        collision? = if collision?, do: collision?, else: pixel > new_pixel
+        pixels = Map.replace(pixels, pixel_coordinates, new_pixel)
+
+        {pixels, collision?}
       end)
 
-    %{display | pixels: pixels}
-  end
+    new_display = %{display | pixels: pixels}
 
-  @spec has_collision?(t(), t()) :: boolean()
-  def has_collision?(%__MODULE__{pixels: before_pixels}, %__MODULE__{pixels: after_pixels}) do
-    before_pixels
-    |> Enum.zip(after_pixels)
-    |> Enum.any?(fn {before_pixel, after_pixel} -> before_pixel > after_pixel end)
+    {new_display, collision?}
   end
 
   @spec create_sprite(Sprite.data()) :: Sprite.t()
@@ -97,5 +101,15 @@ defmodule Chip8.Interpreter.Display do
         Map.fetch!(pixels, coordinates)
       end
     end
+  end
+
+  @spec diff(t(), t()) :: diff()
+  def diff(%__MODULE__{} = before_display, %__MODULE__{} = after_display) do
+    before_pixels = before_display.pixels
+    after_pixels = after_display.pixels
+
+    after_pixels
+    |> Map.reject(fn {coordinates, pixel} -> pixel == before_pixels[coordinates] end)
+    |> Enum.to_list()
   end
 end

@@ -21,7 +21,7 @@ defmodule Chip8.Interpreter.DisplayTest do
       coordinates = Coordinates.new(0, 0)
 
       display = Display.new(10, 10)
-      display = Display.draw(display, coordinates, sprite)
+      {display, _} = Display.draw(display, coordinates, sprite)
 
       cleared_display = Display.clear(display)
 
@@ -107,7 +107,7 @@ defmodule Chip8.Interpreter.DisplayTest do
       sprite = Sprite.new([0xAA, 0x55, 0xAA, 0x55])
       coordinates = Coordinates.new(0, 2)
 
-      drawed_display = Display.draw(display, coordinates, sprite)
+      {drawed_display, _collision} = Display.draw(display, coordinates, sprite)
 
       assert %Display{} = drawed_display
 
@@ -128,9 +128,9 @@ defmodule Chip8.Interpreter.DisplayTest do
       sprite = Sprite.new([0xAA, 0x55, 0xAA, 0x55])
       coordinates = Coordinates.new(0, 2)
 
-      display = Display.draw(display, coordinates, sprite)
+      {display, _collision} = Display.draw(display, coordinates, sprite)
 
-      drawed_display = Display.draw(display, coordinates, sprite)
+      {drawed_display, _collision} = Display.draw(display, coordinates, sprite)
 
       assert %Display{} = drawed_display
 
@@ -151,7 +151,7 @@ defmodule Chip8.Interpreter.DisplayTest do
       sprite = Sprite.new([0xFF, 0xFF])
       coordinates = Coordinates.new(4, 0)
 
-      drawed_display = Display.draw(display, coordinates, sprite)
+      {drawed_display, _collision} = Display.draw(display, coordinates, sprite)
 
       assert %Display{} = drawed_display
 
@@ -172,7 +172,7 @@ defmodule Chip8.Interpreter.DisplayTest do
       sprite = Sprite.new([0x0F, 0x0F, 0x0F, 0x0F])
       coordinates = Coordinates.new(0, 6)
 
-      drawed_display = Display.draw(display, coordinates, sprite)
+      {drawed_display, _collision} = Display.draw(display, coordinates, sprite)
 
       assert %Display{} = drawed_display
 
@@ -187,29 +187,22 @@ defmodule Chip8.Interpreter.DisplayTest do
                [0, 0, 0, 0, 1, 1, 1, 1]
              ]
     end
-  end
 
-  describe "has_collision?/2" do
-    test "should return true when any of the pixels on in the before display are off in the after display" do
+    test "should return collision flag as true when one of the display pixels was turned off while drawing the sprite" do
       display = Display.new(8, 8)
       coordinates = Coordinates.new(0, 0)
       sprite = Sprite.new([0x1])
 
-      before_display = Display.draw(display, coordinates, sprite)
-      after_display = Display.draw(before_display, coordinates, sprite)
-
-      has_collision? = Display.has_collision?(before_display, after_display)
-
-      assert has_collision?
+      {drawed_display, _collision} = Display.draw(display, coordinates, sprite)
+      assert {_display, true} = Display.draw(drawed_display, coordinates, sprite)
     end
 
-    test "should return false when all of the pixels on in the before display are still on in the after display" do
-      before_display = Display.new(8, 8)
-      after_display = Display.new(8, 8)
+    test "should return collision flag as false when no one of the display pixels was turned off while drawing the sprite" do
+      display = Display.new(8, 8)
+      coordinates = Coordinates.new(0, 0)
+      sprite = Sprite.new([0x1])
 
-      has_collision? = Display.has_collision?(before_display, after_display)
-
-      refute has_collision?
+      assert {_display, false} = Display.draw(display, coordinates, sprite)
     end
   end
 
@@ -237,6 +230,25 @@ defmodule Chip8.Interpreter.DisplayTest do
                [0, 0, 0, 0, 0, 0, 0, 0],
                [0, 0, 0, 0, 0, 0, 0, 0]
              ]
+    end
+  end
+
+  describe "diff/2" do
+    test "should return a list with coordinates and the state of all pixels on the second display that has a different state from their equivalent ones on the first display" do
+      display = Display.new(8, 8)
+      sprite = Sprite.new([0x05, 0x05])
+      coordinates = Coordinates.new(0, 0)
+
+      {drawed_display, _} = Display.draw(display, coordinates, sprite)
+
+      diff_pixels = Display.diff(display, drawed_display)
+      assert Enum.sort(diff_pixels) == [{{5, 0}, 1}, {{5, 1}, 1}, {{7, 0}, 1}, {{7, 1}, 1}]
+    end
+
+    test "should return an empty list when there is no difference between the pixel's state between the first display and the second display" do
+      display = Display.new(8, 8)
+
+      assert Display.diff(display, display) == []
     end
   end
 end

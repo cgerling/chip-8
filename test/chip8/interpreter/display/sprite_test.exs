@@ -4,6 +4,8 @@ defmodule Chip8.Interpreter.Display.SpriteTest do
   alias Chip8.Interpreter.Display.Coordinates
   alias Chip8.Interpreter.Display.Sprite
 
+  require Coordinates
+
   describe "new/1" do
     test "should return a sprite struct" do
       sprite = Sprite.new([])
@@ -26,7 +28,15 @@ defmodule Chip8.Interpreter.Display.SpriteTest do
       bitmap = Sprite.to_bitmap(sprite)
 
       assert is_list(bitmap)
-      assert Enum.all?(bitmap, &match?({%Coordinates{}, bit} when bit in [0, 1], &1))
+
+      assert Enum.all?(
+               bitmap,
+               &match?(
+                 {coordinates, bit}
+                 when Coordinates.is_coordinates(coordinates) and bit in [0, 1],
+                 &1
+               )
+             )
     end
 
     test "should return a list of bits with coordinates based on the sprite data" do

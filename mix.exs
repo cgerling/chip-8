@@ -53,6 +53,7 @@ defmodule Chip8.MixProject do
       groups_for_modules: [
         Interpreter: [
           Chip8.Interpreter.Display,
+          Chip8.Interpreter.Display.Coordinates,
           Chip8.Interpreter.Display.Sprite,
           Chip8.Interpreter.Font,
           Chip8.Interpreter.Instruction,
