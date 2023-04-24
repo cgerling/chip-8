@@ -1,7 +1,7 @@
 defmodule Chip8.MixProject do
   use Mix.Project
 
-  @version "1.0.0"
+  @version "1.1.0"
   @repository_url "https://github.com/cgerling/chip-8"
 
   def project do
